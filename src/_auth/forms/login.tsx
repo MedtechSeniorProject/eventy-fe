@@ -8,12 +8,15 @@ import { useForm, Controller } from "react-hook-form";
 import { FunctionComponent } from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {}
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Login: FunctionComponent<LoginProps> = () => {
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -28,11 +31,8 @@ const Login: FunctionComponent<LoginProps> = () => {
 
   const onSubmit = async (data:LoginSchema) => {
     await sleep(2000);
-    if (data.email === "bill") {
-      alert(JSON.stringify(data));
-    } else {
-      alert("There is an error");
-    }
+    console.log(data);
+    navigate("/validate")
   };
 
   return (
