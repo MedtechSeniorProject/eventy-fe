@@ -10,6 +10,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { loginAccount } from "@/lib/queries/api";
 
 interface LoginProps {}
 
@@ -17,7 +18,6 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Login: FunctionComponent<LoginProps> = () => {
   const { toast } = useToast();
-
   const navigate = useNavigate();
   const {
     register,
@@ -30,9 +30,15 @@ const Login: FunctionComponent<LoginProps> = () => {
       terms: false,
     },
   });
-
+  
   const onSubmit = async (data: LoginSchema) => {
     await sleep(2000);
+    const user = {
+      email:data.email,
+      password: data.password
+    }
+    const response = await loginAccount(user);
+    console.log(response)
     console.log(data);
     navigate("/validate");
     toast({
