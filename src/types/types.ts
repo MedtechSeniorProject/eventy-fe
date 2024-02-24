@@ -5,5 +5,5 @@ export type LoginUser = {
 
 export type ValidateUser = {
     email: string,
-    validationCode?: number
+    validationCode?: string
 }
