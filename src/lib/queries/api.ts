@@ -13,7 +13,7 @@ export async function loginAccount(user: LoginUser) {
         "Content-Type": "application/json",
       },
     });
-    return response
+    return response.json();
   } catch (error) {
     console.log(error);
     return error;
@@ -23,11 +23,11 @@ export async function loginAccount(user: LoginUser) {
 /** Code Validation Request */
 export async function validateAccount(user: ValidateUser) {
     try {
-      const response = await fetch(process.env.PUBLIC_URL + "/auth/validate", {
+      const response = await fetch("http://localhost:3000/auth/validate", {
         method: "POST",
         body: JSON.stringify({
           email: user.email,
-          validateAccount: user.validationCode,
+          validationCode: user.validationCode,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export async function validateAccount(user: ValidateUser) {
   /** Resend Code Request */
 export async function resendCode(user: ValidateUser) {
     try {
-      const response = await fetch(process.env.PUBLIC_URL + "/auth/resend", {
+      const response = await fetch("http://localhost:3000/auth/resend", {
         method: "POST",
         body: JSON.stringify({
           email: user.email
