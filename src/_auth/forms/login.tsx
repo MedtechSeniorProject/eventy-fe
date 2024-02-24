@@ -10,41 +10,53 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { loginAccount } from "@/lib/queries/api";
+import { useLoginAccount } from "@/lib/queries/queries";
 
 interface LoginProps {}
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Login: FunctionComponent<LoginProps> = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { mutateAsync: loginAccount } = useLoginAccount();
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       terms: false,
     },
   });
-  
+
   const onSubmit = async (data: LoginSchema) => {
-    await sleep(2000);
     const user = {
-      email:data.email,
-      password: data.password
-    }
+      email: data.email,
+      password: data.password,
+    };
+    reset();
     const response = await loginAccount(user);
-    console.log(response)
-    console.log(data);
-    navigate("/validate");
-    toast({
-      variant: "default",
-      description: "A 6 digit verification code is sent to your email address",
-    });
+    
+    // Fix status code returned from backend
+    if (!response.ok) {
+      // toast({ variant: "destructive", description: response.message });
+      // return;
+    }
+    if (response?.accessToken) {
+      toast({ variant: "default", description: "Successfully Logged In" });
+      navigate("/");
+      return;
+    }
+    if (response?.message) {
+      toast({ variant: "default", description: response.message });
+      navigate("/validate", {
+        state: { email: user.email },
+      });
+      return;
+    }
   };
 
   return (

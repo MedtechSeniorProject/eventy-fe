@@ -7,11 +7,21 @@ import { CodeSchema, codeSchema } from "@/lib/validations/code";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useResendCode, useValidateAccount } from "@/lib/queries/queries";
+import { FunctionComponent } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 
-const Validation = () => {
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+const Validation: FunctionComponent = () => {
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  //Queries
+  const { mutateAsync: validateAccount } = useValidateAccount(); 
+  const { mutateAsync: resendCode } = useResendCode();
+
+  // Form Submission
   const {
     register,
     handleSubmit,
@@ -21,8 +31,22 @@ const Validation = () => {
   });
 
   const onSubmit = async (data: CodeSchema) => {
-    await sleep(2000);
-    console.log(data);
+    const reqObj = {
+      email: location.state.email,
+      validationCode: data.code
+    }
+
+    const response = await validateAccount(reqObj)
+
+    // Fix status code returned from backend
+    if (!response.ok) {
+      // toast({ variant: "destructive", description: response.message });
+      // return;
+    }
+    if(response?.accessToken) {
+      navigate("/")
+      return;
+    }
   };
 
   return (
@@ -69,7 +93,12 @@ const Validation = () => {
             />
           </div>
           <div className="flex justify-between">
-            <Button type="button" variant={"secondary"}>
+            <Button type="button" variant={"secondary"} onClick={async() => {
+              // Issue with the request: I cannot send with an email 
+              console.log(location.state)
+              const response = await resendCode(location.state)
+              console.log(response)
+            }}>
               Resend Code
             </Button>
             <Button type="submit" disabled={isSubmitting} className="w-32">
