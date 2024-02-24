@@ -9,12 +9,14 @@ import { FunctionComponent } from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface LoginProps {}
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Login: FunctionComponent<LoginProps> = () => {
+  const { toast } = useToast();
 
   const navigate = useNavigate();
   const {
@@ -25,14 +27,18 @@ const Login: FunctionComponent<LoginProps> = () => {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      terms: false
-    }
+      terms: false,
+    },
   });
 
-  const onSubmit = async (data:LoginSchema) => {
+  const onSubmit = async (data: LoginSchema) => {
     await sleep(2000);
     console.log(data);
-    navigate("/validate")
+    navigate("/validate");
+    toast({
+      variant: "default",
+      description: "A 6 digit verification code is sent to your email address",
+    });
   };
 
   return (
@@ -55,8 +61,12 @@ const Login: FunctionComponent<LoginProps> = () => {
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
-              {errors.email && (<AlertDescription>{`${errors.email?.message}`}</AlertDescription>)}
-              {errors.password && (<AlertDescription>{`${errors.password?.message}`}</AlertDescription>)}
+              {errors.email && (
+                <AlertDescription>{`${errors.email?.message}`}</AlertDescription>
+              )}
+              {errors.password && (
+                <AlertDescription>{`${errors.password?.message}`}</AlertDescription>
+              )}
             </Alert>
           )}
           <div className="grid w-full items-center gap-1.5">
@@ -85,8 +95,12 @@ const Login: FunctionComponent<LoginProps> = () => {
                 name="terms"
                 control={control}
                 rules={{ required: true }}
-                render={({ field }) => <Checkbox checked={field.value}
-                onCheckedChange={field.onChange} />}
+                render={({ field }) => (
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
               />
               <Label htmlFor="terms">Accept terms and conditions</Label>
             </div>
@@ -96,7 +110,7 @@ const Login: FunctionComponent<LoginProps> = () => {
           </div>
           <Button type="submit" disabled={isSubmitting} className="mt-5">
             {isSubmitting && <div className="mr -5">Loading...</div>}
-            {!isSubmitting && "Log In"}  
+            {!isSubmitting && "Log In"}
           </Button>
         </div>
       </form>
