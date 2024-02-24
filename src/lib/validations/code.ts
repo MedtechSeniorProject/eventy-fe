@@ -1,8 +1,7 @@
 import { z } from "zod"
 
 export const codeSchema = z.object({
-    code: z.number().min(7,"Code should be at least 6 digits !")
-
+    code: z.string().min(6,"Code should be 6 digits !").max(6)
 }).required()
 
 export type CodeSchema = z.infer<typeof codeSchema>
