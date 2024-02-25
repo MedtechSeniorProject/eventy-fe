@@ -11,11 +11,13 @@ import { useResendCode, useValidateAccount } from "@/lib/queries/queries";
 import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
+import useAuth from "../hook/useAuth";
 
 const Validation: FunctionComponent = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const { setUser, setIsAuthenticated } = useAuth();
 
   //Queries
   const { mutateAsync: validateAccount } = useValidateAccount(); 
@@ -44,7 +46,15 @@ const Validation: FunctionComponent = () => {
       // return;
     }
     if(response?.accessToken) {
-      navigate("/")
+      setUser({
+        accessToken: response.accessToken,
+        email: response?.eventManager.email,
+        id: response?.eventManager.id,
+        name: response?.eventManager.name,
+        isSuperAdmin: false
+      });
+      setIsAuthenticated(true)
+      navigate("/eventmanager")
       return;
     }
   };

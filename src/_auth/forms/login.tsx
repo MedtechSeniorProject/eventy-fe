@@ -11,12 +11,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useLoginAccount } from "@/lib/queries/queries";
+import useAuth from "../hook/useAuth";
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { setUser, setIsAuthenticated } = useAuth();
   const { mutateAsync: loginAccount } = useLoginAccount();
 
   const {
@@ -39,7 +41,7 @@ const Login: FunctionComponent<LoginProps> = () => {
     };
     reset();
     const response = await loginAccount(user);
-    
+    console.log(response)
     // Fix status code returned from backend
     if (!response.ok) {
       // toast({ variant: "destructive", description: response.message });
@@ -47,7 +49,15 @@ const Login: FunctionComponent<LoginProps> = () => {
     }
     if (response?.accessToken) {
       toast({ variant: "default", description: "Successfully Logged In" });
-      navigate("/");
+      setUser({
+        accessToken: response.accessToken,
+        email: response?.superadminWithoutPassword.email,
+        id: response?.superadminWithoutPassword.id,
+        name: response?.superadminWithoutPassword.name,
+        isSuperAdmin: true
+      });
+      setIsAuthenticated(true)
+      navigate("/superadmin");
       return;
     }
     if (response?.message) {
