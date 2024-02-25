@@ -11,9 +11,7 @@ import { QueryProvider } from "./lib/QueryProvider";
 
 const App = () => {
   return (
-    <html lang="en">
-      <head />
-      <body>
+    <>
         <main className="flex h-screen">
           <QueryProvider>
           <AuthProvider>
@@ -35,8 +33,7 @@ const App = () => {
           </QueryProvider>
         </main>
         <Toaster />
-      </body>
-    </html>
+        </>
   );
 };
 
