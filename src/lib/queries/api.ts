@@ -1,7 +1,7 @@
 import { LoginUser, ValidateUser } from "@/types/types";
 
 /** Login Request */
-export async function loginAccount(user: LoginUser) {
+export async function loginAccount(user: LoginUser): Promise<Response> {
   try {
     const response = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
@@ -13,15 +13,15 @@ export async function loginAccount(user: LoginUser) {
         "Content-Type": "application/json",
       },
     });
-    return response.json();
+    return response
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 }
 
 /** Code Validation Request */
-export async function validateAccount(user: ValidateUser) {
+export async function validateAccount(user: ValidateUser) : Promise<Response> {
     try {
       const response = await fetch("http://localhost:3000/auth/validate", {
         method: "POST",
@@ -33,17 +33,15 @@ export async function validateAccount(user: ValidateUser) {
           "Content-Type": "application/json",
         },
       });
-  
-      const responseData = await response.json();
-      return responseData;
+      return response
     } catch (error) {
       console.log(error);
-      return error;
+      throw error;
     }
   }
 
   /** Resend Code Request */
-export async function resendCode(user: ValidateUser) {
+export async function resendCode(user: ValidateUser): Promise<Response> {
     try {
       const response = await fetch("http://localhost:3000/auth/resend", {
         method: "POST",
@@ -54,11 +52,9 @@ export async function resendCode(user: ValidateUser) {
           "Content-Type": "application/json",
         },
       });
-  
-      const responseData = await response.json();
-      return responseData;
+      return response
     } catch (error) {
       console.log(error);
-      return error;
+      throw error;
     }
   }

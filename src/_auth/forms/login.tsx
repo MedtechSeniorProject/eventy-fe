@@ -30,6 +30,8 @@ const Login: FunctionComponent<LoginProps> = () => {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
+      email:"",
+      password:"",
       terms: false,
     },
   });
@@ -41,31 +43,38 @@ const Login: FunctionComponent<LoginProps> = () => {
     };
     reset();
     const response = await loginAccount(user);
-    console.log(response)
-    // Fix status code returned from backend
+    const resData = await response.json();
+    // Invalid Credentials
     if (!response.ok) {
-      // toast({ variant: "destructive", description: response.message });
-      // return;
-    }
-    if (response?.accessToken) {
-      toast({ variant: "default", description: "Successfully Logged In" });
-      setUser({
-        accessToken: response.accessToken,
-        email: response?.superadminWithoutPassword.email,
-        id: response?.superadminWithoutPassword.id,
-        name: response?.superadminWithoutPassword.name,
-        isSuperAdmin: true
-      });
-      setIsAuthenticated(true)
-      navigate("/superadmin");
-      return;
-    }
-    if (response?.message) {
-      toast({ variant: "default", description: response.message });
-      navigate("/validate", {
-        state: { email: user.email },
+      toast({
+        variant: "destructive",
+        title: resData?.name,
+        description: resData?.message,
       });
       return;
+    } else {
+      // SuperAdmin
+      if (resData?.accessToken) {
+        toast({ variant: "default", description: "Successfully Logged In" });
+        setUser({
+          accessToken: resData.accessToken,
+          email: resData?.superadmin?.email,
+          id: resData?.superadmin?.id,
+          name: resData?.superadmin?.name,
+          isSuperAdmin: true,
+        });
+        setIsAuthenticated(true);
+        navigate("/superadmin");
+        return;
+      }
+      // Event Manager
+      if (resData?.message) {
+        toast({ variant: "default", description: resData.message });
+        navigate("/validate", {
+          state: { email: user.email },
+        });
+        return;
+      }
     }
   };
 
@@ -97,6 +106,7 @@ const Login: FunctionComponent<LoginProps> = () => {
               )}
             </Alert>
           )}
+          {errors.terms && <span>This field is required</span>}
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -124,9 +134,8 @@ const Login: FunctionComponent<LoginProps> = () => {
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                  <Checkbox checked={field.value}
+                  onCheckedChange={field.onChange}
                   />
                 )}
               />

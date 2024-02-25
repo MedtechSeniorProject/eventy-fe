@@ -14,13 +14,12 @@ import { toast } from "@/components/ui/use-toast";
 import useAuth from "../hook/useAuth";
 
 const Validation: FunctionComponent = () => {
-
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
   const { setUser, setIsAuthenticated } = useAuth();
 
   //Queries
-  const { mutateAsync: validateAccount } = useValidateAccount(); 
+  const { mutateAsync: validateAccount } = useValidateAccount();
   const { mutateAsync: resendCode } = useResendCode();
 
   // Form Submission
@@ -35,28 +34,26 @@ const Validation: FunctionComponent = () => {
   const onSubmit = async (data: CodeSchema) => {
     const reqObj = {
       email: location.state.email,
-      validationCode: data.code
-    }
+      validationCode: data.code,
+    };
 
-    const response = await validateAccount(reqObj)
-
-    // Fix status code returned from backend
+    const response = await validateAccount(reqObj);
     if (!response.ok) {
-      // toast({ variant: "destructive", description: response.message });
-      // return;
-    }
-    if(response?.accessToken) {
-      setUser({
-        accessToken: response.accessToken,
-        email: response?.eventManager.email,
-        id: response?.eventManager.id,
-        name: response?.eventManager.name,
-        isSuperAdmin: false
-      });
-      setIsAuthenticated(true)
-      navigate("/eventmanager")
+      toast({ variant: "destructive", title: response.statusText, description: "Invalid Code" });
       return;
     }
+
+    const resData = await response.json();
+    setUser({
+      accessToken: resData.accessToken,
+      email: resData?.eventManager.email,
+      id: resData?.eventManager.id,
+      name: resData?.eventManager.name,
+      isSuperAdmin: false,
+    });
+    setIsAuthenticated(true);
+    navigate("/eventmanager");
+    return;
   };
 
   return (
@@ -96,19 +93,25 @@ const Validation: FunctionComponent = () => {
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="email">Verification Code</Label>
             <Input
-              {...register("code")}
-              type="number"
+              {...register("code", {required: true})}
+              type="text"
+              pattern="[0-9]*"
               id="code"
+              inputMode="numeric"
               placeholder="Verification Code"
             />
           </div>
           <div className="flex justify-between">
-            <Button type="button" variant={"secondary"} onClick={async() => {
-              // Issue with the request: I cannot send with an email 
-              console.log(location.state)
-              const response = await resendCode(location.state)
-              console.log(response)
-            }}>
+            <Button
+              type="button"
+              variant={"secondary"}
+              onClick={async () => {
+                // Issue with the request: I cannot send with an email
+                console.log(location.state);
+                const response = await resendCode(location.state);
+                console.log(response);
+              }}
+            >
               Resend Code
             </Button>
             <Button type="submit" disabled={isSubmitting} className="w-32">
