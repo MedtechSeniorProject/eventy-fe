@@ -12,6 +12,7 @@ import { FunctionComponent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import useAuth from "../hook/useAuth";
+import { ValidateUser } from "@/types/types";
 
 const Validation: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -30,6 +31,21 @@ const Validation: FunctionComponent = () => {
   } = useForm<CodeSchema>({
     resolver: zodResolver(codeSchema),
   });
+
+  const handleResendCode = async(email: ValidateUser) => {
+    const response = await resendCode(email);
+    const data = await response.json()
+
+    if(!response.ok){
+      toast({title:"An error has occured"})
+      return;
+    }
+    if(data?.message){
+      toast({title:"Resended Email Successfuly", description: data?.message})
+      return;
+    }
+
+  }
 
   const onSubmit = async (data: CodeSchema) => {
     const reqObj = {
@@ -105,12 +121,7 @@ const Validation: FunctionComponent = () => {
             <Button
               type="button"
               variant={"secondary"}
-              onClick={async () => {
-                // Issue with the request: I cannot send with an email
-                console.log(location.state);
-                const response = await resendCode(location.state);
-                console.log(response);
-              }}
+              onClick={async () => {handleResendCode(location.state)}}
             >
               Resend Code
             </Button>

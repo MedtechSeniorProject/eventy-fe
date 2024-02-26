@@ -9,7 +9,10 @@ function MyTimer({ expiryTimestamp } : TimerProps) {
   const {
     seconds,
     minutes,
-  } = useTimer({ expiryTimestamp, onExpire: () => console.warn('onExpire called') });
+    restart
+  } = useTimer({ expiryTimestamp, onExpire: () => {
+    restart(expiryTimestamp)
+  } });
 
   return (
     <div>
@@ -24,7 +27,7 @@ function Timer(){
     const time= new Date();
     time.setSeconds(time.getSeconds() + 120);
 
-    return <MyTimer expiryTimestamp={time} />
+    return <MyTimer expiryTimestamp={time}/>
 }
 
 export default Timer;
