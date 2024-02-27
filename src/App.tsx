@@ -8,13 +8,14 @@ import Dashboard from "./dashboard";
 import { AuthProvider } from "./_auth/context/AuthProvider";
 import RequireAuth from "./components/RequireAuth";
 import { QueryProvider } from "./lib/QueryProvider";
-import DashboardLayout from "./components/DashboardLayout";
+import NavLayoutSuperAdmin from "./pages/superadmin/NavLayoutSuperAdmin";
+import NavLayoutEventManager from "./pages/eventmanager/NavLayoutEventManager";
 
 const App = () => {
   return (
     <>
-        <main className="flex h-screen">
-          <QueryProvider>
+      <main className="flex h-screen">
+        <QueryProvider>
           <AuthProvider>
             <Routes>
               {/** public routes */}
@@ -24,20 +25,21 @@ const App = () => {
               </Route>
               {/** private routes */}
               <Route element={<RequireAuth role="SUPERADMIN" />}>
-                <Route path="/superadmin" element={<Dashboard />} />
+                <Route element={<NavLayoutSuperAdmin />} >
+                  <Route path="/eventmanagers" element={<Dashboard />} />
+                </Route>
               </Route>
               <Route element={<RequireAuth role="EVENTMANAGER" />}>
-                <Route path="/eventmanager" element={<Dashboard />} />
-              </Route>
-              <Route element ={<DashboardLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route element={<NavLayoutEventManager />} >
+                  <Route path="/events" element={<Dashboard />} />
+                </Route>
               </Route>
             </Routes>
           </AuthProvider>
-          </QueryProvider>
-        </main>
-        <Toaster />
-        </>
+        </QueryProvider>
+      </main>
+      <Toaster />
+    </>
   );
 };
 

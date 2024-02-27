@@ -68,7 +68,7 @@ const Validation: FunctionComponent = () => {
       isSuperAdmin: false,
     });
     setIsAuthenticated(true);
-    navigate("/eventmanager");
+    navigate("/events");
     return;
   };
 
