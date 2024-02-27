@@ -8,6 +8,7 @@ import Dashboard from "./dashboard";
 import { AuthProvider } from "./_auth/context/AuthProvider";
 import RequireAuth from "./components/RequireAuth";
 import { QueryProvider } from "./lib/QueryProvider";
+import DashboardLayout from "./components/DashboardLayout";
 
 const App = () => {
   return (
@@ -27,6 +28,9 @@ const App = () => {
               </Route>
               <Route element={<RequireAuth role="EVENTMANAGER" />}>
                 <Route path="/eventmanager" element={<Dashboard />} />
+              </Route>
+              <Route element ={<DashboardLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
               </Route>
             </Routes>
           </AuthProvider>
