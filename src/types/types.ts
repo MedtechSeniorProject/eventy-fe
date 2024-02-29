@@ -15,3 +15,9 @@ export type user = {
     name: string
     isSuperAdmin: boolean
 }
+
+export type event = {
+    name: string,
+    eventManager: string,
+    time: string
+}
