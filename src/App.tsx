@@ -14,6 +14,7 @@ import SaSettings from "./pages/superadmin/settings";
 import SaStatistics from "./pages/superadmin/statistics";
 import EmStatistics from "./pages/eventmanager/statistics";
 import EmSettings from "./pages/eventmanager/settings";
+import Events from "./pages/eventmanager/events";
 
 const App = () => {
   return (
@@ -39,7 +40,7 @@ const App = () => {
               </Route>
               <Route element={<RequireAuth role="EVENTMANAGER" />}>
                 <Route element={<NavLayoutEventManager />} >
-                  <Route path="/events" element={<Dashboard />} />
+                  <Route path="/events" element={<Events />} />
                   <Route path="/emstatistics" element={<EmStatistics />} />
                   <Route path="/emsettings" element={<EmSettings />} />
 
