@@ -28,6 +28,7 @@ export const columns: ColumnDef<Event>[] = [
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
@@ -42,6 +43,7 @@ export const columns: ColumnDef<Event>[] = [
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Time
@@ -56,6 +58,7 @@ export const columns: ColumnDef<Event>[] = [
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Event Managers
