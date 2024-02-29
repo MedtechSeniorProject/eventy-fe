@@ -3,6 +3,7 @@ import { Label } from '@radix-ui/react-label';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// superAdmin NavBar List
 const navSuperAdminList = [
     {
         name: "Event Manager",
@@ -10,30 +11,43 @@ const navSuperAdminList = [
         link: "/eventmanagers"
     },
     {
-        name: "Event Manager",
-        Icon: UserCircle,
-        link: "/eventmanagers"
+        name: "Statistics",
+        Icon: BarChart3,
+        link: "/sastatistics"
     },
     {
-        name: "Event Manager",
-        Icon: UserCircle,
-        link: "/eventmanagers"
-    },
-    {
-        name: "Event Manager",
-        Icon: UserCircle,
-        link: "/eventmanagers"
+        name: "Settings",
+        Icon: Settings,
+        link: "/sasettings"
     },
 ]
 
+// Event Manager NavBar List
+const navEventManagerList = [
+    {
+        name: "Events",
+        Icon: UserCircle,
+        link: "/events"
+    },
+    {
+        name: "Statistics",
+        Icon: BarChart3,
+        link: "/emstatistics"
+    },
+    {
+        name: "Settings",
+        Icon: Settings,
+        link: "/emsettings"
+    },
+]
 function Navbar(
     { role }: { role: string }
 ) {
-    const [active, setActive] = useState<String>("eventManager");
+    const [active, setActive] = role === 'SUPERADMIN' ? useState<String>("/eventmanagers"): useState<String>("/events");
     const navigate = useNavigate()
     function handleClick(clickedLink: string): void {
         setActive(clickedLink);
-        navigate("/sastatistics")
+        navigate(clickedLink)
     }
 
     return (
@@ -49,54 +63,32 @@ function Navbar(
             <ul className='links'>
                 {role === 'SUPERADMIN' && (
                     <>
-                    <li className={`cursor-pointer p-1 pl-5 ${active === "eventManager" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("eventManager") }}>
-                        <div className="flex">
-                            <Users className='m-4' />
-                            <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Event Managers</Label>
-                        </div>
-                    </li>
-                    <li className={`cursor-pointer p-1 pl-5 ${active === "statistics" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("statistics") }}>
-                        <div className="flex">
-                            <BarChart3 className='m-4' />
-                            <Label className='m-auto center font-bold cursor-pointer' style={{ marginLeft: '0.5rem' }}>Statistics</Label>
-                        </div>
-                    </li>
-                    <li className={`cursor-pointer p-1 pl-5 ${active === "settings" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("settings") }}>
-                        <div className="flex">
-                            <Settings className='m-4' />
-                            <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Settings</Label>
-                        </div>
-                    </li>
+                    {navSuperAdminList.map((item, index) => {
+                        return (
+                            <li className={`cursor-pointer p-1 pl-5 ${active === item.link ? "bg-primary text-white" : ""}`} onClick={() => { handleClick(item.link) }} key={index}>
+                                <div className="flex">
+                                    <item.Icon className='m-4' />
+                                    <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>{item.name}</Label>
+                                </div>
+                            </li>
+                        )
+                    })}
                 </>
                 )}
                 {role === 'EVENTMANAGER' && (
-                    <>
-                        <li className={`cursor-pointer p-1 pl-5 ${active === "profile" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("profile") }}>
-                            <div className="flex">
-                                <UserCircle className='m-4' />
-                                <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Profile</Label>
-                            </div>
-                        </li>
-                        <li className={`cursor-pointer p-1 pl-5 ${active === "events" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("events") }}>
-                            <div className="flex">
-                                <CalendarDays className='m-4' />
-                                <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Events</Label>
-                            </div>
-                        </li>
-                        <li className={`cursor-pointer p-1 pl-5 ${active === "statistics" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("statistics") }}>
-                            <div className="flex">
-                                <BarChart3 className='m-4' />
-                                <Label className='m-auto center font-bold cursor-pointer' style={{ marginLeft: '0.5rem' }}>Statistics</Label>
-                            </div>
-                        </li>
-                        <li className={`cursor-pointer p-1 pl-5 ${active === "settings" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("settings") }}>
-                            <div className="flex">
-                                <Settings className='m-4' />
-                                <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Settings</Label>
-                            </div>
-                        </li>
+                <>
+                 {navEventManagerList.map((item, index) => {
+                        return (
+                            <li className={`cursor-pointer p-1 pl-5 ${active === item.link ? "bg-primary text-white" : ""}`} onClick={() => { handleClick(item.link) }} key={index}>
+                                <div className="flex">
+                                    <item.Icon className='m-4' />
+                                    <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>{item.name}</Label>
+                                </div>
+                            </li>
+                         )
+                    })}   
                     </>
-                )}
+                    )}
             </ul>
         </nav>
     )
