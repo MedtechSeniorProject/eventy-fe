@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import "./globals.css";
 import AuthLayout from "./_auth/AuthLayout";
 import Login from "./_auth/forms/login";
@@ -20,6 +20,8 @@ const App = () => {
             <Routes>
               {/** public routes */}
               <Route element={<AuthLayout />}>
+                 {/** Redirect to /login */}
+                <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/validate" element={<Validation />} />
               </Route>
