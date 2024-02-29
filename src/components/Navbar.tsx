@@ -9,6 +9,7 @@ import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import useAuth from "@/_auth/hook/useAuth";
 
 // superAdmin NavBar List
 const navSuperAdminList = [
@@ -47,11 +48,13 @@ const navEventManagerList = [
     link: "/emsettings",
   },
 ];
+
 function Navbar({ role }: { role: string }) {
   const [active, setActive] =
     role === "SUPERADMIN"
       ? useState<String>("/eventmanagers")
       : useState<String>("/events");
+  const { logout } = useAuth();
   const navigate = useNavigate();
   function handleClick(clickedLink: string): void {
     setActive(clickedLink);
@@ -130,7 +133,7 @@ function Navbar({ role }: { role: string }) {
         )}
       </ul>
       <div className="flex-1 flex justify-center items-center">
-        <Button variant={"default"} className="w-1/2">
+        <Button variant={"default"} className="w-1/2" onClick={() => {logout()}}>
           Logout
         </Button>
       </div>
