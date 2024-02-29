@@ -11,7 +11,9 @@ const NavLayoutSuperAdmin = () => {
             </div>
             <div className="flex">
                 <Navbar role="SUPERADMIN" />
-                <Outlet />
+                <div className="flex-1 mt-12 ml-[25%]">
+                    <Outlet />
+                </div>
             </div>
         </div>
     );
