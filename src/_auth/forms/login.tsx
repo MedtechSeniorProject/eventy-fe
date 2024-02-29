@@ -41,7 +41,7 @@ const Login: FunctionComponent<LoginProps> = () => {
       email: data.email,
       password: data.password,
     };
-    reset();
+    
     const response = await loginAccount(user);
     const resData = await response.json();
     // Invalid Credentials
@@ -64,7 +64,8 @@ const Login: FunctionComponent<LoginProps> = () => {
           isSuperAdmin: true,
         });
         setIsAuthenticated(true);
-        navigate("/superadmin");
+        navigate("/eventmanagers");
+        reset();
         return;
       }
       // Event Manager
@@ -73,6 +74,7 @@ const Login: FunctionComponent<LoginProps> = () => {
         navigate("/validate", {
           state: { email: user.email },
         });
+        reset();
         return;
       }
     }

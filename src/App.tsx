@@ -10,6 +10,7 @@ import RequireAuth from "./components/RequireAuth";
 import { QueryProvider } from "./lib/QueryProvider";
 import NavLayoutSuperAdmin from "./pages/superadmin/NavLayoutSuperAdmin";
 import NavLayoutEventManager from "./pages/eventmanager/NavLayoutEventManager";
+import Statistics from "./pages/superadmin/statistics";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
               <Route element={<RequireAuth role="SUPERADMIN" />}>
                 <Route element={<NavLayoutSuperAdmin />} >
                   <Route path="/eventmanagers" element={<Dashboard />} />
+                  <Route path="/sastatistics" element={<Statistics />} />
                 </Route>
               </Route>
               <Route element={<RequireAuth role="EVENTMANAGER" />}>

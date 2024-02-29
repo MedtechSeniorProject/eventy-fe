@@ -1,16 +1,39 @@
 import { BarChart3, CalendarDays, Settings, UserCircle, Users } from 'lucide-react';
 import { Label } from '@radix-ui/react-label';
 import { useState } from 'react';
-import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
+
+const navSuperAdminList = [
+    {
+        name: "Event Manager",
+        Icon: UserCircle,
+        link: "/eventmanagers"
+    },
+    {
+        name: "Event Manager",
+        Icon: UserCircle,
+        link: "/eventmanagers"
+    },
+    {
+        name: "Event Manager",
+        Icon: UserCircle,
+        link: "/eventmanagers"
+    },
+    {
+        name: "Event Manager",
+        Icon: UserCircle,
+        link: "/eventmanagers"
+    },
+]
 
 function Navbar(
     { role }: { role: string }
 ) {
-    const [active, setActive] = useState<String>("profile");
-
+    const [active, setActive] = useState<String>("eventManager");
+    const navigate = useNavigate()
     function handleClick(clickedLink: string): void {
         setActive(clickedLink);
-        //TODO: Add logic to navigate to the clicked link
+        navigate("/sastatistics")
     }
 
     return (
@@ -26,12 +49,6 @@ function Navbar(
             <ul className='links'>
                 {role === 'SUPERADMIN' && (
                     <>
-                    <li className={`cursor-pointer p-1 pl-5 ${active === "profile" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("profile") }}>
-                        <div className="flex">
-                            <UserCircle className='m-4' />
-                            <Label className='m-auto center font-bold cursor-pointer ' style={{ marginLeft: '0.5rem' }}>Profile</Label>
-                        </div>
-                    </li>
                     <li className={`cursor-pointer p-1 pl-5 ${active === "eventManager" ? "bg-primary text-white" : ""}`} onClick={() => { handleClick("eventManager") }}>
                         <div className="flex">
                             <Users className='m-4' />
