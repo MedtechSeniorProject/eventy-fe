@@ -1,7 +1,7 @@
-const Statistics = () => {
+const SaStatistics = () => {
   return (
-    <div>Statistics</div>
+    <div>SA Statistics</div>
   )
 }
 
-export default Statistics
+export default SaStatistics
