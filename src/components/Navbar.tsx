@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // superAdmin NavBar List
 const navSuperAdminList = [
     {
-        name: "Event Manager",
+        name: "Event Managers",
         Icon: UserCircle,
         link: "/eventmanagers"
     },
