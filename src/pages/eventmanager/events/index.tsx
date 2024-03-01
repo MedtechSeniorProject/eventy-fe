@@ -1,3 +1,4 @@
+import CreateEvent from "@/components/CreateEvent";
 import Header from "@/components/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UpcomingEvents from "@/components/upcomingEvents/page";
@@ -8,6 +9,7 @@ const Events = () => {
     <>
       <div className="p-10 w-full">
         <Header name="Events" />
+        <CreateEvent />
         <div className="mt-10">
           <Tabs defaultValue="upcoming" className="w-full">
             <TabsList>
