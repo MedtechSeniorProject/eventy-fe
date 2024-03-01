@@ -4,7 +4,6 @@ import AuthLayout from "./_auth/AuthLayout";
 import Login from "./_auth/forms/login";
 import Validation from "./_auth/forms/validation";
 import { Toaster } from "./components/ui/toaster";
-import Dashboard from "./dashboard";
 import { AuthProvider } from "./_auth/context/AuthProvider";
 import RequireAuth from "./components/RequireAuth";
 import { QueryProvider } from "./lib/QueryProvider";
@@ -15,6 +14,7 @@ import SaStatistics from "./pages/superadmin/statistics";
 import EmStatistics from "./pages/eventmanager/statistics";
 import EmSettings from "./pages/eventmanager/settings";
 import Events from "./pages/eventmanager/events";
+import EventManagers from "./pages/superadmin/eventmanagers";
 
 const App = () => {
   return (
@@ -33,7 +33,7 @@ const App = () => {
               {/** private routes */}
               <Route element={<RequireAuth role="SUPERADMIN" />}>
                 <Route element={<NavLayoutSuperAdmin />} >
-                  <Route path="/eventmanagers" element={<Dashboard />} />
+                  <Route path="/eventmanagers" element={<EventManagers />} />
                   <Route path="/sastatistics" element={<SaStatistics />} />
                   <Route path="/sasettings" element={<SaSettings />} />
                 </Route>
