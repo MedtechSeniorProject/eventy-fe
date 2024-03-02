@@ -21,3 +21,9 @@ export type event = {
     eventManager: string,
     time: string
 }
+
+export type EventManager = {
+    name: string,
+    email: string,
+    password: string
+}
