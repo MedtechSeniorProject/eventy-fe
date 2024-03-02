@@ -7,9 +7,7 @@ export default function EventManagersList() {
 const { data, isError, isLoading } = useGetEventManagers();
 
 
-if (isError) {
-  return <div>woops there was an error</div>;
-}
+if (isError) return <div>woops there was an error</div>;
 if (isLoading) return <p>Loading event managers...</p>;
 
   return (
