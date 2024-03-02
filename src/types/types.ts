@@ -28,3 +28,12 @@ export type EventManager = {
     email: string,
     password: string
 }
+
+export type Attendee = {
+    id: number,
+    name: string,
+    email: string,
+    phoneNumber: string,
+    addedBy : string,
+    attended: boolean
+}
