@@ -15,8 +15,6 @@ import {
 import EditEvent from "../EditEvent";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Event = {
   name: string;
   time: string;
@@ -63,7 +61,7 @@ export const columns: ColumnDef<Event>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Event Managers
+          Event Manager
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

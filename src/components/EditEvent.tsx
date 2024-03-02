@@ -1,5 +1,4 @@
 import {
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -27,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import useAuth from "@/_auth/hook/useAuth";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 const FormSchema = z
   .object({
@@ -42,25 +41,24 @@ const EditEvent = ({ ...props }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: props?.event?.name,
-      eventDate: props?.event?.time,
+      name: props.event.name,
+      eventDate: parse(props.event.time, "EEEE, MMMM d, yyyy", new Date()),
     },
   });
   const { user } = useAuth();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data.eventDate);
     form.reset();
     console.log("Event Manager ID: ", user.id);
     console.log(data);
   }
-  
+
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Edit Event: {props?.event?.name}</DialogTitle>
-        <DialogDescription>
-          Youre editing an event
-        </DialogDescription>
+        <DialogDescription>Youre editing an event</DialogDescription>
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -119,11 +117,9 @@ const EditEvent = ({ ...props }) => {
               </FormItem>
             )}
           />
-          <DialogClose asChild>
-              <Button variant={"secondary"} className="w-20" type="submit">
-                Add
-              </Button>
-            </DialogClose>
+          <Button variant={"secondary"} className="w-20" type="submit">
+            Add
+          </Button>
         </form>
       </Form>
     </DialogContent>
