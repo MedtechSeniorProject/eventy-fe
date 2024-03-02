@@ -12,8 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import EditEvent from "../EditEvent";
-import { Dialog, DialogTrigger } from "../ui/dialog";
+import EditEvent from "../../EditEvent";
+import { Dialog, DialogTrigger } from "../../ui/dialog";
 
 export type Event = {
   name: string;
