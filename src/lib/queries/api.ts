@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager } from "@/types/types";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<Response> {
@@ -78,3 +78,26 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
       throw error;
     }
   }
+
+
+/** Create Event Managers Request */
+export async function createEventManager(eventmanager: EventManager): Promise<Response> {
+
+   try {
+      const response = await fetch("http://localhost:3000/eventmanagers", {
+        method: "POST",
+        body: JSON.stringify({
+          name: eventmanager.name,
+          password: eventmanager.password, 
+          email: eventmanager.email,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+}

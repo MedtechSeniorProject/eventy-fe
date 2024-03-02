@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 
-import { loginAccount, validateAccount, resendCode,getEventManagers } from "./api";
-import { LoginUser, ValidateUser } from "@/types/types";
+import { loginAccount, validateAccount, resendCode,getEventManagers, createEventManager } from "./api";
+import { EventManager, LoginUser, ValidateUser, } from "@/types/types";
 
 // ============================================================
 // AUTH QUERIES
@@ -31,4 +31,12 @@ export const useResendCode = () => {
 
 export const useGetEventManagers = () => {
     return useQuery({queryFn: getEventManagers, queryKey: "eventmanagers"});
+}
+
+// add event manager
+
+export const useCreateEventManager = () => {
+    return useMutation({
+        mutationFn: (eventmanager: EventManager) => createEventManager(eventmanager),
+    })
 }
