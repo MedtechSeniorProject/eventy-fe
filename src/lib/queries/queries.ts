@@ -26,7 +26,7 @@ export const useResendCode = () => {
 }
 
 // ============================================================
-// DATA QUERIES
+// SUPERADMIN QUERIES
 // ============================================================
 
 export const useGetEventManagers = () => {

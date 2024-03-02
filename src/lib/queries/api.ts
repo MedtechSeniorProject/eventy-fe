@@ -59,7 +59,11 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
     }
   }
 
-  /** Get Event Managers Request */
+// ============================================================
+// SUPERADMIN ENDPOINTS
+// ============================================================
+
+/** Get Event Managers Request */
   export async function getEventManagers(): Promise<[]> {
     try {
       const response = await fetch("http://localhost:3000/eventmanagers", {
