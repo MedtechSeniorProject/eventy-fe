@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import EditEvent from "../EditEvent";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -74,27 +75,34 @@ export const columns: ColumnDef<Event>[] = [
       const event = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{event.name}</DropdownMenuLabel>
-            <EditEvent />
-            <DropdownMenuItem>Event Insights</DropdownMenuItem>
-            <DropdownMenuItem>Guests List</DropdownMenuItem>
-            <DropdownMenuItem>Email Template</DropdownMenuItem>
-            <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
-            <DropdownMenuItem>Desk Agents</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red">
-              Archive Event
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{event.name}</DropdownMenuLabel>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem>Edit Event Details</DropdownMenuItem>
+                </DialogTrigger>
+                <DropdownMenuItem>Event Insights</DropdownMenuItem>
+                <DropdownMenuItem>Guests List</DropdownMenuItem>
+                <DropdownMenuItem>Email Template</DropdownMenuItem>
+                <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
+                <DropdownMenuItem>Desk Agents</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-red">
+                  Archive Event
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <EditEvent event={event} />
+          </Dialog>
+        </>
       );
     },
   },
