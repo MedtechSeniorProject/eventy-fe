@@ -58,3 +58,19 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
       throw error;
     }
   }
+
+  /** Get Event Managers Request */
+  export async function getEventManagers(): Promise<[]> {
+    try {
+      const response = await fetch("http://localhost:3000/eventmanagers", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.json()
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }

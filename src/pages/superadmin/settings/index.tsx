@@ -1,7 +1,12 @@
+import useAuth from "@/_auth/hook/useAuth"
+
 const SaSettings = () => {
-    return (
-      <div>SA Settings</div>
-    )
+ 
+  const { user } = useAuth()
+  console.log(user)
+  return (
+    <div>SA SETTINGS: {user?.email}</div>
+  )
   }
   
   export default SaSettings

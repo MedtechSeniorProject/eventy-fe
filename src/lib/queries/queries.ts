@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { loginAccount, validateAccount, resendCode } from "./api";
+import { loginAccount, validateAccount, resendCode,getEventManagers } from "./api";
 import { LoginUser, ValidateUser } from "@/types/types";
 
 // ============================================================
@@ -24,3 +24,16 @@ export const useResendCode = () => {
         mutationFn: (user: ValidateUser) => resendCode(user),
     })
 }
+
+// ============================================================
+// DATA QUERIES
+// ============================================================
+
+export const useGetEventManagers = () => {
+    return useMutation({
+      mutationFn: async () => {
+        const data = await getEventManagers();
+        return data; 
+      },
+    });
+  };
