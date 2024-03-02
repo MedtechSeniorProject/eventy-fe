@@ -15,6 +15,7 @@ import EmStatistics from "./pages/eventmanager/statistics";
 import EmSettings from "./pages/eventmanager/settings";
 import Events from "./pages/eventmanager/events";
 import EventManagers from "./pages/superadmin/eventmanagers";
+import EventGuestList from "./pages/eventmanager/event/guestlist";
 
 const App = () => {
   return (
@@ -43,7 +44,7 @@ const App = () => {
                   <Route path="/events" element={<Events />} />
                   <Route path="/emstatistics" element={<EmStatistics />} />
                   <Route path="/emsettings" element={<EmSettings />} />
-
+                  <Route path="/event/:id/guestlist" element={<EventGuestList />} />
                 </Route>
               </Route>
             </Routes>

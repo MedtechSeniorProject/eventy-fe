@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import EditEvent from "../../EditEvent";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -65,6 +66,7 @@ export const columns: ColumnDef<Event>[] = [
     id: "actions",
     cell: ({ row }) => {
       const event = row.original;
+      const navigate = useNavigate()
 
       return (
         <>
@@ -82,7 +84,7 @@ export const columns: ColumnDef<Event>[] = [
                   <DropdownMenuItem>Edit Event Details</DropdownMenuItem>
                 </DialogTrigger>
                 <DropdownMenuItem>Event Insights</DropdownMenuItem>
-                <DropdownMenuItem>Guests List</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/guestlist`)}}>Guests List</DropdownMenuItem>
                 <DropdownMenuItem>Email Template</DropdownMenuItem>
                 <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
                 <DropdownMenuItem>Desk Agents</DropdownMenuItem>
