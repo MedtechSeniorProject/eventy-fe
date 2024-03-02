@@ -30,5 +30,5 @@ export const useResendCode = () => {
 // ============================================================
 
 export const useGetEventManagers = () => {
-    return useQuery("eventmanagers", getEventManagers);
+    return useQuery({queryFn: getEventManagers, queryKey: "eventmanagers"});
 }
