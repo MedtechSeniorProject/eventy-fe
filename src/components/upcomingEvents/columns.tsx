@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
- 
-import { Button } from "@/components/ui/button"
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,15 +11,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import EditEvent from "../EditEvent";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Event = {
-  name: string,
-  time: string,
-  eventManager: string
-}
+  name: string;
+  time: string;
+  eventManager: string;
+};
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -34,7 +35,7 @@ export const columns: ColumnDef<Event>[] = [
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -49,7 +50,7 @@ export const columns: ColumnDef<Event>[] = [
           Time
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -64,14 +65,14 @@ export const columns: ColumnDef<Event>[] = [
           Event Managers
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const event = row.original
- 
+      const event = row.original;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -82,20 +83,19 @@ export const columns: ColumnDef<Event>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{event.name}</DropdownMenuLabel>
-            <DropdownMenuItem>
-              Edit Event Details
-            </DropdownMenuItem>
-            
+            <EditEvent />
             <DropdownMenuItem>Event Insights</DropdownMenuItem>
             <DropdownMenuItem>Guests List</DropdownMenuItem>
             <DropdownMenuItem>Email Template</DropdownMenuItem>
             <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
             <DropdownMenuItem>Desk Agents</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red">Archive Event</DropdownMenuItem>
+            <DropdownMenuItem className="text-red">
+              Archive Event
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
