@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import { loginAccount, validateAccount, resendCode,getEventManagers } from "./api";
 import { LoginUser, ValidateUser } from "@/types/types";
@@ -30,10 +30,5 @@ export const useResendCode = () => {
 // ============================================================
 
 export const useGetEventManagers = () => {
-    return useMutation({
-      mutationFn: async () => {
-        const data = await getEventManagers();
-        return data; 
-      },
-    });
-  };
+    return useQuery("eventmanagers", getEventManagers);
+}
