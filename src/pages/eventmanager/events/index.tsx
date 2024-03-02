@@ -1,7 +1,8 @@
 import CreateEvent from "@/components/CreateEvent";
 import Header from "@/components/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UpcomingEvents from "@/components/upcomingEvents/page";
+import UpcomingEvents from "@/components/events/upcomingEvents/page";
+import ArchivedEvents from "@/components/events/archivedEvents/page";
 
 const Events = () => {
 
@@ -20,7 +21,7 @@ const Events = () => {
               <UpcomingEvents />
             </TabsContent>
             <TabsContent value="archived">
-              Change your password here.
+              <ArchivedEvents />
             </TabsContent>
           </Tabs>
         </div>
