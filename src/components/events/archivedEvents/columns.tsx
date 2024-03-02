@@ -14,12 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import EditEvent from "../../EditEvent";
 import { Dialog } from "../../ui/dialog";
-
-export type Event = {
-  name: string;
-  time: string;
-  eventManager: string;
-};
+import { Event } from "@/types/types";
 
 export const columns: ColumnDef<Event>[] = [
   {

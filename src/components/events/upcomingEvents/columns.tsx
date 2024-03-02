@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import { Event } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,12 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import EditEvent from "../../EditEvent";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
-
-export type Event = {
-  name: string;
-  time: string;
-  eventManager: string;
-};
 
 export const columns: ColumnDef<Event>[] = [
   {
