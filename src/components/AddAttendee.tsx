@@ -30,7 +30,6 @@ import {
         invalid_type_error: "Name must be a string",
       }),
       email: z.string().email(),
-      phoneNumber: z.string().length(8),
       addedBy: z.string(),
       attended: z.boolean()
     })
@@ -40,7 +39,6 @@ import {
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        phoneNumber: "",
         addedBy: user?.id,
         attended: false
       }
@@ -57,7 +55,7 @@ import {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="mt-5" variant="default">
+          <Button variant="default">
             Add Attendee
           </Button>
         </DialogTrigger>
@@ -98,23 +96,6 @@ import {
                         {...field}
                         value={field.value ?? ""}
                         placeholder="Email"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ""}
-                        placeholder="Phone Number"
                       />
                     </FormControl>
                     <FormMessage />

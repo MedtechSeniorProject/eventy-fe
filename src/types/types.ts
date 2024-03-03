@@ -33,7 +33,6 @@ export type Attendee = {
     id: number,
     name: string,
     email: string,
-    phoneNumber: string,
     addedBy : string,
     attended: boolean
 }

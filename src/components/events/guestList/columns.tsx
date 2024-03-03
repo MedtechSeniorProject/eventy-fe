@@ -60,21 +60,6 @@ export const columns: ColumnDef<Attendee>[] = [
     },
   },
   {
-    accessorKey: "phoneNumber",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="px-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Phone Number
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: "addedBy",
     header: ({ column }) => {
       return (
