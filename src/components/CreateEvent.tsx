@@ -119,6 +119,9 @@ const CreateEvent = () => {
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
+                        disabled={(date) =>
+                          date < new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
