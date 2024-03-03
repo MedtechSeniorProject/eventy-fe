@@ -24,6 +24,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "../../ui/button";
+import { AlertConfirmation } from "@/components/Alert";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,7 +39,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -57,9 +58,20 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
   });
 
+  function checkSelectedRows(): boolean{
+     return table.getFilteredSelectedRowModel().rows.length == 0
+  }
+
+  function handleRemoveAttendees() {
+    const array = table.getFilteredSelectedRowModel().rows
+    array.forEach((attendee) => {
+      console.log(attendee.original)
+    })
+  }
+
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter attendees..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -68,6 +80,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <AlertConfirmation name="Remove Attendees" disabled={checkSelectedRows()} cta={handleRemoveAttendees} />
       </div>
       <div className="w-full border">
         <Table>
@@ -118,23 +131,30 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+
+        <div className="flex items-center justify-between space-x-2 py-4">
+          <div className="text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+          <div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
