@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import EventHeader from "@/components/EventHeader"
 import GuestList from "@/components/events/guestList/page";
 import AddAttendee from "@/components/AddAttendee";
+import UploadAttendee from "@/components/UploadAttendee";
 
 const EventGuestList = () => {
   let params = useParams();
@@ -18,8 +19,9 @@ const EventGuestList = () => {
   return (
     <div className="p-10 w-full">
       <EventHeader name={data.name} time={data.time} />
-      <div className="mt-5">
+      <div className="mt-5 flex gap-5">
         <AddAttendee />
+        <UploadAttendee />
       </div>
       <GuestList />
     </div>
