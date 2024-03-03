@@ -77,7 +77,7 @@ import {
                     <FormControl>
                       <Input
                         {...field}
-                        value={field.value}
+                        value={field.value ?? ""}
                         placeholder="Name"
                       />
                     </FormControl>
