@@ -101,3 +101,41 @@ export async function createEventManager(eventmanager: EventManager): Promise<Re
       throw error;
     }
 }
+
+// ============================================================
+// Events ENDPOINTS
+// ============================================================
+
+/** Get Upcoming Events*/
+export async function getUpcomingEvents(accessToken: string | null): Promise<[]> {
+  try {
+    const response = await fetch("http://localhost:3000/events/upcoming", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    });
+    return response.json()
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/** Get Archived Events*/
+export async function getArchivedEvents(accessToken: string | null): Promise<[]> {
+  try {
+    const response = await fetch("http://localhost:3000/events/archived", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    });
+    return response.json()
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
