@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import CreateEventManager from "@/components/createEventManager";
+import CreateEventManager from "@/components/CreateEventManager";
 import EventManagersList from "@/components/eventmanagers/page";
 
 const EventManagers = () => {

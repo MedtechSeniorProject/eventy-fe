@@ -44,12 +44,19 @@ export const useGetEventManagers = () => {
 };
 
 // add event manager
-
 export const useCreateEventManager = () => {
-  return useMutation({
-    mutationFn: (eventmanager: EventManager) =>
-      createEventManager(eventmanager),
-  });
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (eventmanager: EventManager) => createEventManager(eventmanager),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('eventmanagers');
+      },
+    }
+  );
+
+  return mutation;
 };
 
 // ============================================================

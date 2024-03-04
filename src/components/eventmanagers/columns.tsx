@@ -37,7 +37,7 @@ export const columns: ColumnDef<EventManager>[] = [
     },
   },
   {
-    accessorKey: "time",
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
@@ -45,7 +45,7 @@ export const columns: ColumnDef<EventManager>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Time
+          Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
