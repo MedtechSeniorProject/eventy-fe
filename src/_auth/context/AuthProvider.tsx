@@ -16,7 +16,8 @@ const INITIAL_STATE = {
   setUser: () => {},
   setIsAuthenticated: () => {},
   checkAuthUser: async () => false as boolean,
-  logout: () => {}
+  logout: () => {},
+  getAccessToken: () => null
 };
 
 type contextType = {
@@ -26,6 +27,7 @@ type contextType = {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   logout: () => void;
+  getAccessToken: () => string | null
 };
 
 const AuthContext = createContext<contextType>(INITIAL_STATE);
@@ -42,9 +44,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(false)
   }
 
+  const getAccessToken = () => user.accessToken
+
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isLoading, isAuthenticated, setIsAuthenticated, logout }}
+      value={{ user, setUser, isLoading, isAuthenticated, setIsAuthenticated, logout, getAccessToken }}
     >
       {!isLoading ? children : (
         <div className="h-full w-full flex justify-center items-center">
