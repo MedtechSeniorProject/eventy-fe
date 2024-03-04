@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm } from "@/types/types";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<Response> {
@@ -138,4 +138,26 @@ export async function getArchivedEvents(accessToken: string | null): Promise<[]>
     console.log(error);
     throw error;
   }
+}
+
+/**Create Event */
+export async function createEvent(eventmanager: EventForm, accessToken: string | null): Promise<Response> {
+
+  try {
+     const response = await fetch("http://localhost:3000/events", {
+       method: "POST",
+       body: JSON.stringify({
+         name: eventmanager.name,
+         time: eventmanager.time
+       }),
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`
+       },
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
 }

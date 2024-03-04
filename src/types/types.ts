@@ -36,3 +36,8 @@ export type Attendee = {
     addedBy : string,
     attended: boolean
 }
+
+export type EventForm = {
+    name: string, 
+    time: string
+}

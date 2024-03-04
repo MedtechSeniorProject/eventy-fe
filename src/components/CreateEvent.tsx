@@ -13,7 +13,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { formatISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -30,7 +30,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
-import useAuth from "@/_auth/hook/useAuth";
+import { useCreateEvent } from "@/lib/queries/queries";
+import { useToast } from "./ui/use-toast";
 
 const FormSchema = z
   .object({
@@ -42,17 +43,31 @@ const FormSchema = z
   .required();
 
 const CreateEvent = () => {
+  const {toast} = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-  const { user } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
+  const { mutateAsync: createEvent } = useCreateEvent();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    // Formatting Date Time
+    let datetimeString = formatISO(data.eventDate);
+
+    const event = {
+      name: data.name,
+      time: datetimeString
+    }
+    const response = await createEvent(event);
+    if(!response.ok){
+      toast({variant:"destructive",title:"Error", description:"An error has occured with the event"})
+      form.reset()
+      return;
+    }
     form.reset();
-    console.log("Event Manager ID: ", user.id);
-    console.log(data);
     setOpen(false);
+    toast({title:"Event added successfully", description: `Event: ${data.name} is added to the upcoming events !`})
+    return;
   }
 
   return (
@@ -129,8 +144,8 @@ const CreateEvent = () => {
                 </FormItem>
               )}
             />
-            <Button variant={"secondary"} className="w-20" type="submit">
-              Add
+            <Button variant={"secondary"} className="w-20" type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Loading..." : "Add"}
             </Button>
           </form>
         </Form>

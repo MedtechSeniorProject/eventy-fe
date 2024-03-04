@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   loginAccount,
   validateAccount,
@@ -7,8 +7,9 @@ import {
   createEventManager,
   getUpcomingEvents,
   getArchivedEvents,
+  createEvent,
 } from "./api";
-import { EventManager, LoginUser, ValidateUser } from "@/types/types";
+import { EventManager, LoginUser, ValidateUser, EventForm } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
 // ============================================================
@@ -76,4 +77,20 @@ export const useGetArchivedEvents = () => {
         }
         return getArchivedEvents(accessToken);
       });
+};
+
+export const useCreateEvent = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (event: EventForm) => createEvent(event, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('upcomingEvents');
+      },
+    }
+  );
+
+  return mutation;
 };
