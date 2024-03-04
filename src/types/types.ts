@@ -17,7 +17,7 @@ export type user = {
 }
 
 export type Event = {
-    id: number,
+    id: string,
     name: string;
     time: string;
     eventManager: string;
