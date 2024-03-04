@@ -25,33 +25,49 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useAuth from "@/_auth/hook/useAuth";
-import { format, parse } from "date-fns";
+import { format, formatISO, parse, toDate } from "date-fns";
+import { useUpdateEvent } from "@/lib/queries/queries";
+import { EventUpdateForm } from "@/types/types";
+import { toast } from "./ui/use-toast";
 
 const FormSchema = z
   .object({
     name: z.string(),
-    eventDate: z.date({
-      required_error: "A date of birth is required.",
-    }),
+    eventDate: z.date()
   })
   .required();
 
 const EditEvent = ({ ...props }) => {
+  const { mutateAsync: updateEvent} = useUpdateEvent()
+
+  function convertToDate(inputDateString: string) {
+    const date = parse(inputDateString, 'M/dd/yyyy, hh:mm:ss a', new Date());
+    const fDate = toDate(date)
+    return fDate;
+  }
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: props.event.name,
-      eventDate: parse(props.event.time, "EEEE, MMMM d, yyyy", new Date()),
+      eventDate: convertToDate(props.event.time)
     },
   });
-  const { user } = useAuth();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data.eventDate);
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const event: EventUpdateForm = {
+      id: props.event.id,
+      name: data.name,
+      time: formatISO(data.eventDate)
+    }
+    console.log(event)
+    const response = await updateEvent(event);
+    if(!response.ok){
+      toast({variant: "destructive", title: "Error"})
+      return;
+    }
+    console.log(response)
     form.reset();
-    console.log("Event Manager ID: ", user.id);
-    console.log(data);
   }
 
   return (

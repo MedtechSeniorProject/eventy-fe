@@ -41,3 +41,9 @@ export type EventForm = {
     name: string, 
     time: string
 }
+
+export type EventUpdateForm = {
+    id: string,
+    name?: string, 
+    time?: string
+}

@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm } from "@/types/types";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<Response> {
@@ -141,18 +141,39 @@ export async function getArchivedEvents(accessToken: string | null): Promise<[]>
 }
 
 /**Create Event */
-export async function createEvent(eventmanager: EventForm, accessToken: string | null): Promise<Response> {
+export async function createEvent(event: EventForm, accessToken: string | null): Promise<Response> {
 
   try {
      const response = await fetch("http://localhost:3000/events", {
        method: "POST",
-       body: JSON.stringify({
-         name: eventmanager.name,
-         time: eventmanager.time
-       }),
        headers: {
          "Content-Type": "application/json",
          "Authorization": `Bearer ${accessToken}`
+       },
+       body: JSON.stringify({
+        name: event.name,
+        time: event.time
+      }),
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
+}
+
+/**Update Event */
+export async function updateEvent(event: EventUpdateForm, accessToken: string | null): Promise<Response> {
+  try {
+     const response = await fetch(`http://localhost:3000/events/${event.id}`, {
+       method: "PATCH",
+       body: JSON.stringify({
+         name: event.name,
+         time: event.time
+       }),
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`,
        },
      });
      return response

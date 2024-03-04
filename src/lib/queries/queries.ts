@@ -8,8 +8,9 @@ import {
   getUpcomingEvents,
   getArchivedEvents,
   createEvent,
+  updateEvent,
 } from "./api";
-import { EventManager, LoginUser, ValidateUser, EventForm } from "@/types/types";
+import { EventManager, LoginUser, ValidateUser, EventForm, EventUpdateForm } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
 // ============================================================
@@ -85,6 +86,22 @@ export const useCreateEvent = () => {
 
   const mutation = useMutation(
     (event: EventForm) => createEvent(event, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('upcomingEvents');
+      },
+    }
+  );
+
+  return mutation;
+};
+
+export const useUpdateEvent = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (event: EventUpdateForm) => updateEvent(event, getAccessToken()),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('upcomingEvents');
