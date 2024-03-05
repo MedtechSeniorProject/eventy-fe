@@ -199,3 +199,22 @@ export async function toogleArchiveEvent(id: string, accessToken: string | null)
      throw error;
    }
 }
+
+/**Delete Event */
+export async function deleteEvent(id: string, accessToken: string | null): Promise<Response> {
+  try {
+    console.log(accessToken)
+    console.log(id)
+     const response = await fetch(`http://localhost:3000/events/delete/${id}`, {
+       method: "DELETE",
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`,
+       },
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
+}

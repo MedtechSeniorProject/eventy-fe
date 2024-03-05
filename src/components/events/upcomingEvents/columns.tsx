@@ -15,7 +15,7 @@ import {
 import EditEvent from "../../EditEvent";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
 import { useNavigate } from "react-router-dom";
-import { useToggleArchiveEvent } from "@/lib/queries/queries";
+import { useDeleteEvent, useToggleArchiveEvent } from "@/lib/queries/queries";
 import { useToast } from "@/components/ui/use-toast";
 
 export const columns: ColumnDef<Event>[] = [
@@ -71,6 +71,7 @@ export const columns: ColumnDef<Event>[] = [
       const { toast } = useToast()
       const navigate = useNavigate()
       const { mutateAsync: toggleArchiveEvent } = useToggleArchiveEvent()
+      const { mutateAsync: deleteEvent } = useDeleteEvent()
 
       const handleToggleArchiveEvent = async(id: string) => {
         const response = await toggleArchiveEvent(id);
@@ -80,6 +81,16 @@ export const columns: ColumnDef<Event>[] = [
         }
         const data = await response.json()
         toast({title:"Event Archived Successfully", description: `Event ${data.name} is archived!`})
+      }
+
+      const handleDeleteEvent = async(id: string) => {
+        const response = await deleteEvent(id);
+        if(!response.ok){
+          toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
+          return;
+        }
+        const data = await response.json()
+        toast({title:"Event Deleted Successfully", description: `Event ${data.name} is deleted!`})
       }
 
       return (
@@ -106,6 +117,8 @@ export const columns: ColumnDef<Event>[] = [
                 <DropdownMenuItem onClick={() => handleToggleArchiveEvent(event.id)} className="bg-red">
                   Archive Event
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleDeleteEvent(event.id)}>Delete Event</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <EditEvent event={event} />
