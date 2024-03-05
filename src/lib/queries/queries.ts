@@ -9,6 +9,7 @@ import {
   getArchivedEvents,
   createEvent,
   updateEvent,
+  toogleArchiveEvent
 } from "./api";
 import { EventManager, LoginUser, ValidateUser, EventForm, EventUpdateForm } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
@@ -118,3 +119,19 @@ export const useUpdateEvent = () => {
 
   return mutation;
 };
+
+export const useToggleArchiveEvent = () => {
+  const { getAccessToken} = useAuth()
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation(
+    (id: string) => toogleArchiveEvent(id, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("upcomingEvents")
+      }
+    }
+  );
+  
+  return mutation;
+}

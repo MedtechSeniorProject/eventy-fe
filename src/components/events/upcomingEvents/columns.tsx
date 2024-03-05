@@ -15,6 +15,8 @@ import {
 import EditEvent from "../../EditEvent";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { useToggleArchiveEvent } from "@/lib/queries/queries";
+import { useToast } from "@/components/ui/use-toast";
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -66,7 +68,19 @@ export const columns: ColumnDef<Event>[] = [
     id: "actions",
     cell: ({ row }) => {
       const event = row.original;
+      const { toast } = useToast()
       const navigate = useNavigate()
+      const { mutateAsync: toggleArchiveEvent } = useToggleArchiveEvent()
+
+      const handleToggleArchiveEvent = async(id: string) => {
+        const response = await toggleArchiveEvent(id);
+        if(!response.ok){
+          toast({variant:"destructive", title:"Error", description:"Event failed to archive!"})
+          return;
+        }
+        const data = await response.json()
+        toast({title:"Event Archived Successfully", description: `Event ${data.name} is archived!`})
+      }
 
       return (
         <>
@@ -89,7 +103,7 @@ export const columns: ColumnDef<Event>[] = [
                 <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
                 <DropdownMenuItem>Desk Agents</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red">
+                <DropdownMenuItem onClick={() => handleToggleArchiveEvent(event.id)} className="bg-red">
                   Archive Event
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -182,3 +182,20 @@ export async function updateEvent(event: EventUpdateForm, accessToken: string | 
      throw error;
    }
 }
+
+/**Toggle Event */
+export async function toogleArchiveEvent(id: string, accessToken: string | null): Promise<Response> {
+  try {
+     const response = await fetch(`http://localhost:3000/events/toggleArchive/${id}`, {
+       method: "PATCH",
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`,
+       },
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
+}
