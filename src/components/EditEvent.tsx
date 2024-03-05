@@ -60,14 +60,15 @@ const EditEvent = ({ ...props }) => {
       name: data.name,
       time: formatISO(data.eventDate)
     }
-    console.log(event)
     const response = await updateEvent(event);
     if(!response.ok){
       toast({variant: "destructive", title: "Error"})
       return;
     }
-    console.log(response)
+    const eventResponse = await response.json()
+    toast({title: "Event Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
     form.reset();
+    return;
   }
 
   return (
