@@ -67,7 +67,6 @@ const EditEvent = ({ ...props }) => {
     }
     const eventResponse = await response.json()
     toast({title: "Event Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
-    form.reset();
     return;
   }
 
@@ -138,7 +137,7 @@ const EditEvent = ({ ...props }) => {
             )}
           />
           <Button variant={"secondary"} className="w-20" type="submit">
-            Add
+           {form.formState.isSubmitting ? "Loading..." : "Add"}
           </Button>
         </form>
       </Form>
