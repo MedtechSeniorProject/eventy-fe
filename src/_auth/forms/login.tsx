@@ -84,7 +84,8 @@ const Login: FunctionComponent<LoginProps> = () => {
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex flex-col gap-5">
-          <img src="/logo.svg" alt="logo" className="w-24" />
+          {/* <img src="/logo.svg" alt="logo" className="w-24" /> */}
+          <img src="/public/assets/eventy.png" alt="logo" className="w-24" />
           <div>
             <h1 className="font-extrabold text-5xl tracking-tighter">
               Login to Your Account
