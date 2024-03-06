@@ -1,3 +1,4 @@
+/**User Types */
 export type LoginUser = {
     email: string,
     password: string
@@ -16,6 +17,7 @@ export type user = {
     isSuperAdmin: boolean
 }
 
+/** Events Types */
 export type Event = {
     id: string,
     name: string;
@@ -23,6 +25,25 @@ export type Event = {
     eventManager: string;
   };
 
+export type EventForm = {
+    name: string, 
+    time: string
+}
+
+export type EventUpdateForm = {
+    id: string,
+    name?: string, 
+    time?: string
+}
+
+export type EventAttendees = {
+    id: string,
+    name: string,
+    time: string,
+    attendees: Attendee[]
+}
+
+/**Event Manager Types */
 export type EventManager = {
     name: string,
     email: string,
@@ -35,6 +56,7 @@ export type EventManagerUpdateForm = {
     email: string
 }
 
+/**Attendee Types */
 export type Attendee = {
     id: number,
     name: string,
@@ -43,13 +65,3 @@ export type Attendee = {
     attended: boolean
 }
 
-export type EventForm = {
-    name: string, 
-    time: string
-}
-
-export type EventUpdateForm = {
-    id: string,
-    name?: string, 
-    time?: string
-}
