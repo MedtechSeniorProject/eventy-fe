@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm } from "@/types/types";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<Response> {
@@ -100,6 +100,44 @@ export async function createEventManager(eventmanager: EventManager): Promise<Re
       console.log(error);
       throw error;
     }
+}
+
+/**Update Event Manager */
+export async function updateEventManager(eventManager: EventManagerUpdateForm, accessToken: string | null): Promise<Response> {
+  try {
+     const response = await fetch(`http://localhost:3000/eventmanagers/${eventManager.id}`, {
+       method: "PATCH",
+       body: JSON.stringify({
+         name: eventManager.name,
+         email: eventManager.email
+       }),
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`,
+       },
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
+}
+
+/**Delete Event Manager */
+export async function deleteEventManager(id: string, accessToken: string | null): Promise<Response> {
+  try {
+     const response = await fetch(`http://localhost:3000/eventmanagers/${id}`, {
+       method: "DELETE",
+       headers: {
+         "Content-Type": "application/json",
+         "Authorization": `Bearer ${accessToken}`,
+       },
+     });
+     return response
+   } catch (error) {
+     console.log(error);
+     throw error;
+   }
 }
 
 // ============================================================
@@ -205,7 +243,7 @@ export async function deleteEvent(id: string, accessToken: string | null): Promi
   try {
     console.log(accessToken)
     console.log(id)
-     const response = await fetch(`http://localhost:3000/events/delete/${id}`, {
+     const response = await fetch(`http://localhost:3000/events/${id}`, {
        method: "DELETE",
        headers: {
          "Content-Type": "application/json",
@@ -217,4 +255,21 @@ export async function deleteEvent(id: string, accessToken: string | null): Promi
      console.log(error);
      throw error;
    }
+}
+
+/**Get Event By ID */
+export async function getEventById(id:string, accessToken: string | null): Promise<Response> {
+  try {
+    const response = await fetch(`http://localhost:3000/events/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    });
+    return response
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

@@ -29,6 +29,12 @@ export type EventManager = {
     password: string
 }
 
+export type EventManagerUpdateForm = {
+    id: string,
+    name: string,
+    email: string
+}
+
 export type Attendee = {
     id: number,
     name: string,

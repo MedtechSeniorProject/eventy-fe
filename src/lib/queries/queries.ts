@@ -10,9 +10,12 @@ import {
   createEvent,
   updateEvent,
   toogleArchiveEvent,
-  deleteEvent
+  deleteEvent,
+  getEventById,
+  updateEventManager,
+  deleteEventManager
 } from "./api";
-import { EventManager, LoginUser, ValidateUser, EventForm, EventUpdateForm } from "@/types/types";
+import { EventManager, LoginUser, ValidateUser, EventForm, EventUpdateForm, EventManagerUpdateForm } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
 // ============================================================
@@ -60,6 +63,37 @@ export const useCreateEventManager = () => {
 
   return mutation;
 };
+
+export const useUpdateEventManager = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (eventManager: EventManagerUpdateForm) => updateEventManager(eventManager, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["eventmanagers"]});
+      },
+    }
+  );
+
+  return mutation;
+};
+
+export const useDeleteEventManager = () => {
+  const { getAccessToken } = useAuth()
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation(
+    (id:string) => deleteEventManager(id, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ["eventmanagers"]})
+      }
+    }
+  )
+  return mutation
+}
 
 // ============================================================
 // Events QUERIES
@@ -151,3 +185,12 @@ export const useDeleteEvent = () => {
   )
   return mutation
 }
+
+export const useGetEventById = () => {
+  const {getAccessToken} = useAuth()
+
+  const mutation = useMutation(
+    (id:string) => getEventById(id, getAccessToken())
+  )
+  return mutation
+};

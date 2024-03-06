@@ -12,15 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Dialog, DialogTrigger } from "../ui/dialog"
+import EditEventManager from "../EditEventManager"
+import { useDeleteEventManager } from "@/lib/queries/queries"
+import { useToast } from "../ui/use-toast"
+import { EventManagerUpdateForm } from "@/types/types"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type EventManager = {
-  name: string,
-  email: string,
-}
-
-export const columns: ColumnDef<EventManager>[] = [
+export const columns: ColumnDef<EventManagerUpdateForm>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -56,8 +54,21 @@ export const columns: ColumnDef<EventManager>[] = [
     id: "actions",
     cell: ({ row }) => {
       const eventManager = row.original
+      const { toast } = useToast()
+      const { mutateAsync: deleteEventManager } = useDeleteEventManager()
+
+      const handleDeleteEventManager = async(id: string) => {
+        const response = await deleteEventManager(id);
+        if(!response.ok){
+          toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
+          return;
+        }
+        toast({title:"EventManager Deleted Successfully", description: `Event ${eventManager.name} is deleted!`})
+      }
  
       return (
+        <>
+        <Dialog>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -67,11 +78,16 @@ export const columns: ColumnDef<EventManager>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{eventManager.name}</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DialogTrigger asChild>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </DialogTrigger>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red">Remove</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {handleDeleteEventManager(eventManager.id)}} className="text-red">Remove</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <EditEventManager eventManager={eventManager} />
+        </Dialog>
+        </>
       )
     },
   },
