@@ -24,6 +24,8 @@ import {
 import { useState } from "react";
 import { useCreateEventManager } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const FormSchema = z
   .object({
@@ -65,6 +67,18 @@ const CreateEventManager = () => {
           <DialogTitle>Add a new event manager</DialogTitle>
           <DialogDescription>
             You’re adding a new event manager to the list
+            {(form.formState.errors.email || form.formState.errors.password) && (
+            <Alert variant="destructive" className="mt-5">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              {form.formState.errors.email && (
+                <AlertDescription>{`${form.formState.errors.email?.message}`}</AlertDescription>
+              )}
+              {form.formState.errors.password && (
+                <AlertDescription>{`${form.formState.errors.password?.message}`}</AlertDescription>
+              )}
+            </Alert>
+          )}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
