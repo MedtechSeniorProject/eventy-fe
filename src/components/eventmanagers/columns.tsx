@@ -60,10 +60,10 @@ export const columns: ColumnDef<EventManagerUpdateForm>[] = [
       const handleDeleteEventManager = async(id: string) => {
         const response = await deleteEventManager(id);
         if(!response.ok){
-          toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
+          toast({variant:"destructive", title:"Error", description:"Event Manager failed to delete!"})
           return;
         }
-        toast({title:"EventManager Deleted Successfully", description: `Event ${eventManager.name} is deleted!`})
+        toast({title:"Event Manager Deleted Successfully", description: `Event Manager ${eventManager.name} is deleted!`})
       }
  
       return (
