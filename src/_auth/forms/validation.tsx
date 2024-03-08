@@ -74,9 +74,15 @@ const Validation: FunctionComponent = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-5">
-          <img src="/logo.svg" alt="logo" className="w-24" />
+      <form onSubmit={handleSubmit(onSubmit) } className="py-14 px-6 xs:px-12 lg:px-20 mx-auto ">
+        <div className="flex flex-col gap-20">
+
+          {/* //logo */}
+          <div className="flex items-center justify-center">
+          <img src="/assets/eventy.png" alt="logo" className="w-20 md:w-20 lg:w-24" />
+          </div>
+
+          {/* //welcome */}
           <div>
             <h1 className="font-extrabold text-5xl tracking-tighter">
               Login to Your Account
@@ -84,11 +90,11 @@ const Validation: FunctionComponent = () => {
             <p className="mt-2 font-normal tracking-tight text-base">
               Welcome Back !
             </p>
+            <div className="h-0.5 w-full bg-slate-100"></div>
           </div>
-          <div className="h-0.5 w-full bg-slate-100"></div>
-        </div>
 
-        <div className="flex flex-col gap-10 mt-5">
+       {/* //form fields & accept */}
+        <div className="flex flex-col gap-5 mt-5">
           {errors.code && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
@@ -117,19 +123,31 @@ const Validation: FunctionComponent = () => {
               placeholder="Verification Code"
             />
           </div>
+          </div>
+
+          {/* buttons */}
           <div className="flex justify-between">
-            <Button
+            <Button   
               type="button"
               variant={"secondary"}
               onClick={async () => {handleResendCode(location.state)}}
-            >
+              className=" h-10 w-24 md:w-36 lg:w-40 bg-black p-0">
+             <span className="h-10 w-24 md:w-36 lg:w-40 block translate-x-2 -translate-y-2 border-2 border-black bg-white p-2 text-black transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0 text-center">
               Resend Code
+             </span>
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="w-32">
-              {isSubmitting && <div className="mr -5">Loading...</div>}
+
+            <Button 
+              type="submit" 
+              disabled={isSubmitting} 
+              className=" h-10 w-24 md:w-36 lg:w-40 bg-black p-0">
+            <span className="h-10 w-24 md:w-36 lg:w-40 block translate-x-2 -translate-y-2 border-2 border-black bg-primary p-2 transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0 text-center">
+            {isSubmitting && <div className="mr -5">Loading...</div>}
               {!isSubmitting && "Verify"}{" "}
+              </span>
             </Button>
           </div>
+
         </div>
       </form>
     </>
