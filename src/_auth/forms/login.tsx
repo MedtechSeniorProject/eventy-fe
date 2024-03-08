@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useLoginAccount } from "@/lib/queries/queries";
 import useAuth from "../hook/useAuth";
+import { Button } from "@/components/ui/button";
 
 interface LoginProps {}
 
@@ -155,13 +156,13 @@ const Login: FunctionComponent<LoginProps> = () => {
 
           {/* //button + arrow image relative div*/}
           <div className="relative">
-          <img src="/assets/button_arrow.png" alt="image" className="absolute top-2 transform -translate-y-1/2 -translate-x-24 w-16 md:w-20 lg:w-24" />  
-        <button  type="submit" disabled={isSubmitting} className="mt-5 w-full h-12 bg-black">
-          <span className="h-12 block translate-x-2 -translate-y-2  border-2 border-black  bg-primary p-2 transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0 text-white text-lg text-center">
-          {isSubmitting && <div className="mr -5">Loading...</div>}
-          {!isSubmitting && "Log In"} 
+          <img src="/assets/button_arrow.png" alt="image" className="absolute top-2 transform -translate-y-1/2 -translate-x-24 w-16 md:w-20 lg:w-24" />        
+          <Button type="submit" disabled={isSubmitting} className="mt-5 w-full h-12 bg-black p-0">
+          <span className="h-12 w-full block translate-x-2 -translate-y-2  border-2 border-black  bg-primary p-2 transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0 text-white text-lg text-center">
+            {isSubmitting && <div className="mr -5">Loading...</div>}
+            {!isSubmitting && "Log In"} 
           </span>
-        </button>
+          </Button>
           </div>
         </div>
       </form>
