@@ -81,12 +81,12 @@ const Login: FunctionComponent<LoginProps> = () => {
 
   return (
     <> 
-     <form onSubmit={handleSubmit(onSubmit)} className="py-14 px-6 xs:px-12 lg:px-20 mx-auto bg-white ">
+     <form onSubmit={handleSubmit(onSubmit)} className="py-14 px-6 xs:px-12 lg:px-20 mx-auto ">
         <div className="flex flex-col gap-20">
 
           {/* //logo */}
           <div className="flex items-center justify-center">
-          <img src="/assets/eventy.png" alt="logo" className="w-24" />
+          <img src="/assets/eventy.png" alt="logo" className=" w-20 md:w-20 lg:w-24" />
           </div>
 
           {/* //welcome */}
