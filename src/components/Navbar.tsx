@@ -1,9 +1,7 @@
 import {
   BarChart3,
-  CalendarDays,
   Settings,
   UserCircle,
-  Users,
 } from "lucide-react";
 import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
@@ -62,28 +60,15 @@ function Navbar({ role }: { role: string }) {
   }
 
   return (
-    <nav className="w-3/12 h-screen flex flex-col fixed mt-10 shadow-[1px_0px_7px_rgba(0,0,0,0.25)]">
-      <div className="flex justify-center align-center py-14">
-        <img
-          src="/logo.svg"
-          alt="Eventy logo"
-          className="w-32"
-          style={{ objectFit: "contain" }}
-        />
-      </div>
-      <div className="flex items-center mb-3">
-        <div className="h-0.5 w-10 bg-black"></div>
-        <p className="px-2 font-semibold">Navigation</p>
-        <div className="h-0.5 w-full bg-black"></div>
-      </div>
+    <nav className="w-3/12 h-screen flex flex-col fixed mt-14 pl-4 ">
       <ul className="links">
         {role === "SUPERADMIN" && (
           <>
             {navSuperAdminList.map((item, index) => {
               return (
                 <li
-                  className={`cursor-pointer p-1 pl-5 ${
-                    active === item.link ? "bg-primary text-white" : ""
+                  className={`cursor-pointer mb-14 pl:8 lg:pl-16 ${
+                    active === item.link ? "border-l-4 border-black font-bold lg:text-xl md:text-lg  sm:text-sm " : " font-light text-xl"
                   }`}
                   onClick={() => {
                     handleClick(item.link);
@@ -91,9 +76,8 @@ function Navbar({ role }: { role: string }) {
                   key={index}
                 >
                   <div className="flex">
-                    <item.Icon className="m-4" />
                     <Label
-                      className="m-auto center font-bold cursor-pointer "
+                      className="m-auto center cursor-pointer "
                       style={{ marginLeft: "0.5rem" }}
                     >
                       {item.name}
@@ -109,31 +93,30 @@ function Navbar({ role }: { role: string }) {
             {navEventManagerList.map((item, index) => {
               return (
                 <li
-                  className={`cursor-pointer p-1 pl-5 ${
-                    active === item.link ? "bg-primary text-white" : ""
-                  }`}
-                  onClick={() => {
-                    handleClick(item.link);
-                  }}
-                  key={index}
-                >
-                  <div className="flex">
-                    <item.Icon className="m-4" />
-                    <Label
-                      className="m-auto center font-bold cursor-pointer "
-                      style={{ marginLeft: "0.5rem" }}
-                    >
-                      {item.name}
-                    </Label>
-                  </div>
-                </li>
+                className={`cursor-pointer mb-14 pl:8 lg:pl-16 ${
+                  active === item.link ? "border-l-4 border-black font-bold lg:text-xl md:text-lg  sm:text-sm " : " font-light text-xl"
+                }`}
+                onClick={() => {
+                  handleClick(item.link);
+                }}
+                key={index}
+              >
+                <div className="flex">
+                  <Label
+                    className="m-auto center cursor-pointer "
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    {item.name}
+                  </Label>
+                </div>
+              </li>
               );
             })}
           </>
         )}
       </ul>
       <div className="flex-1 flex justify-center items-center">
-        <Button variant={"default"} className="w-1/2" onClick={() => {logout()}}>
+        <Button variant={"inverse"} className="w-1/2" onClick={() => {logout()}}>
           Logout
         </Button>
       </div>
