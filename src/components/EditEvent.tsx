@@ -32,7 +32,7 @@ import { toast } from "./ui/use-toast";
 
 const FormSchema = z
   .object({
-    name: z.string(),
+    name: z.string().min(3),
     eventDate: z.date()
   })
   .required();
