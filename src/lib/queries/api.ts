@@ -64,12 +64,13 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
 // ============================================================
 
 /** Get Event Managers Request */
-  export async function getEventManagers(): Promise<[]> {
+  export async function getEventManagers(accessToken: string | null): Promise<[]> {
     try {
       const response = await fetch("http://localhost:3000/eventmanagers", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
       });
       return response.json()
@@ -81,7 +82,7 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
 
 
 /** Create Event Managers Request */
-export async function createEventManager(eventmanager: EventManager): Promise<Response> {
+export async function createEventManager(eventmanager: EventManager,accessToken: string | null): Promise<Response> {
 
    try {
       const response = await fetch("http://localhost:3000/eventmanagers", {
@@ -93,6 +94,7 @@ export async function createEventManager(eventmanager: EventManager): Promise<Re
         }),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
       });
       return response

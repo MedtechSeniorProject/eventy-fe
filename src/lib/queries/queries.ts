@@ -56,22 +56,30 @@ export const useResendCode = () => {
 // ============================================================
 
 export const useGetEventManagers = () => {
-  return useQuery({ queryFn: getEventManagers, queryKey: "eventmanagers" });
+  const {getAccessToken} = useAuth()
+
+  return useQuery('eventmanagers', async () => {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error('No access token available');
+    }
+    return getEventManagers(accessToken);
+  });
 };
 
 // add event manager
 export const useCreateEventManager = () => {
+  const { getAccessToken } = useAuth();
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (eventmanager: EventManager) => createEventManager(eventmanager),
+    (eventmanager: EventManager) => createEventManager(eventmanager, getAccessToken()),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("eventmanagers");
       },
     }
   );
-
   return mutation;
 };
 
