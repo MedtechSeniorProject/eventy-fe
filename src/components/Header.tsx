@@ -7,7 +7,7 @@ interface props{
 const Header = (props:props) => {
 
   return (<>
-    <h1 className="font-bold text-3xl">{props.name}</h1>
+    <h1 className=" font-extrabold sm:text-3xl md:text-3xl lg:text-4xl">{props.name}</h1>
     <TodayDate />
   </>)
 }

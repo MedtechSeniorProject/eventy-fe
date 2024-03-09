@@ -58,7 +58,7 @@ const CreateEventManager = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="mt-5" variant="secondary">
+        <Button className="mt-2" variant="inverse">
           Add Event manager
         </Button>
       </DialogTrigger>
