@@ -5,7 +5,7 @@ const TopBar = () => {
 
   return (
 
- <nav className="relative flex w-full lg:pt-12 py-8 px-2 lg:px-20">
+ <nav className="relative flex w-full lg:pt-16 py-8 px-2 lg:px-20">
     <div className="flex w-full items-center justify-between">
         
          {/* logo and line under */}
@@ -20,8 +20,8 @@ const TopBar = () => {
         </div>
 
         {/* hello , search and input line under */}
-     <div className=" w-9/12">
-      <div className="flex pb-6 justify-between">
+     <div className=" w-9/12 pt-3" >
+      <div className="flex pb-3 justify-between">
         <h3 className="text-2xl font-bold primary">Hello, <span className="text-transform: capitalize">{user?.name}</span></h3>
         <div className="ms-5 flex w-[30%] justify-between">
                 {/* Search */}
