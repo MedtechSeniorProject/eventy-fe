@@ -13,9 +13,20 @@ import {
   deleteEvent,
   getEventById,
   updateEventManager,
-  deleteEventManager
+  deleteEventManager,
+  addAttendees,
+  removeAttendees,
 } from "./api";
-import { EventManager, LoginUser, ValidateUser, EventForm, EventUpdateForm, EventManagerUpdateForm } from "@/types/types";
+import {
+  EventManager,
+  LoginUser,
+  ValidateUser,
+  EventForm,
+  EventUpdateForm,
+  EventManagerUpdateForm,
+  AddAttendees,
+  RemoveAttendees,
+} from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
 // ============================================================
@@ -56,7 +67,7 @@ export const useCreateEventManager = () => {
     (eventmanager: EventManager) => createEventManager(eventmanager),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('eventmanagers');
+        queryClient.invalidateQueries("eventmanagers");
       },
     }
   );
@@ -69,10 +80,11 @@ export const useUpdateEventManager = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (eventManager: EventManagerUpdateForm) => updateEventManager(eventManager, getAccessToken()),
+    (eventManager: EventManagerUpdateForm) =>
+      updateEventManager(eventManager, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["eventmanagers"]});
+        queryClient.invalidateQueries({ queryKey: ["eventmanagers"] });
       },
     }
   );
@@ -81,46 +93,46 @@ export const useUpdateEventManager = () => {
 };
 
 export const useDeleteEventManager = () => {
-  const { getAccessToken } = useAuth()
-  const queryClient = useQueryClient()
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (id:string) => deleteEventManager(id, getAccessToken()),
+    (id: string) => deleteEventManager(id, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ["eventmanagers"]})
-      }
+        queryClient.invalidateQueries({ queryKey: ["eventmanagers"] });
+      },
     }
-  )
-  return mutation
-}
+  );
+  return mutation;
+};
 
 // ============================================================
 // Events QUERIES
 // ============================================================
 
 export const useGetUpcomingEvents = () => {
-    const {getAccessToken} = useAuth()
+  const { getAccessToken } = useAuth();
 
-    return useQuery('upcomingEvents', async () => {
-        const accessToken = getAccessToken();
-        if (!accessToken) {
-          throw new Error('No access token available');
-        }
-        return getUpcomingEvents(accessToken);
-      });
+  return useQuery("upcomingEvents", async () => {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("No access token available");
+    }
+    return getUpcomingEvents(accessToken);
+  });
 };
 
 export const useGetArchivedEvents = () => {
-    const {getAccessToken} = useAuth()
+  const { getAccessToken } = useAuth();
 
-    return useQuery('archivedEvents', async () => {
-        const accessToken = getAccessToken();
-        if (!accessToken) {
-          throw new Error('No access token available');
-        }
-        return getArchivedEvents(accessToken);
-      });
+  return useQuery("archivedEvents", async () => {
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      throw new Error("No access token available");
+    }
+    return getArchivedEvents(accessToken);
+  });
 };
 
 export const useCreateEvent = () => {
@@ -131,7 +143,7 @@ export const useCreateEvent = () => {
     (event: EventForm) => createEvent(event, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('upcomingEvents');
+        queryClient.invalidateQueries("upcomingEvents");
       },
     }
   );
@@ -147,7 +159,7 @@ export const useUpdateEvent = () => {
     (event: EventUpdateForm) => updateEvent(event, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["upcomingEvents"]});
+        queryClient.invalidateQueries({ queryKey: ["upcomingEvents"] });
       },
     }
   );
@@ -156,41 +168,67 @@ export const useUpdateEvent = () => {
 };
 
 export const useToggleArchiveEvent = () => {
-  const { getAccessToken} = useAuth()
-  const queryClient = useQueryClient()
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation(
     (id: string) => toogleArchiveEvent(id, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("upcomingEvents")
-      }
+        queryClient.invalidateQueries("upcomingEvents");
+      },
     }
   );
-  
+
   return mutation;
-}
+};
 
 export const useDeleteEvent = () => {
-  const { getAccessToken } = useAuth()
-  const queryClient = useQueryClient()
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (id:string) => deleteEvent(id, getAccessToken()),
+    (id: string) => deleteEvent(id, getAccessToken()),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ["upcomingEvents"]})
-      }
+        queryClient.invalidateQueries({ queryKey: ["upcomingEvents"] });
+      },
     }
-  )
-  return mutation
-}
-
-export const useGetEventById = () => {
-  const {getAccessToken} = useAuth()
-
-  const mutation = useMutation(
-    (id:string) => getEventById(id, getAccessToken())
-  )
-  return mutation
+  );
+  return mutation;
 };
+
+export const useGetEventById = (eventId: string) => {
+  const { getAccessToken } = useAuth();
+  return useQuery({
+    queryKey: ["event", eventId],
+    queryFn: async () => {
+      const response = await getEventById(eventId, getAccessToken());
+      const responseData = response.json();
+      return responseData;
+    },
+    enabled: !!eventId,
+  });
+};
+
+export const useAddAttendees = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (event: AddAttendees) =>
+      addAttendees(event.eventId, event.attendees, getAccessToken()),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
+  });
+};
+
+export const useDeleteAttendees = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (event: RemoveAttendees) =>
+      removeAttendees(event.eventId, event.attendeeIds, getAccessToken()),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
+  });
+}

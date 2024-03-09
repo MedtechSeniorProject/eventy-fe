@@ -21,7 +21,9 @@ import {
     FormMessage,
   } from "@/components/ui/form";
   import { useState } from "react";
-  import useAuth from "@/_auth/hook/useAuth";
+import { useAddAttendees } from "@/lib/queries/queries";
+import { AddAttendees, AttendeeForm } from "@/types/types";
+import { useToast } from "./ui/use-toast";
   
   const FormSchema = z
     .object({
@@ -29,27 +31,36 @@ import {
         required_error: "Name is required",
         invalid_type_error: "Name must be a string",
       }),
-      email: z.string().email(),
-      addedBy: z.string(),
-      attended: z.boolean()
+      email: z.string().email()
     })
   
-  const AddAttendee = () => {
-    const { user } = useAuth();
+  const AddAttendee = ({...props}) => {
+    const {mutateAsync: addAttendees } = useAddAttendees()
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
-      defaultValues: {
-        addedBy: user?.id,
-        attended: false
-      }
     });
-    
+    const { toast } = useToast()
     const [open, setOpen] = useState<boolean>(false);
   
-    function onSubmit(data: z.infer<typeof FormSchema>) {
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+      const attendee: AttendeeForm[] = [
+        {
+          name: data.name,
+          email: data.email
+        }
+      ]
+      const params: AddAttendees = {
+        eventId: props.eventId,
+        attendees: attendee
+      }
+      const response = await addAttendees(params)
+      if(!response.ok){
+        toast({title: 'Error', description: "Error has occured while adding attendees!"})
+        return;
+      }
+      toast({title:"Attendee Added Successfully", description: `${attendee[0].name} is added to the guest list!`})
       form.reset();
-      console.log(data);
-      setOpen(false);
+      setOpen(false)
     }
   
     return (
