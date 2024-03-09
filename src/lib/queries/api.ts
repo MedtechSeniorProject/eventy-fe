@@ -82,7 +82,7 @@ export async function resendCode(user: ValidateUser): Promise<Response> {
 
 
 /** Create Event Managers Request */
-export async function createEventManager(eventmanager: EventManager): Promise<Response> {
+export async function createEventManager(eventmanager: EventManager,accessToken: string | null): Promise<Response> {
 
    try {
       const response = await fetch("http://localhost:3000/eventmanagers", {
@@ -94,6 +94,7 @@ export async function createEventManager(eventmanager: EventManager): Promise<Re
         }),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
       });
       return response
