@@ -10,7 +10,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useLoginAccount } from "@/lib/queries/queries";
-import useAuth from "../hook/useAuth";
 import { Button } from "@/components/ui/button";
 
 interface LoginProps {}
@@ -18,7 +17,6 @@ interface LoginProps {}
 const Login: FunctionComponent<LoginProps> = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { setUser, setIsAuthenticated } = useAuth();
   const { mutateAsync: loginAccount } = useLoginAccount();
 
   const {
@@ -53,22 +51,7 @@ const Login: FunctionComponent<LoginProps> = () => {
       });
       return;
     } else {
-      // SuperAdmin
-      if (resData?.accessToken) {
-        toast({ variant: "default", description: "Successfully Logged In" });
-        setUser({
-          accessToken: resData.accessToken,
-          email: resData?.superadmin?.email,
-          id: resData?.superadmin?.id,
-          name: resData?.superadmin?.name,
-          isSuperAdmin: true,
-        });
-        setIsAuthenticated(true);
-        navigate("/eventmanagers");
-        reset();
-        return;
-      }
-      // Event Manager
+      // Event Manager and SuperAdmin
       if (resData?.message) {
         toast({ variant: "default", description: resData.message });
         navigate("/validate", {

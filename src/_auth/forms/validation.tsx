@@ -60,7 +60,20 @@ const Validation: FunctionComponent = () => {
     }
 
     const resData = await response.json();
-    setUser({
+
+    if (resData.superadmin) {
+      setUser({
+        accessToken: resData.accessToken,
+        email: resData?.superadmin.email,
+        id: resData?.superadmin.id,
+        name: resData?.superadmin.name,
+        isSuperAdmin: true,
+      });
+      setIsAuthenticated(true);
+      navigate("/eventmanagers");
+      return;
+    }
+    else{ setUser({
       accessToken: resData.accessToken,
       email: resData?.eventManager.email,
       id: resData?.eventManager.id,
@@ -70,6 +83,9 @@ const Validation: FunctionComponent = () => {
     setIsAuthenticated(true);
     navigate("/events");
     return;
+
+    }
+   
   };
 
   return (
