@@ -65,3 +65,18 @@ export type Attendee = {
     attended: boolean
 }
 
+export type AttendeeForm = {
+    name: string,
+    email: string,
+}
+
+export type AddAttendees= {
+    eventId: string,
+    attendees: AttendeeForm []
+}
+
+export type RemoveAttendees = {
+    eventId: string,
+    attendeeIds: string[]
+}
+
