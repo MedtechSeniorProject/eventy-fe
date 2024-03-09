@@ -8,7 +8,7 @@ const EventManagers = () => {
     <>
       <div className="px-10 w-full">
         <Header name="Events Managers" />
-        <div className="mt-10">
+        <div className="mt-8">
         <CreateEventManager />
         <EventManagersList />
         </div>

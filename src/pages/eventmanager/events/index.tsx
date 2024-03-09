@@ -8,7 +8,7 @@ const Events = () => {
 
   return (
     <>
-      <div className="p-10 w-full">
+      <div className="px-10 w-full">
         <Header name="Events" />
         <CreateEvent />
         <div className="mt-10">
