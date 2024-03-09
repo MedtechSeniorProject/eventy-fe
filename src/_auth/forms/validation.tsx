@@ -61,6 +61,7 @@ const Validation: FunctionComponent = () => {
 
     const resData = await response.json();
 
+    //superadmin
     if (resData.superadmin) {
       setUser({
         accessToken: resData.accessToken,
@@ -73,7 +74,9 @@ const Validation: FunctionComponent = () => {
       navigate("/eventmanagers");
       return;
     }
-    else{ setUser({
+    //eventmanager
+    else{ 
+      setUser({
       accessToken: resData.accessToken,
       email: resData?.eventManager.email,
       id: resData?.eventManager.id,
