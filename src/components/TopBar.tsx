@@ -6,7 +6,7 @@ const TopBar = () => {
   return (
 
  <nav className="relative flex w-full lg:pt-16 py-8 px-2 lg:px-20">
-    <div className="flex w-full items-center justify-between">
+    <div className="flex w-full flex-wrap items-center justify-between">
         
          {/* logo and line under */}
          <div className="w-3/12">
