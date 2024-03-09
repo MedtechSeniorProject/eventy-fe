@@ -25,21 +25,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "../../ui/button";
 import { AlertConfirmation } from "@/components/Alert";
+import { useDeleteAttendees } from "@/lib/queries/queries";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  eventId: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  eventId
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
+  const {mutateAsync: RemoveAttendees } = useDeleteAttendees()
+  const { toast } = useToast()
 
   const table = useReactTable({
     data,
@@ -62,11 +68,23 @@ export function DataTable<TData, TValue>({
      return table.getFilteredSelectedRowModel().rows.length == 0
   }
 
-  function handleRemoveAttendees() {
+  async function handleRemoveAttendees() {
     const array = table.getFilteredSelectedRowModel().rows
-    array.forEach((attendee) => {
-      console.log(attendee.original)
+    let attendeeIds: string[] = []
+    array.forEach((event) => {
+      attendeeIds.push(event.original.id)
     })
+    const params = {
+      eventId: eventId,
+      attendeeIds: attendeeIds
+    }
+    const response  = await RemoveAttendees(params)
+    if(!response.ok){
+      toast({title:"Error", description:"Error has occured while removing the attendees from the list!"})
+      return;
+    }
+    toast({title:"Attendees Removed Successfully", description:"Attendees are removed from the list of the event!"})
+    return;
   }
 
   return (

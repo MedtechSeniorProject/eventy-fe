@@ -60,7 +60,7 @@ export const columns: ColumnDef<Attendee>[] = [
     },
   },
   {
-    accessorKey: "addedBy",
+    accessorKey: "isInvited",
     header: ({ column }) => {
       return (
         <Button
@@ -68,14 +68,14 @@ export const columns: ColumnDef<Attendee>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Added By
+          Invited
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "attended",
+    accessorKey: "hasAttended",
     header: ({ column }) => {
       return (
         <Button

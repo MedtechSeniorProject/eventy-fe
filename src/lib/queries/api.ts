@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm } from "@/types/types";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<Response> {
@@ -242,8 +242,6 @@ export async function toogleArchiveEvent(id: string, accessToken: string | null)
 /**Delete Event */
 export async function deleteEvent(id: string, accessToken: string | null): Promise<Response> {
   try {
-    console.log(accessToken)
-    console.log(id)
      const response = await fetch(`http://localhost:3000/events/${id}`, {
        method: "DELETE",
        headers: {
@@ -267,6 +265,44 @@ export async function getEventById(id:string, accessToken: string | null): Promi
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`,
       },
+    });
+    return response
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addAttendees(eventId: string, attendees: AttendeeForm[], accessToken: string | null): Promise<Response> {
+  try {
+    const response = await fetch(`http://localhost:3000/events/attendees/${eventId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(
+        attendees
+     ),
+    });
+    return response
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function removeAttendees(eventId: string, attendeeIds: string[], accessToken: string | null): Promise<Response> {
+  try {
+    const response = await fetch(`http://localhost:3000/events/delete/${eventId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(
+        attendeeIds
+     ),
     });
     return response
   } catch (error) {
