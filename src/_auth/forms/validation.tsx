@@ -94,7 +94,7 @@ const Validation: FunctionComponent = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit) } className="py-14 px-6 xs:px-12 lg:px-20 mx-auto ">
-        <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-10">
 
           {/* //logo */}
           <div className="flex items-center justify-center">
@@ -106,10 +106,10 @@ const Validation: FunctionComponent = () => {
             <h1 className="font-extrabold text-5xl tracking-tighter">
               Login to Your Account
             </h1>
-            <p className="mt-2 font-normal tracking-tight text-base">
+            <p className="my-2 font-normal tracking-tight text-base">
               Welcome Back !
             </p>
-            <div className="h-0.5 w-full bg-slate-100"></div>
+            <div className="h-0.5 w-full bg-slate-900"></div>
           </div>
 
        {/* //form fields & accept */}
