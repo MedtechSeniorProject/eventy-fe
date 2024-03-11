@@ -10,7 +10,7 @@ const NavLayoutEventManager = () => {
          <TopBar/>
             <div className="flex">
                 <Navbar role="EVENTMANAGER" />
-                <div className="flex-1 mt-12 ml-[25%]">
+                <div className="flex-1 mt-40 ml-[25%]">
                     <Outlet />
                 </div>
             </div>

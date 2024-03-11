@@ -60,7 +60,7 @@ function Navbar({ role }: { role: string }) {
   }
 
   return (
-    <nav className="w-3/12 h-screen flex flex-col fixed mt-14 pl-4 ">
+    <nav className="w-3/12 h-screen flex flex-col fixed mt-52 pl-4 ">
       <ul className="links">
         {role === "SUPERADMIN" && (
           <>
@@ -115,7 +115,7 @@ function Navbar({ role }: { role: string }) {
           </>
         )}
       </ul>
-      <div className="flex-1 flex justify-center items-center">
+      <div className="md:mt-32 2xl:mt-40 flex justify-center items-center">
         <Button variant={"inverse"} className="w-1/2" onClick={() => {logout()}}>
           Logout
         </Button>
