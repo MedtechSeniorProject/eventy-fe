@@ -1,4 +1,3 @@
-import Timer from "@/components/Timer";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import useAuth from "../hook/useAuth";
 import { ValidateUser } from "@/types/types";
+import { useTimer } from 'react-timer-hook';
+import { ToastAction } from "@/components/ui/toast";
 
 const Validation: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -21,17 +22,35 @@ const Validation: FunctionComponent = () => {
 
   //Queries
   const { mutateAsync: validateAccount } = useValidateAccount();
-  const { mutateAsync: resendCode } = useResendCode();
+  const { mutateAsync: resendCode, isLoading } = useResendCode();
 
   // Form Submission
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CodeSchema>({
     resolver: zodResolver(codeSchema),
   });
 
+  // Timer
+  const time= new Date();
+  time.setSeconds(time.getSeconds() + 120);
+  const {
+    seconds,
+    minutes,
+    restart
+  } = useTimer({ expiryTimestamp: time, onExpire: () => {
+    toast({
+      title: "Uh oh! The timer has expired.",
+      description: "Click to request a new code.",
+      action: <ToastAction altText="Try again" onClick={() => handleResendCode(location.state)}>Resend Code</ToastAction>,
+      duration: 20000
+    })
+  } });
+  
+  // Handle Resend Code Function
   const handleResendCode = async(email: ValidateUser) => {
     const response = await resendCode(email);
     const data = await response.json()
@@ -42,9 +61,10 @@ const Validation: FunctionComponent = () => {
     }
     if(data?.message){
       toast({title:"Resended Email Successfuly", description: data?.message})
+      restart(time)
+      reset()
       return;
     }
-
   }
 
   const onSubmit = async (data: CodeSchema) => {
@@ -129,7 +149,11 @@ const Validation: FunctionComponent = () => {
               Please enter the 6-digit verification code we just sent you by
               email:{" "}
             </p>
-            <Timer />
+            <div>
+              <div className='font-medium text-lg'>
+                <span>{minutes}</span>:<span>{seconds}</span>
+              </div>
+            </div>
           </div>
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="email">Verification Code</Label>
@@ -150,9 +174,10 @@ const Validation: FunctionComponent = () => {
               type="button"
               variant={"secondary"}
               onClick={async () => {handleResendCode(location.state)}}
+              disabled={isLoading}
               className=" h-10 w-24 md:w-36 lg:w-40 bg-black p-0">
              <span className="h-10 w-24 md:w-36 lg:w-40 block translate-x-2 -translate-y-2 border-2 border-black bg-white p-2 text-black transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0 text-center">
-              Resend Code
+              {isLoading ? "Loading" : "Resend Code"}
              </span>
             </Button>
 
