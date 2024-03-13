@@ -112,7 +112,7 @@ export const columns: ColumnDef<Event>[] = [
                 <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/guestlist`)}}>Guests List</DropdownMenuItem>
                 <DropdownMenuItem>Email Template</DropdownMenuItem>
                 <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
-                <DropdownMenuItem>Desk Agents</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/deskagents`)}}>Desk Agents</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleToggleArchiveEvent(event.id)} className="bg-red">
                   Archive Event
