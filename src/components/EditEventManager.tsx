@@ -55,12 +55,12 @@ import { useToast } from "./ui/use-toast";
       toast({title: "EventManager Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
       return;
     }
-  
+    
     return (
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Event: {props?.event?.name}</DialogTitle>
-          <DialogDescription>Youre editing an event</DialogDescription>
+          <DialogTitle>Edit Event Manager: {props?.eventManager?.name}</DialogTitle>
+          <DialogDescription>Youre editing event manager details</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

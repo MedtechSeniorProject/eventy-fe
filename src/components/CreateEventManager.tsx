@@ -41,11 +41,11 @@ const CreateEventManager = () => {
     resolver: zodResolver(FormSchema),
   });
   const [open, setOpen] = useState<boolean>(false);
-  const { mutate, isLoading, isSuccess } = useCreateEventManager();
+  const { mutate, isLoading, isError } = useCreateEventManager();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     mutate(data);
-    if (!isSuccess) {
+    if (isError) {
       toast({ variant: "destructive", title: "Error" });
       form.reset()
       return;
@@ -67,7 +67,8 @@ const CreateEventManager = () => {
           <DialogTitle>Add a new event manager</DialogTitle>
           <DialogDescription>
             You’re adding a new event manager to the list
-            {(form.formState.errors.email || form.formState.errors.password) && (
+          </DialogDescription>
+          {(form.formState.errors.email || form.formState.errors.password) && (
             <Alert variant="destructive" className="mt-5">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
@@ -79,7 +80,6 @@ const CreateEventManager = () => {
               )}
             </Alert>
           )}
-          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

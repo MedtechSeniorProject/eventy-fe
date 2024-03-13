@@ -28,7 +28,7 @@ const UploadAttendee = ({...props}) => {
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as Array<Array<string>>;
 
-      const headers = jsonData[0];
+      const headers = jsonData[0].map((header: string) => header.toLowerCase());
       const parsedData = jsonData.slice(1).map((row) => {
         const obj: AttendeeForm = { name: "", email: "" };
         headers.forEach((header, index) => {
@@ -51,7 +51,7 @@ const UploadAttendee = ({...props}) => {
         setIsLoading(false);
         return;
       }
-      toast({title:"Attendees Added Successfully"})
+      toast({title:"Attendees Added Successfully", description:`${params.attendees.length} attendees are added to the list`})
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
