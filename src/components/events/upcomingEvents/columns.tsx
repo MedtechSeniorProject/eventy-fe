@@ -89,8 +89,7 @@ export const columns: ColumnDef<Event>[] = [
           toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
           return;
         }
-        const data = await response.json()
-        toast({title:"Event Deleted Successfully", description: `Event ${data.name} is deleted!`})
+        toast({title:"Event Deleted Successfully", description: `Event ${event.name} is deleted!`})
       }
 
       return (
