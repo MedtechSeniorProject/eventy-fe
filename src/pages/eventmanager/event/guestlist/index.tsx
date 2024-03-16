@@ -20,7 +20,7 @@ const EventGuestList = () => {
   const attendees = event.attendees || [];
 
   return (
-    <div className="p-10 w-full">
+    <div className="p-10 w-11/12">
       <EventHeader name={event.name} time={event.time} />
       <div className="mt-5 flex gap-5">
         <AddAttendee eventId={event.id} />
