@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { user } from "@/types/types";
+import LoadingSpinner from "@/components/Loading";
 
 export const INITIAL_USER = {
   id: "",
@@ -51,9 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{ user, setUser, isLoading, isAuthenticated, setIsAuthenticated, logout, getAccessToken }}
     >
       {!isLoading ? children : (
-        <div className="h-full w-full flex justify-center items-center">
-          <p className="font-bold">Loading...</p>
-        </div>
+        <LoadingSpinner />
       )}
     </AuthContext.Provider>
   );

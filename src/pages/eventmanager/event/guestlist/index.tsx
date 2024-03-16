@@ -4,13 +4,14 @@ import GuestList from "@/components/events/guestList/page";
 import AddAttendee from "@/components/AddAttendee";
 import UploadAttendee from "@/components/UploadAttendee";
 import { useGetEventById } from "@/lib/queries/queries";
+import SkeletonTable from "@/components/SkeletonTable";
 
 const EventGuestList = () => {
   const { id } = useParams() as { id: string };
   const { data: event, isLoading, isError } = useGetEventById(id);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <SkeletonTable />;
   }
 
   if (isError || !event) {

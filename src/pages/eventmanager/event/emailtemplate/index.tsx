@@ -1,4 +1,5 @@
 import EventHeader from "@/components/EventHeader"
+import LoadingSpinner from "@/components/Loading"
 import Editor from "@/components/events/Editor"
 import { useGetEventById } from "@/lib/queries/queries"
 import { useParams } from "react-router-dom"
@@ -9,7 +10,7 @@ const EventEmailTemplate = () => {
   const { data: event, isLoading, isError} = useGetEventById(id)
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (isError || !event) {

@@ -1,6 +1,7 @@
 import { useGetUpcomingEvents } from "@/lib/queries/queries";
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
+import SkeletonTable from "@/components/SkeletonTable";
 
 
 interface event {
@@ -26,7 +27,7 @@ export default function UpcomingEvents() {
   }));
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <SkeletonTable />;
   }
 
   if (isError) {
