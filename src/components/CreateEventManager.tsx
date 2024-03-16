@@ -27,13 +27,17 @@ import { useToast } from "./ui/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 
-const FormSchema = z
+export const FormSchema = z
   .object({
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(7),
+    confirmPassword: z.string().min(7),
   })
-  .required();
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 const CreateEventManager = () => {
   const {toast} = useToast();
@@ -128,6 +132,24 @@ const CreateEventManager = () => {
                       {...field}
                       value={field.value ?? ""}
                       placeholder="Enter Password..."
+                      type="password"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={field.value ?? ""}
+                      placeholder="Confirm Password..."
                       type="password"
                     />
                   </FormControl>
