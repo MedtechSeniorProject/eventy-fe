@@ -109,7 +109,7 @@ export const columns: ColumnDef<Event>[] = [
                 </DialogTrigger>
                 <DropdownMenuItem>Event Insights</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/guestlist`)}}>Guests List</DropdownMenuItem>
-                <DropdownMenuItem>Email Template</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/emailtemplate`)}}>Email Template</DropdownMenuItem>
                 <DropdownMenuItem>Evaluation Form</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/deskagents`)}}>Desk Agents</DropdownMenuItem>
                 <DropdownMenuSeparator />

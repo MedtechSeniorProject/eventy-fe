@@ -17,6 +17,7 @@ import Events from "./pages/eventmanager/events";
 import EventManagers from "./pages/superadmin/eventmanagers";
 import EventGuestList from "./pages/eventmanager/event/guestlist";
 import EventDeskAgents from "./pages/eventmanager/event/deskagents";
+import EventEmailTemplate from "./pages/eventmanager/event/emailtemplate";
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
                   <Route path="/emsettings" element={<EmSettings />} />
                   <Route path="/event/:id/guestlist" element={<EventGuestList />} />
                   <Route path="/event/:id/deskagents" element={<EventDeskAgents />} />
+                  <Route path="/event/:id/emailtemplate" element={<EventEmailTemplate />} />
                 </Route>
               </Route>
             </Routes>
