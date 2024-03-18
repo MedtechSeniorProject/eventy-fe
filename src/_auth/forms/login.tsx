@@ -76,7 +76,7 @@ const Login: FunctionComponent<LoginProps> = () => {
 
           {/* //welcome */}
           <div>
-            <h1 className="font-extrabold text-5xl tracking-tighter">
+            <h1 className="font-bold text-5xl tracking-tighter ">
               Login to your account
             </h1>
             <p className="my-2 font-normal tracking-tight text-base pt-2">
