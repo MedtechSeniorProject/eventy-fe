@@ -6,7 +6,7 @@ const EventManagers = () => {
 
   return (
     <>
-      <div className="px-10 w-full">
+      <div className="w-full">
         <Header name="Events Managers" />
         <div className="mt-8">
         <CreateEventManager />
