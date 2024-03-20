@@ -43,7 +43,7 @@ export default function Editor() {
         formats={formats}
       />
       <div className="flex justify-end">
-      <Button variant={"inverse"} size={"lg"} className="mt-5">Save</Button>
+      <Button variant={"inverse"} size={"lg"} className="mt-5" onClick={() => console.log(value)}>Save</Button>
       </div>
     </>
   );
