@@ -27,7 +27,11 @@ export type Event = {
 
 export type EventForm = {
     name: string, 
-    time: string
+    startTime: string,
+    endTime: string,
+    latitude: string,
+    longitude: string,
+    description: string,
 }
 
 export type EventUpdateForm = {
@@ -80,3 +84,31 @@ export type RemoveAttendees = {
     attendeeIds: string[]
 }
 
+/**Address */
+export type Address = {
+    place_id: number;
+    licence: string;
+    osm_type: string;
+    osm_id: number;
+    lat: string;
+    lon: string;
+    category: string;
+    type: string;
+    place_rank: number;
+    importance: number;
+    addresstype: string;
+    name: string;
+    display_name: string;
+    address: {
+      road: string;
+      suburb: string;
+      city_district: string;
+      city: string;
+      state: string;
+      'ISO3166-2-lvl4': string;
+      postcode: string;
+      country: string;
+      country_code: string;
+    };
+    boundingbox: [string, string, string, string];
+  };

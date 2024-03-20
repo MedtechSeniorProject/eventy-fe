@@ -192,7 +192,11 @@ export async function createEvent(event: EventForm, accessToken: string | null):
        },
        body: JSON.stringify({
         name: event.name,
-        time: event.time
+        startTime: event.startTime,
+        endTime: event.endTime,
+        description: event.description,
+        longitude: event.longitude,
+        latitude: event.latitude
       }),
      });
      return response
