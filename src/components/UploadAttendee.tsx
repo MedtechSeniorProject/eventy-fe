@@ -36,8 +36,6 @@ const UploadAttendee = ({...props}) => {
         });
         return obj;
       });
-
-      console.log(parsedData);
       const params: AddAttendees = {
         eventId: props.eventId,
         attendees: parsedData
@@ -51,7 +49,7 @@ const UploadAttendee = ({...props}) => {
         setIsLoading(false);
         return;
       }
-      toast({title:"Attendees Added Successfully", description:`${params.attendees.length} attendees are added to the list`})
+      toast({title:"Attendees Added Successfully", description:`${params.attendees.length} Attendees are added to the list`})
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
