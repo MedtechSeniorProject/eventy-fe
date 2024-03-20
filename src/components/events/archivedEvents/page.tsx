@@ -12,7 +12,10 @@ interface event {
   },
   id: string,
   name: string,
-  time: string
+  startTime: string
+  endTime: string
+  address:string
+  description: string
 }
 
 export default function ArchivedEvents() {
@@ -21,8 +24,11 @@ export default function ArchivedEvents() {
   const archivedEvents = rawArchivedEvents.map((event: event) => ({
     id: event.id,
     name: event.name,
-    time: new Date(event.time).toLocaleString(),
-    eventManager: event.eventManager?.name || ''
+    startTime: new Date(event.startTime).toLocaleString(),
+    eventManager: event.eventManager?.name || '',
+    endTime: new Date(event.endTime).toLocaleString(),
+    address: event.address,
+    description: event.description
   }));
   if (isLoading) {
     return <SkeletonTable />;

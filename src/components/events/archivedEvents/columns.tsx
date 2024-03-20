@@ -33,7 +33,7 @@ export const columns: ColumnDef<Event>[] = [
     },
   },
   {
-    accessorKey: "time",
+    accessorKey: "startTime",
     header: ({ column }) => {
       return (
         <Button
@@ -41,7 +41,22 @@ export const columns: ColumnDef<Event>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Time
+          Start Time
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "endTime",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          End Time
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
