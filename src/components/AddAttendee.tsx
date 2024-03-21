@@ -54,7 +54,7 @@ import { useToast } from "./ui/use-toast";
         attendees: attendee
       }
       const response = await addAttendees(params)
-      if(!response.ok){
+      if(response.status != 200){
         toast({title: 'Error', description: "Error has occured while adding attendees!"})
         return;
       }

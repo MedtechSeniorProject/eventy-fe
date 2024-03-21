@@ -41,10 +41,9 @@ const Login: FunctionComponent<LoginProps> = () => {
     };
     
     const response = await loginAccount(user);
-    const resData = await response.json();
-    console.log(resData)
+    const resData = await response.data
     // Invalid Credentials
-    if (!response.ok) {
+    if (response.status != 200) {
       toast({
         variant: "destructive",
         title: resData?.name,

@@ -47,11 +47,11 @@ import { useToast } from "./ui/use-toast";
         email: data.email
       }
       const response = await updateEventManager(eventManager)
-      if(!response.ok){
+      if(response.status != 200){
         toast({variant: "destructive", title: "Error"})
         return;
       }
-      const eventResponse = await response.json()
+      const eventResponse = await response.data
       toast({title: "EventManager Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
       return;
     }

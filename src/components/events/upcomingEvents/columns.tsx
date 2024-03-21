@@ -90,17 +90,17 @@ export const columns: ColumnDef<Event>[] = [
 
       const handleToggleArchiveEvent = async(id: string) => {
         const response = await toggleArchiveEvent(id);
-        if(!response.ok){
+        if(response.status != 200){
           toast({variant:"destructive", title:"Error", description:"Event failed to archive!"})
           return;
         }
-        const data = await response.json()
+        const data = await response.data
         toast({title:"Event Archived Successfully", description: `Event ${data.name} is archived!`})
       }
 
       const handleDeleteEvent = async(id: string) => {
         const response = await deleteEvent(id);
-        if(!response.ok){
+        if(response.status != 200){
           toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
           return;
         }

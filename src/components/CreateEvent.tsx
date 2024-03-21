@@ -87,7 +87,7 @@ const CreateEvent = () => {
     };
 
     const response = await createEvent(event);
-    if (!response.ok) {
+    if (response.status != 200) {
       toast({
         variant: "destructive",
         title: "Error",

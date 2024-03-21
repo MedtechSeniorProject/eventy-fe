@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
       attendeeIds: attendeeIds
     }
     const response  = await RemoveAttendees(params)
-    if(!response.ok){
+    if(response.status != 200){
       toast({title:"Error", description:"Error has occured while removing the attendees from the list!"})
       return;
     }

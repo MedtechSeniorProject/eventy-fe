@@ -61,7 +61,7 @@ export const columns: ColumnDef<EventManagerUpdateForm>[] = [
 
       const handleDeleteEventManager = async (id: string) => {
         const response = await deleteEventManager(id);
-        if (!response.ok) {
+        if (response.status != 200) {
           toast({
             variant: "destructive",
             title: "Error",

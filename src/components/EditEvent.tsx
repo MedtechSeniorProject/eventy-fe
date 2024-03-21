@@ -98,11 +98,11 @@ const EditEvent = ({ ...props }) => {
     console.log(event)
     
     const response = await updateEvent(event);
-    if(!response.ok){
+    if(response.status != 200){
       toast({variant: "destructive", title: "Error"})
       return;
     }
-    const eventResponse = await response.json()
+    const eventResponse = await response.data
     toast({title: "Event Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
     return;
   }

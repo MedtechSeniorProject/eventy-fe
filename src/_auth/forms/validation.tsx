@@ -53,9 +53,9 @@ const Validation: FunctionComponent = () => {
   // Handle Resend Code Function
   const handleResendCode = async(email: ValidateUser) => {
     const response = await resendCode(email);
-    const data = await response.json()
+    const data = await response.data
 
-    if(!response.ok){
+    if(response.status != 200){
       toast({title:"An error has occured"})
       return;
     }
@@ -74,12 +74,12 @@ const Validation: FunctionComponent = () => {
     };
 
     const response = await validateAccount(reqObj);
-    if (!response.ok) {
+    if (response.status != 200) {
       toast({ variant: "destructive", title: response.statusText, description: "Invalid Code" });
       return;
     }
 
-    const resData = await response.json();
+    const resData = await response.data;
 
     //superadmin
     if (resData.superadmin) {

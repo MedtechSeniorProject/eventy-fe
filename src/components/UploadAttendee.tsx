@@ -41,7 +41,7 @@ const UploadAttendee = ({...props}) => {
         attendees: parsedData
       }
       const response = await addAttendees(params)
-      if(!response.ok){
+      if(response.status != 200){
         toast({variant:"destructive",title:"Error", description:"Error while uploading attendees to this event!"})
         if (fileInputRef.current) {
           fileInputRef.current.value = '';

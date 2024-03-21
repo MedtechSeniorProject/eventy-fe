@@ -212,7 +212,7 @@ export const useGetEventById = (eventId: string) => {
     queryKey: ["event", eventId],
     queryFn: async () => {
       const response = await getEventById(eventId, getAccessToken());
-      const responseData = response.json();
+      const responseData = response.data
       return responseData;
     },
     enabled: !!eventId,
