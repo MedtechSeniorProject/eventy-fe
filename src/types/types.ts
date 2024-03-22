@@ -118,3 +118,15 @@ export type Address = {
   };
   boundingbox: [string, string, string, string];
 };
+
+/** Desk Agent types */
+export type DeskAgentForm = {
+  username: string,
+  password: string,
+  eventId: string
+}
+
+export type DeskAgentsDisplay= {
+  id: string,
+  username: string
+}
