@@ -4,6 +4,7 @@ import { useToast } from "./ui/use-toast";
 import { useAddAttendees } from "@/lib/queries/queries";
 import * as XLSX from 'xlsx';
 import { AddAttendees, AttendeeForm } from "@/types/types";
+import { AxiosError } from "axios";
 
 const UploadAttendee = ({...props}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -40,16 +41,28 @@ const UploadAttendee = ({...props}) => {
         eventId: props.eventId,
         attendees: parsedData
       }
-      const response = await addAttendees(params)
-      if(response.status != 200){
-        toast({variant:"destructive",title:"Error", description:"Error while uploading attendees to this event!"})
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
+
+      try{
+        const response = await addAttendees(params)
+        toast({title:"Attendees Added Successfully", description:`${params.attendees.length} Attendees are added to the list`})
+      }catch(error){
+        console.error('Error:', error)
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+          toast({variant:"destructive",title:"Error", description:"Error while uploading attendees to this event!"})
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+          setIsLoading(false);
+        } else if (axiosError.request) {
+          console.error('No response received:', axiosError.request);
+          toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+        } else {
+          console.error('Request setup error:', axiosError.message);
+          toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
         }
-        setIsLoading(false);
-        return;
       }
-      toast({title:"Attendees Added Successfully", description:`${params.attendees.length} Attendees are added to the list`})
+
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }

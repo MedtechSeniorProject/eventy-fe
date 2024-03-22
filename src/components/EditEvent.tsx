@@ -32,6 +32,7 @@ import { toast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import { getAddress } from "@/lib/adressapi";
+import { AxiosError } from "axios";
 
 const FormSchema = z
 .object({
@@ -97,14 +98,31 @@ const EditEvent = ({ ...props }) => {
     
     console.log(event)
     
-    const response = await updateEvent(event);
-    if(response.status != 200){
-      toast({variant: "destructive", title: "Error"})
-      return;
+    try {
+      const response = await updateEvent(event);
+      const eventResponse = await response.data
+      toast({title: "Event Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
+    } catch (error) {
+      console.error("Error:", error);
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({variant: "destructive", title: "Error"})
+      } else if (axiosError.request) {
+        console.error("No response received:", axiosError.request);
+        toast({
+          variant: "destructive",
+          title: "Network Error",
+          description: "Failed to fetch data due to network issue!",
+        });
+      } else {
+        console.error("Request setup error:", axiosError.message);
+        toast({
+          variant: "destructive",
+          title: "Request Error",
+          description: "Failed to setup request!",
+        });
+      }
     }
-    const eventResponse = await response.data
-    toast({title: "Event Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
-    return;
   }
 
   async function handleLocationChange(value: string) {

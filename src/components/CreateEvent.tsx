@@ -35,6 +35,7 @@ import { useToast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import { getAddress } from "@/lib/adressapi";
 import { Address } from "@/types/types";
+import { AxiosError } from "axios";
 
 const FormSchema = z
   .object({
@@ -66,8 +67,8 @@ const CreateEvent = () => {
   const { mutateAsync: createEvent } = useCreateEvent();
   const [isLoading, setIsLoading] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const [longitude, setLongitude] = useState<string>("")
-  const [latitude, setLatitude] = useState<string>("")
+  const [longitude, setLongitude] = useState<string>("");
+  const [latitude, setLatitude] = useState<string>("");
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     // Formatting Date Time
@@ -83,26 +84,43 @@ const CreateEvent = () => {
       endTime: endTimeString,
       description: data.description,
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
     };
 
-    const response = await createEvent(event);
-    if (response.status != 200) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An error has occured with the event",
-      });
+    try {
+      const response = await createEvent(event);
       form.reset();
-      return;
+      setOpen(false);
+      toast({
+        title: "Event added successfully",
+        description: `Event: ${data.name} is added to the upcoming events !`,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "An error has occured with the event",
+        });
+        form.reset();
+      } else if (axiosError.request) {
+        console.error("No response received:", axiosError.request);
+        toast({
+          variant: "destructive",
+          title: "Network Error",
+          description: "Failed to fetch data due to network issue!",
+        });
+      } else {
+        console.error("Request setup error:", axiosError.message);
+        toast({
+          variant: "destructive",
+          title: "Request Error",
+          description: "Failed to setup request!",
+        });
+      }
     }
-    form.reset();
-    setOpen(false);
-    toast({
-      title: "Event added successfully",
-      description: `Event: ${data.name} is added to the upcoming events !`,
-    });
-    return;
   }
 
   async function handleLocationChange(value: string) {
@@ -248,7 +266,9 @@ const CreateEvent = () => {
                     />
                   </FormControl>
                   <FormMessage />
-                  {isLoading && <div className="text-sm font-semibold">Loading...</div>}
+                  {isLoading && (
+                    <div className="text-sm font-semibold">Loading...</div>
+                  )}
                   {!isLoading && addresses.length > 0 && (
                     <div className="flex flex-col gap-1 border border-1 ">
                       {addresses.map((address) => (
@@ -257,14 +277,16 @@ const CreateEvent = () => {
                           className="hover:bg-slate-100 pl-3 transition-all duration-100"
                           key={address.place_id}
                           onClick={(e) => {
-                            e.preventDefault()
+                            e.preventDefault();
                             form.setValue("location", address.display_name);
-                            setLatitude(address.lat)
-                            setLongitude(address.lon)
-                            setAddresses([])
+                            setLatitude(address.lat);
+                            setLongitude(address.lon);
+                            setAddresses([]);
                           }}
                         >
-                          <p className="text-start text-sm">{address.display_name}</p>
+                          <p className="text-start text-sm">
+                            {address.display_name}
+                          </p>
                         </button>
                       ))}
                     </div>

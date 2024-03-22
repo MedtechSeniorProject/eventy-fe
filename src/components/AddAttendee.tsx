@@ -24,6 +24,7 @@ import {
 import { useAddAttendees } from "@/lib/queries/queries";
 import { AddAttendees, AttendeeForm } from "@/types/types";
 import { useToast } from "./ui/use-toast";
+import { AxiosError } from "axios";
   
   const FormSchema = z
     .object({
@@ -53,14 +54,25 @@ import { useToast } from "./ui/use-toast";
         eventId: props.eventId,
         attendees: attendee
       }
-      const response = await addAttendees(params)
-      if(response.status != 200){
-        toast({title: 'Error', description: "Error has occured while adding attendees!"})
-        return;
+      
+      try{
+        const response = await addAttendees(params)
+        toast({title:"Attendee Added Successfully", description: `${attendee[0].name} is added to the guest list!`})
+        form.reset();
+        setOpen(false)
+      }catch(error){
+        console.error('Error:', error)
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+          toast({ variant:"destructive", title: 'Error', description: 'Error has occured while adding attendees!' });
+        } else if (axiosError.request) {
+          console.error('No response received:', axiosError.request);
+          toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+        } else {
+          console.error('Request setup error:', axiosError.message);
+          toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+        }
       }
-      toast({title:"Attendee Added Successfully", description: `${attendee[0].name} is added to the guest list!`})
-      form.reset();
-      setOpen(false)
     }
   
     return (

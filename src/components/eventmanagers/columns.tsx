@@ -17,8 +17,7 @@ import EditEventManager from "../EditEventManager";
 import { useDeleteEventManager } from "@/lib/queries/queries";
 import { useToast } from "../ui/use-toast";
 import { EventManagerUpdateForm } from "@/types/types";
-import { AlertConfirmation } from "@/components/Alert";
-import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
+import { AxiosError } from "axios";
 
 export const columns: ColumnDef<EventManagerUpdateForm>[] = [
   {
@@ -60,19 +59,30 @@ export const columns: ColumnDef<EventManagerUpdateForm>[] = [
       const { mutateAsync: deleteEventManager } = useDeleteEventManager();
 
       const handleDeleteEventManager = async (id: string) => {
-        const response = await deleteEventManager(id);
-        if (response.status != 200) {
+        try{
+          const response = await deleteEventManager(id);
           toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Event Manager failed to delete!",
+            title: "Event Manager Deleted Successfully",
+            description: `Event Manager ${eventManager.name} is deleted!`,
           });
-          return;
+  
+        }catch(error){
+          console.error('Error:', error)
+          const axiosError = error as AxiosError;
+          if (axiosError.response) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: "Event Manager failed to delete!",
+            });
+          } else if (axiosError.request) {
+            console.error('No response received:', axiosError.request);
+            toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+          } else {
+            console.error('Request setup error:', axiosError.message);
+            toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+          }
         }
-        toast({
-          title: "Event Manager Deleted Successfully",
-          description: `Event Manager ${eventManager.name} is deleted!`,
-        });
       };
 
       return (
@@ -104,13 +114,6 @@ export const columns: ColumnDef<EventManagerUpdateForm>[] = [
               >
                 Remove
               </DropdownMenuItem>
-
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  Remove
-                </AlertDialogTrigger>
-                <AlertConfirmation name={"remove"} cta={() => handleDeleteEventManager(eventManager.id) } />
-              </AlertDialog>
             </DropdownMenuContent>
           </DropdownMenu>
         </>

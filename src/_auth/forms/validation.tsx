@@ -14,6 +14,7 @@ import useAuth from "../hook/useAuth";
 import { ValidateUser } from "@/types/types";
 import { useTimer } from 'react-timer-hook';
 import { ToastAction } from "@/components/ui/toast";
+import { AxiosError } from "axios";
 
 const Validation: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -52,18 +53,26 @@ const Validation: FunctionComponent = () => {
   
   // Handle Resend Code Function
   const handleResendCode = async(email: ValidateUser) => {
-    const response = await resendCode(email);
-    const data = await response.data
-
-    if(response.status != 200){
-      toast({title:"An error has occured"})
-      return;
-    }
-    if(data?.message){
-      toast({title:"Resended Email Successfuly", description: data?.message})
-      restart(time)
-      reset()
-      return;
+    try{
+      const response = await resendCode(email);
+      const data = await response.data
+      if (data?.message) {
+        toast({title:"Resended Email Successfuly", description: data?.message})
+        restart(time)
+        reset()
+      }
+    }catch(error){
+      console.error('Error:', error)
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({ variant:"destructive", title: 'Error', description: 'An error occurred while fetching data!' });
+      } else if (axiosError.request) {
+        console.error('No response received:', axiosError.request);
+        toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+      } else {
+        console.error('Request setup error:', axiosError.message);
+        toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+      }
     }
   }
 
@@ -73,40 +82,47 @@ const Validation: FunctionComponent = () => {
       validationCode: data.code,
     };
 
-    const response = await validateAccount(reqObj);
-    if (response.status != 200) {
-      toast({ variant: "destructive", title: response.statusText, description: "Invalid Code" });
-      return;
-    }
-
-    const resData = await response.data;
-
-    //superadmin
-    if (resData.superadmin) {
-      setUser({
+    try{
+      const response = await validateAccount(reqObj);
+      const resData = await response.data;
+      //superadmin
+      if (resData.superadmin) {
+        setUser({
+          accessToken: resData.accessToken,
+          email: resData?.superadmin.email,
+          id: resData?.superadmin.id,
+          name: resData?.superadmin.name,
+          isSuperAdmin: true,
+        });
+        setIsAuthenticated(true);
+        navigate("/eventmanagers");
+        return;
+      }
+      //eventmanager
+      else{ 
+        setUser({
         accessToken: resData.accessToken,
-        email: resData?.superadmin.email,
-        id: resData?.superadmin.id,
-        name: resData?.superadmin.name,
-        isSuperAdmin: true,
+        email: resData?.eventManager.email,
+        id: resData?.eventManager.id,
+        name: resData?.eventManager.name,
+        isSuperAdmin: false,
       });
       setIsAuthenticated(true);
-      navigate("/eventmanagers");
+      navigate("/events");
       return;
     }
-    //eventmanager
-    else{ 
-      setUser({
-      accessToken: resData.accessToken,
-      email: resData?.eventManager.email,
-      id: resData?.eventManager.id,
-      name: resData?.eventManager.name,
-      isSuperAdmin: false,
-    });
-    setIsAuthenticated(true);
-    navigate("/events");
-    return;
-
+    }catch(error){
+      console.error('Error:', error)
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({ variant:"destructive", title: 'Error', description: 'Invalid Code!' });
+      } else if (axiosError.request) {
+        console.error('No response received:', axiosError.request);
+        toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+      } else {
+        console.error('Request setup error:', axiosError.message);
+        toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+      }
     }
    
   };

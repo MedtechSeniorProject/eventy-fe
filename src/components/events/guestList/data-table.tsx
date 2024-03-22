@@ -27,6 +27,7 @@ import { Button } from "../../ui/button";
 import { AlertConfirmation } from "@/components/Alert";
 import { useDeleteAttendees } from "@/lib/queries/queries";
 import { useToast } from "@/components/ui/use-toast";
+import { AxiosError } from "axios";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -78,13 +79,22 @@ export function DataTable<TData, TValue>({
       eventId: eventId,
       attendeeIds: attendeeIds
     }
-    const response  = await RemoveAttendees(params)
-    if(response.status != 200){
-      toast({title:"Error", description:"Error has occured while removing the attendees from the list!"})
-      return;
+    try{
+      const response  = await RemoveAttendees(params)
+      toast({title:"Attendees Removed Successfully", description:"Attendees are removed from the list of the event!"})
+    }catch(error){
+      console.error('Error:', error)
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({title:"Error", description:"Error has occured while removing the attendees from the list!"})
+      } else if (axiosError.request) {
+        console.error('No response received:', axiosError.request);
+        toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+      } else {
+        console.error('Request setup error:', axiosError.message);
+        toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+      }
     }
-    toast({title:"Attendees Removed Successfully", description:"Attendees are removed from the list of the event!"})
-    return;
   }
 
   return (

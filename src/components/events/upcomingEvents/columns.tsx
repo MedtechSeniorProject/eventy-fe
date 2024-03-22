@@ -17,6 +17,7 @@ import { Dialog, DialogTrigger } from "../../ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { useDeleteEvent, useToggleArchiveEvent } from "@/lib/queries/queries";
 import { useToast } from "@/components/ui/use-toast";
+import { AxiosError } from "axios";
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -89,22 +90,42 @@ export const columns: ColumnDef<Event>[] = [
       const { mutateAsync: deleteEvent } = useDeleteEvent()
 
       const handleToggleArchiveEvent = async(id: string) => {
-        const response = await toggleArchiveEvent(id);
-        if(response.status != 200){
-          toast({variant:"destructive", title:"Error", description:"Event failed to archive!"})
-          return;
+        try{
+          const response = await toggleArchiveEvent(id);
+          const data = await response.data
+          toast({title:"Event Archived Successfully", description: `Event ${data.name} is archived!`})
+        }catch(error){
+          console.error('Error:', error)
+          const axiosError = error as AxiosError;
+          if (axiosError.response) {
+            toast({variant:"destructive", title:"Error", description:"Event failed to archive!"})
+          } else if (axiosError.request) {
+            console.error('No response received:', axiosError.request);
+            toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+          } else {
+            console.error('Request setup error:', axiosError.message);
+            toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+          }
         }
-        const data = await response.data
-        toast({title:"Event Archived Successfully", description: `Event ${data.name} is archived!`})
       }
 
       const handleDeleteEvent = async(id: string) => {
-        const response = await deleteEvent(id);
-        if(response.status != 200){
-          toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
-          return;
+        try{
+          const response = await deleteEvent(id);
+          toast({title:"Event Deleted Successfully", description: `Event ${event.name} is deleted!`})
+        }catch(error){
+          console.error('Error:', error)
+          const axiosError = error as AxiosError;
+          if (axiosError.response) {
+            toast({variant:"destructive", title:"Error", description:"Event failed to delete!"})
+          } else if (axiosError.request) {
+            console.error('No response received:', axiosError.request);
+            toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+          } else {
+            console.error('Request setup error:', axiosError.message);
+            toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+          }
         }
-        toast({title:"Event Deleted Successfully", description: `Event ${event.name} is deleted!`})
       }
 
       return (

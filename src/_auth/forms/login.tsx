@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useLoginAccount } from "@/lib/queries/queries";
 import { Button } from "@/components/ui/button";
+import { AxiosError } from "axios";
 
 interface LoginProps {}
 
@@ -40,18 +41,10 @@ const Login: FunctionComponent<LoginProps> = () => {
       password: data.password,
     };
     
-    const response = await loginAccount(user);
-    const resData = await response.data
-    // Invalid Credentials
-    if (response.status != 200) {
-      toast({
-        variant: "destructive",
-        title: resData?.name,
-        description: resData?.message,
-      });
-      return;
-    } else {
-      // Event Manager and SuperAdmin
+    try{
+      const response = await loginAccount(user);
+      console.log(response.status)
+      const resData = await response.data
       if (resData?.message) {
         toast({ variant: "default", description: resData.message });
         navigate("/validate", {
@@ -59,6 +52,18 @@ const Login: FunctionComponent<LoginProps> = () => {
         });
         reset();
         return;
+      }
+    }catch(error){
+      console.error('Error:', error)
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        toast({ variant:"destructive", title: 'Error', description: 'Incorrect Credentials!' });
+      } else if (axiosError.request) {
+        console.error('No response received:', axiosError.request);
+        toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+      } else {
+        console.error('Request setup error:', axiosError.message);
+        toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
       }
     }
   };

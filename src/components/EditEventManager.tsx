@@ -20,6 +20,7 @@ import {
 import { useUpdateEventManager } from "@/lib/queries/queries";
 import { EventManagerUpdateForm } from "@/types/types";
 import { useToast } from "./ui/use-toast";
+import { AxiosError } from "axios";
   
   const FormSchema = z
     .object({
@@ -46,14 +47,24 @@ import { useToast } from "./ui/use-toast";
         name: data.name,
         email: data.email
       }
-      const response = await updateEventManager(eventManager)
-      if(response.status != 200){
-        toast({variant: "destructive", title: "Error"})
-        return;
+
+      try{
+        const response = await updateEventManager(eventManager)
+        const eventResponse = await response.data
+        toast({title: "EventManager Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
+      }catch(error){
+        console.error('Error:', error)
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+          toast({variant: "destructive", title: "Error"})
+        } else if (axiosError.request) {
+          console.error('No response received:', axiosError.request);
+          toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
+        } else {
+          console.error('Request setup error:', axiosError.message);
+          toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+        }
       }
-      const eventResponse = await response.data
-      toast({title: "EventManager Updated Successfully", description:`Event ${eventResponse.name} is updated!`})
-      return;
     }
     
     return (
