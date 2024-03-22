@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm, DeskAgentForm } from "@/types/types";
 import axios, { AxiosResponse } from "axios"
 import { axiosPrivate } from "../axios/axiosInstance";
 
@@ -233,6 +233,25 @@ export async function addAttendees(eventId: string, attendees: AttendeeForm[], a
 export async function removeAttendees(eventId: string, attendeeIds: string[], accessToken: string | null): Promise<AxiosResponse> {
   try {
     const response = await axiosPrivate.post(`/events/delete/${eventId}`, attendeeIds, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+    return response
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+// ============================================================
+// Desk Agents ENDPOINTS
+// ============================================================
+
+/**Add a desk agent to an event */
+export async function addDeskAgent(deskAgent: DeskAgentForm, accessToken: string | null): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.post(`/deskagents`, deskAgent, {
       headers: {
         "Authorization": `Bearer ${accessToken}`
       }
