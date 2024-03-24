@@ -44,6 +44,7 @@ export type EventUpdateForm = {
   description?:string;
   latitude?: string;
   longitude?: string;
+  emailTemplate?: string
 };
 
 export type EventAttendees = {

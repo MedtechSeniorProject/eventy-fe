@@ -170,6 +170,7 @@ export const useUpdateEvent = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["upcomingEvents"] });
+        queryClient.invalidateQueries({ queryKey: ["event"] });
       },
     }
   );
