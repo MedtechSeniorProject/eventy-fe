@@ -75,10 +75,10 @@ export const columns: ColumnDef<DeskAgentsDisplay>[] = [
 
       const handleDeleteEventManager = async (id: string) => {
         try{
-          const response = await deleteDeskAgent(id);
+          await deleteDeskAgent(id);
           toast({title: "Deleted Successfully", description: `Desk agent ${deskAgent.username} has been deleted from this event !`})
         }catch(error){
-          toast({title: "Error", description: `An error has occured while deleting the desk agent from this event!`})
+          toast({variant:"destructive",title: "Error", description: `An error has occured while deleting the desk agent from this event!`})
         }
       };
       return (
