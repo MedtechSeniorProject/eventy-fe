@@ -121,12 +121,12 @@ import { useToast } from "./ui/use-toast";
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         value={field.value ?? ""}
-                        placeholder="Password"
+                        placeholder="Confirm Password"
                         type="password"
                       />
                     </FormControl>

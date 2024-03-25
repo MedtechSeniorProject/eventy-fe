@@ -17,6 +17,8 @@ import {
   addAttendees,
   removeAttendees,
   addDeskAgent,
+  deleteDeskAgent,
+  editDeskAgent,
 } from "./api";
 import {
   EventManager,
@@ -28,6 +30,7 @@ import {
   AddAttendees,
   RemoveAttendees,
   DeskAgentForm,
+  DeskAgentsDisplay,
 } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
@@ -257,4 +260,34 @@ export const useAddDeskAgent = () => {
       addDeskAgent(deskAgent, getAccessToken()),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
+};
+
+export const useEditDeskAgent = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (deskAgent: DeskAgentsDisplay) => editDeskAgent(deskAgent, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["event"] });
+      },
+    }
+  );
+  return mutation;
+};
+
+export const useDeleteDeskAgent = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (id: string) => deleteDeskAgent(id, getAccessToken()),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["event"] });
+      },
+    }
+  );
+  return mutation;
 };

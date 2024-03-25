@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm, DeskAgentForm } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm, DeskAgentForm, DeskAgentsDisplay } from "@/types/types";
 import axios, { AxiosResponse } from "axios"
 import { axiosPrivate } from "../axios/axiosInstance";
 
@@ -258,6 +258,38 @@ export async function addDeskAgent(deskAgent: DeskAgentForm, accessToken: string
     });
     return response
   } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+/**Edit desk agent */
+export async function editDeskAgent(deskAgent: DeskAgentsDisplay , accessToken: string | null): Promise<AxiosResponse> {
+  try{
+    const response = await axiosPrivate.patch(`/deskagents/${deskAgent.id}`, {
+      username: deskAgent.username
+    }, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    return response
+  }catch(error){
+    console.log(error);
+    throw error;
+  }
+}
+
+/**Delete desk agent */
+export async function deleteDeskAgent(deskAgentId: string, accessToken: string | null): Promise<AxiosResponse> {
+  try{
+    const response = await axiosPrivate.delete(`/deskagents/${deskAgentId}`, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    return response
+  }catch(error){
     console.log(error);
     throw error;
   }

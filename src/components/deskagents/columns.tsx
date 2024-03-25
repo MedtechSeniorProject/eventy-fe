@@ -5,12 +5,12 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeskAgentsDisplay } from "@/types/types";
 import { Checkbox } from "@/components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "../ui/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import EditEventManager from "../EditEventManager";
-import { AlertDialog, AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
-import { AlertConfirmation } from "../Alert";
+import { useDeleteDeskAgent } from "@/lib/queries/queries";
+import EditDeskAgent from "../EditDeskAgent";
 
 export const columns: ColumnDef<DeskAgentsDisplay>[] = [
   {
@@ -70,25 +70,17 @@ export const columns: ColumnDef<DeskAgentsDisplay>[] = [
     cell: ({ row }) => {
       const deskAgent = row.original;
       const { toast } = useToast();
-      /*
-      const { mutateAsync: deleteEventManager } = useDeleteEventManager();
+      
+      const { mutateAsync: deleteDeskAgent } = useDeleteDeskAgent();
 
       const handleDeleteEventManager = async (id: string) => {
-        const response = await deleteEventManager(id);
-        if (response.status != 200) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Event Manager failed to delete!",
-          });
-          return;
+        try{
+          const response = await deleteDeskAgent(id);
+          toast({title: "Deleted Successfully", description: `Desk agent ${deskAgent.username} has been deleted from this event !`})
+        }catch(error){
+          toast({title: "Error", description: `An error has occured while deleting the desk agent from this event!`})
         }
-        toast({
-          title: "Event Manager Deleted Successfully",
-          description: `Event Manager ${eventManager.name} is deleted!`,
-        });
       };
-      */
       return (
         <>
           <DropdownMenu>
@@ -105,14 +97,14 @@ export const columns: ColumnDef<DeskAgentsDisplay>[] = [
                 <DialogTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Edit</DropdownMenuItem>
                 </DialogTrigger>
-                {/* <EditEventManager eventManager={eventManager} /> */}
+                <EditDeskAgent deskAgent={deskAgent} />
               </Dialog>
 
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
                 onClick={() => {
-                  // handleDeleteEventManager(eventManager.id);
+                  handleDeleteEventManager(deskAgent.id);
                 }}
                 className="text-red"
               >
