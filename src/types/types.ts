@@ -24,6 +24,7 @@ export type Event = {
   startTime: string;
   endTime: string;
   description: string;
+  address: string;
   eventManager: string;
 };
 
