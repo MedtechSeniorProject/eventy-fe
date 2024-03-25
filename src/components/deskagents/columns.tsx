@@ -8,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "../ui/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
-import EditEventManager from "../EditEventManager";
 import { useDeleteDeskAgent } from "@/lib/queries/queries";
 import EditDeskAgent from "../EditDeskAgent";
 
