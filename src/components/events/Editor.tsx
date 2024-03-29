@@ -5,16 +5,22 @@ import "react-quill/dist/quill.snow.css";
 import { useToast } from "../ui/use-toast";
 import { useRef } from "react";
 import { DropdownMenuSeparator, DropdownMenuLabel, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuItem } from "../ui/dropdown-menu";
-import { Event } from "@/types/types";
 
 interface EditorProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   eventId: string;
-  event: Event
 }
 
-export default function Editor({ value, setValue, eventId, event }: EditorProps) {
+const eventEmailProperties = {
+  name: "{{title}}",
+  startTime: "{{startTime}}",
+  endTime: "{{endTime}}",
+  address: "{{address}}",
+  description: "{{description}}",
+};
+
+export default function Editor({ value, setValue, eventId }: EditorProps) {
   const { toast } = useToast();
   const { mutateAsync: updateEvent, isLoading } = useUpdateEvent();
   const quillRef = useRef(false);
@@ -71,10 +77,10 @@ export default function Editor({ value, setValue, eventId, event }: EditorProps)
     console.log(currentSelection)
     
     if (currentSelection) {
-      quillRef.current?.getEditor()?.insertText(currentSelection.index, `${eventProperty}\n`, 'user'); // Insert with authorship attribution
+      quillRef.current?.getEditor()?.insertText(currentSelection.index, `${eventProperty}`, 'user'); 
     } else {
-      const currentValue = quillRef.current?.getEditor()?.getContents(); // Get current content
-      const updatedContent = currentValue ? `${eventProperty}\n\n${currentValue}` : eventProperty; // Prepend based on existing content
+      const currentValue = quillRef.current?.getEditor()?.getContents(); 
+      const updatedContent = currentValue ? `${eventProperty}${currentValue}` : eventProperty; 
       setValue(updatedContent);
     }
   }
@@ -92,11 +98,11 @@ export default function Editor({ value, setValue, eventId, event }: EditorProps)
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => {handleAppendTitle(event.name)}}>Title</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {handleAppendTitle(event.startTime)}}>Event Start</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {handleAppendTitle(event.endTime)}}>Event End</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {handleAppendTitle(event.address)}}>Address</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {handleAppendTitle(event.description)}}>Description</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.name)}}>Title</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.startTime)}}>Event Start</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.endTime)}}>Event End</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.address)}}>Address</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.description)}}>Description</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
