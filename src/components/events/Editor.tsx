@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import { useToast } from "../ui/use-toast";
 import { useRef } from "react";
 import { DropdownMenuSeparator, DropdownMenuLabel, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuItem } from "../ui/dropdown-menu";
+import SendInvitees from "../SendInvitees";
 
 interface EditorProps {
   value: string;
@@ -87,7 +88,8 @@ export default function Editor({ value, setValue, eventId }: EditorProps) {
 
   return (
     <div className="mt-10">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <SendInvitees eventId={eventId}/>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="mb-5">Add Event Properties</Button>

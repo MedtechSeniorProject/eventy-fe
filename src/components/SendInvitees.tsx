@@ -14,7 +14,7 @@ const SendInvitees = ({eventId}: SendInviteesProps) => {
     // Send invitees
     try{
         await mutateAsync(eventId);
-        toast({title:"Invitees sent", description:"success"});
+        toast({title:"Invitees Sent Successfully"});
     }catch(error){
         const errormsg = error as Error;
         toast({variant:"destructive",title:"Error", description: errormsg.message});
