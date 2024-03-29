@@ -19,6 +19,7 @@ import {
   addDeskAgent,
   deleteDeskAgent,
   editDeskAgent,
+  sendInvitees,
 } from "./api";
 import {
   EventManager,
@@ -291,3 +292,12 @@ export const useDeleteDeskAgent = () => {
   );
   return mutation;
 };
+
+export const useSendInvitees = () => {
+  const { getAccessToken } = useAuth();
+
+  const mutation = useMutation(
+    (id: string) => sendInvitees(id, getAccessToken()),
+  )
+  return mutation;
+}

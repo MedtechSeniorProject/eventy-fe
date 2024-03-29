@@ -294,3 +294,17 @@ export async function deleteDeskAgent(deskAgentId: string, accessToken: string |
     throw error;
   }
 }
+
+export async function sendInvitees(id: string, accessToken: string | null): Promise<AxiosResponse> {
+  try{
+    const response = await axiosPrivate.patch(`/sendInvites/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    return response
+  }catch(error){
+    console.log(error);
+    throw error;
+  }
+}
