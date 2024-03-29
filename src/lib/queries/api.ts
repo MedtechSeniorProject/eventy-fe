@@ -174,7 +174,7 @@ export async function updateEvent(event: EventUpdateForm, accessToken: string | 
 /**Toggle Event */
 export async function toogleArchiveEvent(id: string, accessToken: string | null): Promise<AxiosResponse> {
   try {
-     const response = await axiosPrivate.patch(`/events/toggleArchive/${id}`, {
+     const response = await axiosPrivate.patch(`/events/toggleArchive/${id}`, {}, {
        headers: {
          "Authorization": `Bearer ${accessToken}`,
        },
