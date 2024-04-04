@@ -1,4 +1,4 @@
-import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm, DeskAgentForm, DeskAgentsDisplay } from "@/types/types";
+import { LoginUser, ValidateUser,EventManager, EventForm, EventUpdateForm, EventManagerUpdateForm, AttendeeForm, DeskAgentForm, DeskAgentsDisplay, Question } from "@/types/types";
 import axios, { AxiosResponse } from "axios"
 import { axiosPrivate } from "../axios/axiosInstance";
 
@@ -295,9 +295,25 @@ export async function deleteDeskAgent(deskAgentId: string, accessToken: string |
   }
 }
 
+/** Send Invitees */
 export async function sendInvitees(id: string, accessToken: string | null): Promise<AxiosResponse> {
   try{
     const response = await axiosPrivate.patch(`/events/sendInvites/${id}`, {}, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    return response
+  }catch(error){
+    console.log(error);
+    throw error;
+  }
+}
+
+/** Add Evaluation Form Questions */
+export async function addEvaluationFormQuestions(eventId: string, questions: Question[], accessToken: string | null): Promise<AxiosResponse> {
+  try{
+    const response = await axiosPrivate.post(`/events/questions/${eventId}`, questions, {
       headers: {
         "Authorization": `Bearer ${accessToken}`
       }

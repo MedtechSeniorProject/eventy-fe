@@ -20,6 +20,7 @@ import {
   deleteDeskAgent,
   editDeskAgent,
   sendInvitees,
+  addEvaluationFormQuestions,
 } from "./api";
 import {
   EventManager,
@@ -32,6 +33,7 @@ import {
   RemoveAttendees,
   DeskAgentForm,
   DeskAgentsDisplay,
+  QuestionForm,
 } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 
@@ -301,3 +303,14 @@ export const useSendInvitees = () => {
   )
   return mutation;
 }
+
+/**Add evaluation form query */
+export const useAddEvaluationForm = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (form: QuestionForm) => addEvaluationFormQuestions(form.eventId, form.questions, getAccessToken()),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
+  });
+};
