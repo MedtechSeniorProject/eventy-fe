@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
   async function handleRemoveAttendees() {
     const array = table.getFilteredSelectedRowModel().rows
     let attendeeIds: string[] = []
-    array.forEach((event) => {
+    array.forEach((event: any) => {
       attendeeIds.push(event.original.id)
     })
     const params = {
@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
       attendeeIds: attendeeIds
     }
     try{
-      const response  = await RemoveAttendees(params)
+      await RemoveAttendees(params)
       toast({title:"Attendees Removed Successfully", description:"Attendees are removed from the list of the event!"})
     }catch(error){
       console.error('Error:', error)

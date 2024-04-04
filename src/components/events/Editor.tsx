@@ -24,7 +24,7 @@ const eventEmailProperties = {
 export default function Editor({ value, setValue, eventId }: EditorProps) {
   const { toast } = useToast();
   const { mutateAsync: updateEvent, isLoading } = useUpdateEvent();
-  const quillRef = useRef(false);
+  const quillRef = useRef<any>();
 
   const modules = {
     toolbar: [
@@ -71,7 +71,6 @@ export default function Editor({ value, setValue, eventId }: EditorProps) {
   }
 
   async function handleAppendTitle(eventProperty: string) {
-    // Focus the editor before appending
     quillRef.current?.focus();
 
     const currentSelection = quillRef.current.getEditor().getSelection()
@@ -110,12 +109,12 @@ export default function Editor({ value, setValue, eventId }: EditorProps) {
         </DropdownMenu>
       </div>
       <ReactQuill
+        ref={quillRef}
         theme="snow"
         value={value}
         onChange={setValue}
         modules={modules}
         formats={formats}
-        ref={quillRef}
       />
       <div className="flex justify-end">
         <Button

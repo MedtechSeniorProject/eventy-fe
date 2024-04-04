@@ -56,7 +56,7 @@ import { AxiosError } from "axios";
       }
       
       try{
-        const response = await addAttendees(params)
+        await addAttendees(params)
         toast({title:"Attendee Added Successfully", description: `${attendee[0].name} is added to the guest list!`})
         form.reset();
         setOpen(false)

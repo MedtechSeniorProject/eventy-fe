@@ -43,7 +43,7 @@ const UploadAttendee = ({...props}) => {
       }
 
       try{
-        const response = await addAttendees(params)
+        await addAttendees(params)
         toast({title:"Attendees Added Successfully", description:`${params.attendees.length} Attendees are added to the list`})
       }catch(error){
         console.error('Error:', error)

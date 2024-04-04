@@ -111,7 +111,7 @@ export const columns: ColumnDef<Event>[] = [
 
       const handleDeleteEvent = async(id: string) => {
         try{
-          const response = await deleteEvent(id);
+          await deleteEvent(id);
           toast({title:"Event Deleted Successfully", description: `Event ${event.name} is deleted!`})
         }catch(error){
           console.error('Error:', error)

@@ -56,7 +56,7 @@ import { useToast } from "./ui/use-toast";
         eventId: props.eventId
       }
       try{
-        const response = await addDeskAgent(params)
+        await addDeskAgent(params)
         toast({title:"Desk Agent Added Successfully", description: `${data.username} is added to the desk agents list!`})
         form.reset();
         setOpen(false)

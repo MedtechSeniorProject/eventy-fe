@@ -88,7 +88,7 @@ const CreateEvent = () => {
     };
 
     try {
-      const response = await createEvent(event);
+      await createEvent(event);
       form.reset();
       setOpen(false);
       toast({

@@ -59,7 +59,7 @@ const EditQuestion = ({ ...props }) => {
 async function onSubmit(data: z.infer<typeof FormSchema>) {
   const newData = {
     ...data,
-    options: data.type === "Input" ? null : data.options?.split(",").map((option: string) => ({ value: option.trim() })),
+    options: data.type === "Input" ? null : data.options?.split(",").map((option: string) => (option.trim())),
   };
   
   props.setQuestions((prev: any) => {
