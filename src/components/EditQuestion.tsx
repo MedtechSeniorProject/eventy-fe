@@ -50,7 +50,7 @@ const EditQuestion = ({ ...props }) => {
     defaultValues: {
       type: props.question.type,
       question: props.question.question,
-      options: props.question?.options,
+      options: props.question?.options?.map((option: string) => option).join(", "),
       isRequired: props.question.isRequired,
     },
   });
@@ -59,12 +59,12 @@ const EditQuestion = ({ ...props }) => {
 async function onSubmit(data: z.infer<typeof FormSchema>) {
   const newData = {
     ...data,
-    options: data.type === "Input" ? null : data.options?.split(",").map((option: string) => (option.trim())),
+    options: data.type === "Input" ? null : data.options?.split(",").map((option) => option.trim()),
   };
   
   props.setQuestions((prev: any) => {
-    return prev.map((question: Question) => {
-      if (question.id === props.question.id) {
+    return prev.map((question: Question, index: number) => {
+      if (index === props.index) {
         return {
           ...question,
           ...newData,

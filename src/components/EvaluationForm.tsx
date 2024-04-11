@@ -48,6 +48,7 @@ const EvaluationForm = ({ ...props }) => {
           <>
             <div className="flex flex-col gap-5 mt-3">
               {questions.map((question, index) => {
+                
                 return (
                   <div key={index}>
                     <div className="flex justify-between">
@@ -55,7 +56,7 @@ const EvaluationForm = ({ ...props }) => {
                         Question {index + 1}: {question.question} <span className="text-red-500 font-semibold">{question.isRequired && "**"}</span>
                       </h3>
                       <div className="flex gap-3">
-                        <EditQuestion question={question} setQuestions={setQuestions} />
+                        <EditQuestion question={question} index={index} setQuestions={setQuestions} />
                         <Trash
                           strokeWidth={2}
                           size={20}
