@@ -19,6 +19,7 @@ import EventGuestList from "./pages/eventmanager/event/guestlist";
 import EventDeskAgents from "./pages/eventmanager/event/deskagents";
 import EventEmailTemplate from "./pages/eventmanager/event/emailtemplate";
 import EventEvaluationForm from "./pages/eventmanager/event/evaluationform";
+import AttendeeEvaluationForm from "./pages/Attendee/evaluationform";
 
 const App = () => {
   return (
@@ -34,6 +35,8 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/validate" element={<Validation />} />
               </Route>
+              {/**Attendee Evaluation Form*/}
+              <Route path="/evaluation/:eventId/:inviteeId" element={<AttendeeEvaluationForm />} />
               {/** private routes */}
               <Route element={<RequireAuth role="SUPERADMIN" />}>
                 <Route element={<NavLayoutSuperAdmin />} >
