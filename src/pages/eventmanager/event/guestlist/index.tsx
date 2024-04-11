@@ -5,6 +5,7 @@ import AddAttendee from "@/components/AddAttendee";
 import UploadAttendee from "@/components/UploadAttendee";
 import { useGetEventById } from "@/lib/queries/queries";
 import SkeletonTable from "@/components/SkeletonTable";
+import SendInvitees from "@/components/SendInvitees";
 
 const EventGuestList = () => {
   const { id } = useParams() as { id: string };
@@ -19,13 +20,17 @@ const EventGuestList = () => {
   }
 
   const attendees = event.attendees || [];
+  console.log(attendees)
 
   return (
     <div className="py-10 w-11/12">
-      <EventHeader name={"Guest List - "+event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
-      <div className="mt-5 flex gap-5">
-        <AddAttendee eventId={event.id} />
-        <UploadAttendee eventId={event.id} />
+      <EventHeader name={"Guest List - " + event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
+      <div className="mt-5 flex justify-between">
+        <div className="flex gap-5">
+          <AddAttendee eventId={event.id} />
+          <UploadAttendee eventId={event.id} />
+        </div>
+        <SendInvitees eventId={event.id}/>
       </div>
       <GuestList attendees={attendees} eventId={event.id} />
     </div>
