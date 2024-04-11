@@ -135,8 +135,8 @@ export type DeskAgentsDisplay= {
 
 export type Question =  {
   id: string,
-  options: string,
-  question: string[],
+  options: string[],
+  question: string,
   type: string,
   isRequired: boolean
 }
@@ -144,4 +144,15 @@ export type Question =  {
 export type QuestionForm = {
   eventId: string,
   questions: Question[]
+}
+
+export type response = {
+  id: string,
+  responses: string[]
+}
+
+export type responseForm = {
+  eventId: string,
+  attendeeId: string,
+  responses: response[]
 }
