@@ -19,6 +19,7 @@ const eventEmailProperties = {
   endTime: "{{endTime}}",
   address: "{{address}}",
   description: "{{description}}",
+  attendeeName: "{{attendeeName}}"
 };
 
 export default function Editor({ value, setValue, eventId }: EditorProps) {
@@ -104,6 +105,7 @@ export default function Editor({ value, setValue, eventId }: EditorProps) {
               <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.endTime)}}>Event End</DropdownMenuItem>
               <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.address)}}>Address</DropdownMenuItem>
               <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.description)}}>Description</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {handleAppendTitle(eventEmailProperties.attendeeName)}}>Attendee Name</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
