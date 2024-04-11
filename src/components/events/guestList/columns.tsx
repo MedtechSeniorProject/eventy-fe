@@ -75,7 +75,11 @@ export const columns: ColumnDef<Attendee>[] = [
     },
   },
   {
-    accessorKey: "hasAttended",
+    accessorKey: "checkedInAt",
+    cell: props => {
+      console.log(props.getValue());
+      return props.getValue() ? new Date(String(props.getValue())).toLocaleString() : "Not checked in";
+    },
     header: ({ column }) => {
       return (
         <Button
@@ -83,7 +87,7 @@ export const columns: ColumnDef<Attendee>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Attended
+          Checked In At
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
