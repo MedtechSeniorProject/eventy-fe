@@ -21,6 +21,8 @@ import {
   editDeskAgent,
   sendInvitees,
   addEvaluationFormQuestions,
+  getEvaluationFormQuestions,
+  updateResponses,
 } from "./api";
 import {
   EventManager,
@@ -34,8 +36,10 @@ import {
   DeskAgentForm,
   DeskAgentsDisplay,
   QuestionForm,
+  responseForm,
 } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
+import { AxiosError } from "axios";
 
 // ============================================================
 // AUTH QUERIES
@@ -314,3 +318,20 @@ export const useAddEvaluationForm = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
 };
+
+export const useGetEvaluationFormQuestions = (eventId: string, attendeeId: string) => {
+  return useQuery({
+    queryKey: ["evaluationform", eventId, attendeeId],
+    queryFn: async () => getEvaluationFormQuestions(eventId, attendeeId),
+    onError: (error: AxiosError) => {
+      console.log((error.response?.data as any)?.message);
+    }
+  }
+);
+}
+
+export const useGetEvaluationFormResponses = () => {
+  return useMutation({
+    mutationFn: (responseForm: responseForm) => updateResponses(responseForm.eventId, responseForm.attendeeId, responseForm.responses),
+  });
+}
