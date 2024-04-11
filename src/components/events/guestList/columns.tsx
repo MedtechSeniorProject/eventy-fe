@@ -77,7 +77,6 @@ export const columns: ColumnDef<Attendee>[] = [
   {
     accessorKey: "checkedInAt",
     cell: props => {
-      console.log(props.getValue());
       return props.getValue() ? new Date(String(props.getValue())).toLocaleString() : "Not checked in";
     },
     header: ({ column }) => {
