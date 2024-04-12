@@ -1,6 +1,9 @@
 import { format } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { MapPin } from 'lucide-react';
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react"
 
 interface props{
     name: string
@@ -15,7 +18,16 @@ const EventHeader = (props:props) => {
   const formattedStartDateTime = format(startTime, "EEEE, MMMM d, yyyy 'at' h:mm a");
   const formattedEndDateTime = format(endTime, "EEEE, MMMM d, yyyy 'at' h:mm a");
 
+  const navigate = useNavigate();
+  function handleClick(): void {
+    navigate("/events");
+  }
   return (<>
+
+         <Button variant="icon" className="mb-6" size="icon" onClick={() => {handleClick()}}>
+      
+      <ChevronLeft className="h-8 w-8" />
+    </Button>
     <h1 className="font-bold text-3xl">{props.name}</h1>
     <div className='flex gap-2 mt-3'>
       <Clock className='w-4' />
