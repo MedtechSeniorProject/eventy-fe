@@ -25,7 +25,7 @@ const EventEmailTemplate = () => {
 
   return (
     <>
-        <div className="py-10 w-11/12">
+        <div className="pb-10 w-11/12">
         <EventHeader name={"Email template - " + event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
             <Editor value={value} setValue={setValue} eventId={id} />
         </div>
