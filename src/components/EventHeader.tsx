@@ -23,9 +23,7 @@ const EventHeader = (props:props) => {
     navigate("/events");
   }
   return (<>
-
-         <Button variant="icon" className="mb-6" size="icon" onClick={() => {handleClick()}}>
-      
+    <Button variant="icon" className="mb-6" size="icon" onClick={() => {handleClick()}}>
       <ChevronLeft className="h-8 w-8" />
     </Button>
     <h1 className="font-bold text-3xl">{props.name}</h1>
