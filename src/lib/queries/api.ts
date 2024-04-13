@@ -17,7 +17,7 @@ import { axiosPrivate } from "../axios/axiosInstance";
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<AxiosResponse> {
   try {
-    const response = await axios.post("http://localhost:3000/auth/login", user);
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, user);
     return response;
   } catch (error) {
     console.log(error);
@@ -31,7 +31,7 @@ export async function validateAccount(
 ): Promise<AxiosResponse> {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/validate",
+      `${import.meta.env.VITE_BASE_URL}/auth/validate`,
       user
     );
     return response;
@@ -45,7 +45,7 @@ export async function validateAccount(
 export async function resendCode(user: ValidateUser): Promise<AxiosResponse> {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/resend",
+      `${import.meta.env.VITE_BASE_URL}/auth/resend`,
       user
     );
     return response;

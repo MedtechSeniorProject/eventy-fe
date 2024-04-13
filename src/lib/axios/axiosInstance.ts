@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosPrivate = axios.create({
-    baseURL: 'http://localhost:3000', // Base URL for your API
+    baseURL: import.meta.env.VITE_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
     },
