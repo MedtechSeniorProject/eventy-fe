@@ -123,8 +123,9 @@ export type Address = {
 
 /** Desk Agent types */
 export type DeskAgentForm = {
-  username: string,
-  password: string,
+  username?: string,
+  password?: string,
+  numberOfAgents?: number,
   eventId: string
 }
 

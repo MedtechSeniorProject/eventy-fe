@@ -23,7 +23,7 @@ const EventGuestList = () => {
   console.log(attendees)
 
   return (
-    <div className="py-10 w-11/12">
+    <div className="pb-10 w-11/12">
       <EventHeader name={"Guest List - " + event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
       <div className="mt-5 flex justify-between">
         <div className="flex gap-5">

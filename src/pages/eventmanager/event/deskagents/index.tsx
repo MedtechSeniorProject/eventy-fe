@@ -21,7 +21,7 @@ const EventDeskAgents = () => {
   const deskAgents = event.deskAgents || [];
 
   return (
-    <div className="py-10 w-11/12">
+    <div className="pb-10 w-11/12">
       <EventHeader name={"Desk Agents - "+event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
       <div className="mt-5 flex gap-5">
         <AddDeskAgent eventId={event.id} />
