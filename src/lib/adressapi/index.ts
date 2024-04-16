@@ -1,15 +1,15 @@
-export async function getAddress(query: string): Promise<[]> {
-    const replacedQuery = query.replace(/ /g, '%20');
-    try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/search.php?q=${replacedQuery}&polygon_geojson=1&format=jsonv2`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response.json()
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+import axios from "axios";
+
+export async function getAddress(
+  latitude: string,
+  longitude: string
+): Promise<[]> {
+  const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+  try {
+    const response = await axios.get(url);
+    const address = response.data.display_name;
+    return address;
+  } catch (error) {
+    throw new Error("Failed to fetch address from coordinates.");
   }
+}
