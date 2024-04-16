@@ -34,8 +34,8 @@ import { useCreateEvent } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import { getAddress } from "@/lib/adressapi";
-import { Address } from "@/types/types";
 import { AxiosError } from "axios";
+import MapComponent from "./MapComponent";
 
 const FormSchema = z
   .object({
@@ -46,14 +46,21 @@ const FormSchema = z
     endTime: z.date({
       required_error: "An end date is required.",
     }),
-    location: z.string(),
+    location: z
+      .object({
+        latitude: z.string(),
+        longitude: z.string(),
+      })
+      .refine((value) => value.latitude && value.longitude, {
+        message: "Location is required.",
+      }),
     description: z
       .string()
       .min(10, {
         message: "Description must be at least 10 characters.",
       })
       .max(160, {
-        message: "Description must not be longer than 30 characters.",
+        message: "Description must not be longer than 160 characters.",
       }),
   })
   .required();
@@ -65,18 +72,32 @@ const CreateEvent = () => {
   });
   const [open, setOpen] = useState<boolean>(false);
   const { mutateAsync: createEvent } = useCreateEvent();
-  const [isLoading, setIsLoading] = useState(false);
-  const [addresses, setAddresses] = useState<Address[]>([]);
   const [longitude, setLongitude] = useState<string>("");
   const [latitude, setLatitude] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  function handleLocationChange(lat: number, lng: number) {
+    setLatitude(lat.toString());
+    setLongitude(lng.toString());
+    getAddressFromCoordinates(lat.toString(), lng.toString());
+    //Update the location so that it does not tell me it is required
+    form.setValue("location", {
+      latitude: lat.toString(),
+      longitude: lng.toString(),
+    });
+  }
+
+  async function getAddressFromCoordinates(lat: string, lng: string) {
+    let address;
+    address = await getAddress(lat.toString(), lng.toString());
+    address = address.toString();
+    setAddress(address);
+  }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     // Formatting Date Time
     let startTimeString = formatISO(data.startTime);
     let endTimeString = formatISO(data.endTime);
-
-    const address = await getAddress(data.location);
-    console.log(address);
 
     const event = {
       name: data.name,
@@ -85,6 +106,7 @@ const CreateEvent = () => {
       description: data.description,
       latitude: latitude,
       longitude: longitude,
+      address: address,
     };
 
     try {
@@ -120,20 +142,6 @@ const CreateEvent = () => {
           description: "Failed to setup request!",
         });
       }
-    }
-  }
-
-  async function handleLocationChange(value: string) {
-    try {
-      setIsLoading(true);
-      const response = await getAddress(value);
-      const limitedAddresses = response.slice(0, 3);
-      console.log(response);
-      setAddresses(limitedAddresses);
-    } catch (error) {
-      console.error("Error fetching addresses:", error);
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -251,46 +259,16 @@ const CreateEvent = () => {
             <FormField
               control={form.control}
               name="location"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      value={field.value ?? ""}
-                      placeholder="Search..."
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleLocationChange(e.target.value);
-                      }}
+                    <MapComponent
+                      handleChange={handleLocationChange}
+                      address={address}
                     />
                   </FormControl>
                   <FormMessage />
-                  {isLoading && (
-                    <div className="text-sm font-semibold">Loading...</div>
-                  )}
-                  {!isLoading && addresses.length > 0 && (
-                    <div className="flex flex-col gap-1 border border-1 ">
-                      {addresses.map((address) => (
-                        <button
-                          type="button"
-                          className="hover:bg-slate-100 pl-3 transition-all duration-100"
-                          key={address.place_id}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            form.setValue("location", address.display_name);
-                            setLatitude(address.lat);
-                            setLongitude(address.lon);
-                            setAddresses([]);
-                          }}
-                        >
-                          <p className="text-start text-sm">
-                            {address.display_name}
-                          </p>
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </FormItem>
               )}
             />
