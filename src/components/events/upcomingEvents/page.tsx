@@ -15,6 +15,8 @@ interface event {
   name: string,
   startTime: string
   endTime: string
+  latitude: number
+  longitude: number
   address:string
   description: string
 }
@@ -28,6 +30,8 @@ export default function UpcomingEvents() {
     startTime: new Date(event.startTime).toLocaleString(),
     eventManager: event.eventManager?.name || '',
     endTime: new Date(event.endTime).toLocaleString(),
+    latitude: event.latitude,
+    longitude: event.longitude,
     address: event.address,
     description: event.description
   }));

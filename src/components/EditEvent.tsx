@@ -27,12 +27,13 @@ import {
 } from "@/components/ui/popover";
 import { format, formatISO, parse, toDate } from "date-fns";
 import { useUpdateEvent } from "@/lib/queries/queries";
-import { Address, EventUpdateForm } from "@/types/types";
+import { EventUpdateForm } from "@/types/types";
 import { toast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import { getAddress } from "@/lib/adressapi";
 import { AxiosError } from "axios";
+import MapComponent from "./MapComponent";
 
 const FormSchema = z
 .object({
@@ -43,7 +44,12 @@ const FormSchema = z
   endTime: z.date({
     required_error: "An end date is required.",
   }),
-  location: z.string(),
+  location: z
+      .object({
+        latitude: z.string(),
+        longitude: z.string(),
+      }),
+  address: z.string(),
   description: z
     .string()
     .min(10, {
@@ -56,11 +62,10 @@ const FormSchema = z
 .required();
 
 const EditEvent = ({ ...props }) => {
-  const { mutateAsync: updateEvent} = useUpdateEvent()
-  const [isLoading, setIsLoading] = useState(false);
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [longitude, setLongitude] = useState<string>("")
-  const [latitude, setLatitude] = useState<string>("")
+  const { mutateAsync: updateEvent} = useUpdateEvent();
+  const [longitude, setLongitude] = useState<string>("");
+  const [latitude, setLatitude] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
   function convertToDate(inputDateString: string) {
     const date = parse(inputDateString, 'M/dd/yyyy, hh:mm:ss a', new Date());
@@ -75,7 +80,11 @@ const EditEvent = ({ ...props }) => {
       startTime: convertToDate(props.event.startTime),
       endTime: convertToDate(props.event.endTime),
       description: props.event.description,
-      location: props.event.address
+      location: {
+        latitude: props.event.latitude,
+        longitude: props.event.longitude,
+      },
+      address: props.event.address
     },
   });
 
@@ -94,6 +103,10 @@ const EditEvent = ({ ...props }) => {
     
     if (longitude) {
       event.longitude = longitude;
+    }
+
+    if (address) {
+      event.address = address;
     }
     
     console.log(event)
@@ -125,18 +138,23 @@ const EditEvent = ({ ...props }) => {
     }
   }
 
-  async function handleLocationChange(value: string) {
-    try {
-      setIsLoading(true);
-      const response = await getAddress(value);
-      const limitedAddresses = response.slice(0, 3);
-      console.log(response);
-      setAddresses(limitedAddresses);
-    } catch (error) {
-      console.error("Error fetching addresses:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  async function getAddressFromCoordinates(lat: string, lng: string) {
+    let address;
+    address = await getAddress(lat.toString(), lng.toString());
+    address = address.toString();
+    setAddress(address);
+  }
+
+
+  function handleLocationChange(lat: number, lng: number) {
+    setLatitude(lat.toString());
+    setLongitude(lng.toString());
+    getAddressFromCoordinates(lat.toString(), lng.toString());
+    //Update the location so that it does not tell me it is required
+    form.setValue("location", {
+      latitude: lat.toString(),
+      longitude: lng.toString(),
+    });
   }
 
   return (
@@ -249,42 +267,18 @@ const EditEvent = ({ ...props }) => {
           <FormField
               control={form.control}
               name="location"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      value={field.value ?? ""}
-                      placeholder="Search..."
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleLocationChange(e.target.value);
-                      }}
+                  <MapComponent
+                      handleChange={handleLocationChange}
+                      address={address}
+                      defaultLatitude={parseFloat(form.getValues("location").latitude)}
+                      defaultLongitude={parseFloat(form.getValues("location").longitude)}
                     />
                   </FormControl>
                   <FormMessage />
-                  {isLoading && <div className="text-sm font-semibold">Loading...</div>}
-                  {!isLoading && addresses.length > 0 && (
-                    <div className="flex flex-col gap-1 border border-1 ">
-                      {addresses.map((address) => (
-                        <button
-                          type="button"
-                          className="hover:bg-slate-100 pl-3 transition-all duration-100"
-                          key={address.place_id}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            form.setValue("location", address.display_name);
-                            setLatitude(address.lat)
-                            setLongitude(address.lon)
-                            setAddresses([])
-                          }}
-                        >
-                          <p className="text-start text-sm">{address.display_name}</p>
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </FormItem>
               )}
             />
