@@ -11,6 +11,7 @@ import {
   ColumnFiltersState,
   getPaginationRowModel,
   getFilteredRowModel,
+  Row,
 } from "@tanstack/react-table";
 
 import {
@@ -24,6 +25,8 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
+import { useDeleteDeskAgent } from "@/lib/queries/queries";
+import { toast } from "../ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,6 +42,10 @@ export function DataTable<TData, TValue>({
     []
   );
 
+//row selection
+const [rowSelection, setRowSelection] = React.useState({})
+
+
   const table = useReactTable({
     data,
     columns,
@@ -46,13 +53,35 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  const selectedAgents = table.getFilteredSelectedRowModel().rows;
+
+
+  const { mutateAsync: deleteDeskAgent } = useDeleteDeskAgent();
+  
+  const handleDeleteEventManager = async (rows: Row<TData>[]) => {
+    try {
+      for (const row of rows) {
+        const id = row.getValue("id") as string;
+  
+        await deleteDeskAgent(id);
+      }
+        toast({ title: "Deleted Successfully", description: "All selected desk agents have been deleted from this event!" });
+      
+    } catch (error) {
+      
+      toast({ variant: "destructive", title: "Error", description: "An error occurred while deleting desk agents!" });
+    }
+  };
 
   return (
     <div>
@@ -134,6 +163,11 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
+      <Button className=" mt-5 ml-1 h-9 px-3" variant={"secondary"} disabled={selectedAgents.length === 0} 
+         onClick={() => {
+          handleDeleteEventManager(selectedAgents);
+        }}>
+        Remove</Button>
     </div>
   );
 }
