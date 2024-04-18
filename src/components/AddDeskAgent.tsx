@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { toast as stoast } from 'sonner';
 
 import {
   Form,
@@ -23,8 +24,8 @@ import {
 import { useState } from "react";
 import {  useAddDeskAgent } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
-import { ToastAction } from "@/components/ui/toast"
-import { cn } from "@/lib/utils";
+import { X } from 'lucide-react';
+
 
 
 const FormSchema = z 
@@ -34,7 +35,7 @@ const FormSchema = z
       invalid_type_error: "Number of agents must be a number",
     }),
   })
-  //.refine // add refine for min and max number 
+
 
 const AddDeskAgent = ({...props}) => {
   const {mutateAsync: addDeskAgent } = useAddDeskAgent() 
@@ -55,11 +56,7 @@ const AddDeskAgent = ({...props}) => {
       const addedDeskAgents = response.data;
 
       if (Array.isArray(addedDeskAgents)) {
-        let message = "";
-        for (const agent of addedDeskAgents) {
-          message += `- Username: ${agent.username}\n`;
-          message += `  Password: ${agent.password}\n\n`;
-        }
+        setOpen(false); 
         /// export data to json --> @sahar TODO: convert json to csv
         const exportData = () => {
           const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
@@ -72,14 +69,45 @@ const AddDeskAgent = ({...props}) => {
           link.click();
         };
 
-        toast({
-          className: cn(
-            'fixed top-0 left-1/2 -translate-x-1/2 flex justify-center items-center md:max-w-[420px] md:top-4'
-          ),
-          title: "Desk Agents Added Successfully :\n ",
-          description: message,
-          action: <ToastAction onClick={exportData} altText="Export Data">Export Data</ToastAction>,
-        })
+
+        stoast.custom((t) => (
+        <div className=" flex flex-col w-96 bg-white text-black bg-background p-2" >
+              {/* //x icon */}
+               <div className="flex justify-end">
+                  <Button variant="icon" size="icon" onClick={() => { stoast.dismiss(t); }}>
+                    <X className="ml-auto h-4 w-4" />
+                  </Button>
+                </div>
+          {/* title */}
+          <h2 className="font-semibold pt-2 pl-2 pb-3">Desk Agents Added Successfully :</h2>
+
+          <div className="flex flex-col border border-gray-300 border-solid">
+          {/* added desk agents */}
+          {addedDeskAgents.map((agent, index) => (
+            <>
+                <div key={index} className="flex flex-row py-3 px-2 w-full">
+                  <p className="text-sm"><span className=" font-medium ">Agent {index+1}. username: </span>{agent.username}</p>
+                  <p className="text-sm pl-2"><span className=" font-medium">password: </span>{agent.password}</p>
+                </div>
+                {index === addedDeskAgents.length-1 ? null : <hr />}
+                </>
+                ))}        
+            </div>
+          {/* export data button */}
+            <div className="flex justify-center py-3">
+                <Button className=" w-fit" variant={"secondary"} 
+                        onClick={() => {exportData(); stoast.dismiss(t); }}>
+                  Export Data
+                  </Button>
+            </div>
+          </div>
+        )
+        , {
+          duration: Infinity,
+          position: 'top-center',
+          style: {border: '1px solid #a9b1b8', },
+        });
+
       } else {
         console.error("Unexpected data format in response. Please check API response structure.");
         toast({ title: "Error", description: "An error occurred. Please try again." });
@@ -97,6 +125,7 @@ const AddDeskAgent = ({...props}) => {
 }
 
   return (
+    <div>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default">
@@ -137,6 +166,9 @@ const AddDeskAgent = ({...props}) => {
         </Form>
       </DialogContent>
     </Dialog>
+    </div>
+
+ 
   );
 };
 
