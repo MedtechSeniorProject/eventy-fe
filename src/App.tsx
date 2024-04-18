@@ -20,6 +20,7 @@ import EventDeskAgents from "./pages/eventmanager/event/deskagents";
 import EventEmailTemplate from "./pages/eventmanager/event/emailtemplate";
 import EventEvaluationForm from "./pages/eventmanager/event/evaluationform";
 import AttendeeEvaluationForm from "./pages/Attendee/evaluationform";
+import EventStatistics from "./pages/eventmanager/event/insights";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
                   <Route path="/event/:id/deskagents" element={<EventDeskAgents />} />
                   <Route path="/event/:id/emailtemplate" element={<EventEmailTemplate />} />
                   <Route path="/event/:id/evaluationform" element={<EventEvaluationForm />} />
+                  <Route path="/event/:id/statistics" element={<EventStatistics />} />
                 </Route>
               </Route>
             </Routes>
