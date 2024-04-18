@@ -20,6 +20,7 @@ import EventDeskAgents from "./pages/eventmanager/event/deskagents";
 import EventEmailTemplate from "./pages/eventmanager/event/emailtemplate";
 import EventEvaluationForm from "./pages/eventmanager/event/evaluationform";
 import AttendeeEvaluationForm from "./pages/Attendee/evaluationform";
+import { Toaster as SToaster } from "@/components/ui/sonner"
 
 const App = () => {
   return (
@@ -61,6 +62,8 @@ const App = () => {
         </QueryProvider>
       </main>
       <Toaster />
+      <SToaster />
+
     </>
   );
 };
