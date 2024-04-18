@@ -460,3 +460,24 @@ export async function updateResponses(
     throw error;
   }
 }
+
+// ============================================================
+// STATISTICS ENDPOINTS
+// ============================================================
+
+export async function getEventStatistics(
+  eventId: string,
+  accessToken: string | null
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.get(`/statistics/event/${eventId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

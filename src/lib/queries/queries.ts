@@ -23,6 +23,7 @@ import {
   addEvaluationFormQuestions,
   getEvaluationFormQuestions,
   updateResponses,
+  getEventStatistics,
 } from "./api";
 import {
   EventManager,
@@ -333,5 +334,21 @@ export const useGetEvaluationFormQuestions = (eventId: string, attendeeId: strin
 export const useGetEvaluationFormResponses = () => {
   return useMutation({
     mutationFn: (responseForm: responseForm) => updateResponses(responseForm.eventId, responseForm.attendeeId, responseForm.responses),
+  });
+}
+
+// ============================================================
+// Statistics QUERIES
+// ============================================================
+
+export const useGetEventStatistics = (eventId: string) => {
+  const { getAccessToken } = useAuth();
+  return useQuery({
+    queryKey: ["statistics", eventId],
+    queryFn: async () => {
+      const response = await getEventStatistics(eventId, getAccessToken());
+      const responseData = response.data
+      return responseData;
+    }
   });
 }
