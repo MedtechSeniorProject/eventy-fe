@@ -82,7 +82,7 @@ const AddDeskAgent = ({...props}) => {
                 ))}        
             </div>
             <div className="flex justify-center ">
-            <CSVLink className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center h-6 pb-2 w-32 my-2 font-semibold text-sm" data={addedDeskAgents}>Export CSV</CSVLink>
+            <CSVLink filename={"desk_agents_credentials.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center h-8 py-1 w-32 my-2 font-semibold text-sm" data={addedDeskAgents}>Export CSV</CSVLink>
             </div>
           </div>
         )
