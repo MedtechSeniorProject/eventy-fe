@@ -1,4 +1,5 @@
 import Charts from "@/components/Charts";
+import EventHeader from "@/components/EventHeader";
 import SkeletonTable from "@/components/SkeletonTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics } from "@/lib/queries/queries";
@@ -21,12 +22,11 @@ const EventStatistics = () => {
   if (isStatisticsError || !eventStatistics) {
     return <div>Error: Failed to load event</div>;
   }
-  console.log(eventStatistics);
 
   return (
     <>
-      <div className="mt-10 w-10/12">
-        <div className="font-bold text-2xl">Statistics - {event?.name}</div>
+      <div className="w-10/12">
+        <EventHeader name={"Event Statistics - " + event.name} address={event.address} endTime={event.endTime} time={event.startTime}/>
         <div className="mt-5 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
