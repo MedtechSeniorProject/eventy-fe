@@ -26,7 +26,7 @@ import {  useAddDeskAgent } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
 import { X } from 'lucide-react';
 
-
+import { CSVLink } from "react-csv";
 
 const FormSchema = z 
   .object({
@@ -56,19 +56,7 @@ const AddDeskAgent = ({...props}) => {
       const addedDeskAgents = response.data;
 
       if (Array.isArray(addedDeskAgents)) {
-        setOpen(false); 
-        /// export data to json --> @sahar TODO: convert json to csv
-        const exportData = () => {
-          const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-            JSON.stringify(addedDeskAgents)
-          )}`;
-          const link = document.createElement("a");
-          link.href = jsonString;
-          link.download = "data.json";
-      
-          link.click();
-        };
-
+        setOpen(false);
 
         stoast.custom((t) => (
         <div className=" flex flex-col w-96 bg-white text-black bg-background p-2" >
@@ -93,12 +81,8 @@ const AddDeskAgent = ({...props}) => {
                 </>
                 ))}        
             </div>
-          {/* export data button */}
-            <div className="flex justify-center py-3">
-                <Button className=" w-fit" variant={"secondary"} 
-                        onClick={() => {exportData(); stoast.dismiss(t); }}>
-                  Export Data
-                  </Button>
+            <div className="flex justify-center ">
+            <CSVLink className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center h-6 pb-2 w-32 my-2 font-semibold text-sm" data={addedDeskAgents}>Export CSV</CSVLink>
             </div>
           </div>
         )
