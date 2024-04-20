@@ -10,8 +10,18 @@ import { useParams } from "react-router-dom";
 
 const EventStatistics = () => {
   const { id } = useParams() as { id: string };
-  const { data: event } = useGetEventById(id);
-  const { data: attendees } = useAttendeesByEvent(id);
+  
+  const {
+    data: event,
+    isLoading:eventLoading,
+    isError: eventError,
+  } = useGetEventById(id);
+
+  const {
+    data: attendeesList,
+    isLoading:attendeesListLoading,
+    isError: attendeesListError,
+  } = useAttendeesByEvent(id);
 
   const {
     data: eventStatistics,
@@ -19,25 +29,25 @@ const EventStatistics = () => {
     isError: isStatisticsError,
   } = useGetEventStatistics(id);
 
-  if (isStatisticsLoading) {
+  if (isStatisticsLoading || attendeesListLoading || eventLoading) {
     return <Loading />;
   }
 
-  if (isStatisticsError || !eventStatistics) {
+  if (isStatisticsError || !eventStatistics || attendeesListError || eventError) {
     return <div>Error: Failed to load event</div>;
   }
   console.log(eventStatistics);
 
   
 // saving the responses of the attendees
-const responses = attendees.filter(
+const responses = attendeesList.filter(
   (attendee) => attendee.responses && attendee.responses.length > 0
 )
 .flatMap((attendee) => attendee.responses.map((response) => response.responses));
 
-  console.log("with responsessssss",responses);
+console.log("with responsessssss",responses);
 
-//TOFIX @sSAHAR  : should send the responses ↑ to the sentiment analysis api and store the result in the responseSentiment array
+//TOFIX @SAHAR  : should send the responses ↑ to the sentiment analysis api and store the result in the responseSentiment array
 // maybe loop through the responses array and send each response to the sentiment analysis api and store the result in the responseSentiment array by appending the result to the array
 
 
