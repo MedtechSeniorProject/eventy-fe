@@ -24,6 +24,8 @@ import {
   getEvaluationFormQuestions,
   updateResponses,
   getEventStatistics,
+  deleteAllDeskAgents,
+  sendForm,
   getEventManagerStatistics,
 } from "./api";
 import {
@@ -39,6 +41,7 @@ import {
   DeskAgentsDisplay,
   QuestionForm,
   responseForm,
+  RemoveDeskAgents,
 } from "@/types/types";
 import useAuth from "@/_auth/hook/useAuth";
 import { AxiosError } from "axios";
@@ -301,6 +304,17 @@ export const useDeleteDeskAgent = () => {
   return mutation;
 };
 
+export const useDeleteAllDeskAgents = () => {
+  const { getAccessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (ids: RemoveDeskAgents) =>
+      deleteAllDeskAgents(ids.agentsIds, getAccessToken()),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
+  });
+}
+
 export const useSendInvitees = () => {
   const { getAccessToken } = useAuth();
 
@@ -337,6 +351,16 @@ export const useGetEvaluationFormResponses = () => {
     mutationFn: (responseForm: responseForm) => updateResponses(responseForm.eventId, responseForm.attendeeId, responseForm.responses),
   });
 }
+
+export const useSendForm = () => {
+  const { getAccessToken } = useAuth();
+
+  const mutation = useMutation(
+    (id: string) => sendForm(id, getAccessToken()),
+  )
+  return mutation;
+}
+
 
 // ============================================================
 // Statistics QUERIES

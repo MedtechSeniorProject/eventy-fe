@@ -11,6 +11,7 @@ import { useAddEvaluationForm } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
 import { areArraysEqual } from "@/lib/utils";
 import EditQuestion from "./EditQuestion";
+import SendForm from "./SendForm";
 
 const EvaluationForm = ({ ...props }) => {
   const [questions, setQuestions] = useState<Question[]>(props.questions);
@@ -21,7 +22,7 @@ const EvaluationForm = ({ ...props }) => {
     const form = {
       eventId: props.eventId,
       questions: questions,
-    };
+      };
     if(areArraysEqual(props.questions, questions)){
       toast({title:"No changes", description:"No changes made to form"})
       return;
@@ -36,7 +37,11 @@ const EvaluationForm = ({ ...props }) => {
 
   return (
     <>
+   <div className="flex items-center justify-between w-10/12">       
       <AddQuestion setQuestions={setQuestions} />
+      <SendForm eventId={props.eventId}></SendForm>
+
+   </div>
       {!areArraysEqual(props.questions, questions) && (
         <div className="text-sm text-gray-500">You made changes. Do not forget to save.</div>
       )}

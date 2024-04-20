@@ -69,13 +69,15 @@ export type EventManagerUpdateForm = {
   email: string;
 };
 
+
 /**Attendee Types */
 export type Attendee = {
   id: number;
   name: string;
   email: string;
-  addedBy: string;
-  attended: boolean;
+  isInvited: boolean;
+  responses: string[];
+  checkedInAt: string;
 };
 
 export type AttendeeForm = {
@@ -134,6 +136,10 @@ export type DeskAgentsDisplay= {
   id: string,
   username: string
 }
+
+export type RemoveDeskAgents = {
+  agentsIds: string[];
+};
 
 export type Question =  {
   id: string,
