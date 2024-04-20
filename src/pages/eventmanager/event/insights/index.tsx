@@ -1,13 +1,20 @@
 import Charts from "@/components/Charts";
+import { FormsBarChart } from "@/components/FormsBarChart";
 import SkeletonTable from "@/components/SkeletonTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetEventById, useGetEventStatistics } from "@/lib/queries/queries";
+import { useGetEventById, useGetEventStatistics,useAttendeesByEvent } from "@/lib/queries/queries";
 import { Percent, User } from "lucide-react";
+import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
 
 const EventStatistics = () => {
   const { id } = useParams() as { id: string };
   const { data: event } = useGetEventById(id);
+  const { data: attendees } = useAttendeesByEvent(id);
+  console.log("AAAAAAAAAAAAAA attendee: ", attendees,"doneeeee");
+
+  // console.log(attendees);
+  
   const {
     data: eventStatistics,
     isLoading: isStatisticsLoading,
@@ -22,6 +29,14 @@ const EventStatistics = () => {
     return <div>Error: Failed to load event</div>;
   }
   console.log(eventStatistics);
+
+
+  // const attendeesWithResponses = attendees.filter(
+  //   (attendee) => attendee.responses && attendee.responses.length > 0
+  // )
+  // .map((attendee) => attendee.responses);
+
+  // console.log(attendeesWithResponses);
 
   return (
     <>
@@ -82,9 +97,16 @@ const EventStatistics = () => {
           </Card>
         </div>
         <div className="mt-5">
-          <div className="font-bold text-xl mb-3">Event Timeline</div>
-            <Charts checkinData={eventStatistics.eventTimeline} />
-          </div>
+            <div className="font-bold text-xl mb-3">Event Timeline</div>
+          <Charts checkinData={eventStatistics.eventTimeline} />
+        </div>
+
+        <div className="mt-5">
+            <div className="font-bold text-xl mb-3">Forms Insights</div>
+        </div>
+      <FormsBarChart></FormsBarChart>
+      <CSVLink filename={"desk_agents_credentials.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center h-8 py-1 w-32 my-2 font-semibold text-sm" data={"attendees"}>Export CSV</CSVLink>
+
       </div>
     </>
   );
