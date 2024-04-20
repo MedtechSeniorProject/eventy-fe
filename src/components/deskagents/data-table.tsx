@@ -85,7 +85,7 @@ const [rowSelection, setRowSelection] = React.useState({})
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter desk agents..."
           value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
@@ -94,6 +94,11 @@ const [rowSelection, setRowSelection] = React.useState({})
           }
           className="max-w-sm"
         />
+        <Button className="h-9" variant={"secondary"} disabled={selectedAgents.length === 0} 
+         onClick={() => {
+          handleDeleteEventManager(selectedAgents);
+        }}>
+        Remove Desk Agents</Button>
       </div>
       <div className="w-full border">
         <Table>
@@ -163,11 +168,6 @@ const [rowSelection, setRowSelection] = React.useState({})
           </Button>
         </div>
       </div>
-      <Button className=" mt-5 ml-1 h-9 px-3" variant={"secondary"} disabled={selectedAgents.length === 0} 
-         onClick={() => {
-          handleDeleteEventManager(selectedAgents);
-        }}>
-        Remove</Button>
     </div>
   );
 }
