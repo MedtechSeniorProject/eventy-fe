@@ -1,6 +1,6 @@
 import EvaluationForm from "@/components/EvaluationForm";
 import EventHeader from "@/components/EventHeader";
-import LoadingSpinner from "@/components/Loading";
+import Loading from "@/components/Loading";
 import { useGetEventById } from "@/lib/queries/queries";
 import { useParams } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const EventEvaluationForm = () => {
   const { data: event, isLoading, isError} = useGetEventById(id)
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <Loading />;
   }
 
   if (isError || !event) {

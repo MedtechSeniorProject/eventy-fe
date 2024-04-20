@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import { user } from "@/types/types";
-import LoadingSpinner from "@/components/Loading";
+import Loading from "@/components/Loading";
 
 export const INITIAL_USER = {
   id: "",
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{ user, setUser, isLoading, isAuthenticated, setIsAuthenticated, logout, getAccessToken }}
     >
       {!isLoading ? children : (
-        <LoadingSpinner />
+        <Loading />
       )}
     </AuthContext.Provider>
   );

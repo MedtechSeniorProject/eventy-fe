@@ -1,6 +1,8 @@
 import Chart from "react-apexcharts";
 
 const Charts = ({...props}) => {
+
+  // Change checkIn Data once we have the actual data
   const checkinData = [
     "2022-01-01T08:00:00.000Z",
     "2022-01-01T08:00:00.100Z",

@@ -1,7 +1,7 @@
 import { useGetArchivedEvents } from "@/lib/queries/queries";
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
-import SkeletonTable from "@/components/SkeletonTable";
+import Loading from "@/components/Loading";
 
 interface event {
   eventManager: {
@@ -31,7 +31,7 @@ export default function ArchivedEvents() {
     description: event.description
   }));
   if (isLoading) {
-    return <SkeletonTable />;
+    return <Loading />;
   }
 
   if (isError) {
