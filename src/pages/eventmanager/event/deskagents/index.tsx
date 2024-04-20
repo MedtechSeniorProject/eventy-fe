@@ -1,9 +1,9 @@
 import EventHeader from "@/components/EventHeader";
-import SkeletonTable from "@/components/SkeletonTable";
 import { useGetEventById } from "@/lib/queries/queries";
 import { useParams } from "react-router-dom";
 import AddDeskAgent from "@/components/AddDeskAgent";
 import DeskAgents from "@/components/deskagents/page";
+import Loading from "@/components/Loading";
 
 const EventDeskAgents = () => {
 
@@ -11,7 +11,7 @@ const EventDeskAgents = () => {
   const { data: event, isLoading, isError } = useGetEventById(id);
 
   if (isLoading) {
-    return <SkeletonTable />;
+    return <Loading />;
   }
 
   if (isError || !event) {

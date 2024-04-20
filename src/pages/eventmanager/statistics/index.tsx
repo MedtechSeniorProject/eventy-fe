@@ -4,6 +4,7 @@ import { useGetEventManagerStatistics } from "@/lib/queries/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Medal, Percent, Trophy, User } from "lucide-react";
 import DonutChart from "@/components/DonutChart";
+import Loading from "@/components/Loading";
 
 const EmStatistics = () => {
   const { user } = useAuth();
@@ -18,14 +19,7 @@ const EmStatistics = () => {
 
 
   if (isLoading) {
-    return (
-      <div
-        style={{ height: "80vh" }}
-        className="w-10/12 flex items-center justify-center"
-      >
-        <p className="font-semibold">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError || data == undefined) {

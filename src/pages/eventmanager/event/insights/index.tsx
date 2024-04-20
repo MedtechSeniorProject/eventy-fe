@@ -1,6 +1,6 @@
 import Charts from "@/components/Charts";
 import EventHeader from "@/components/EventHeader";
-import SkeletonTable from "@/components/SkeletonTable";
+import Loading from "@/components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics } from "@/lib/queries/queries";
 import { Percent, User } from "lucide-react";
@@ -16,7 +16,7 @@ const EventStatistics = () => {
   } = useGetEventStatistics(id);
 
   if (isStatisticsLoading) {
-    return <SkeletonTable />;
+    return <Loading />;
   }
 
   if (isStatisticsError || !eventStatistics) {

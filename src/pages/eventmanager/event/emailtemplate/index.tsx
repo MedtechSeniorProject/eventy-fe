@@ -1,5 +1,5 @@
 import EventHeader from "@/components/EventHeader"
-import LoadingSpinner from "@/components/Loading"
+import Loading from "@/components/Loading"
 import Editor from "@/components/events/Editor"
 import { useGetEventById } from "@/lib/queries/queries"
 import { useEffect, useState } from "react"
@@ -16,7 +16,7 @@ const EventEmailTemplate = () => {
   },[isLoading])
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <Loading />;
   }
 
   if (isError || !event) {
