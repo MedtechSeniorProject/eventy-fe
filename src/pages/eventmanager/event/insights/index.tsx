@@ -1,10 +1,10 @@
 import Charts from "@/components/Charts";
-import { FormsBarChart } from "@/components/FormsBarChart";
 import EventHeader from "@/components/EventHeader";
+import FormsBarChart from "@/components/FormsBarChart";
 import Loading from "@/components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics,useAttendeesByEvent } from "@/lib/queries/queries";
-import { Percent, User } from "lucide-react";
+import { Percent, User, } from "lucide-react";
 import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const EventStatistics = () => {
   const { id } = useParams() as { id: string };
   const { data: event } = useGetEventById(id);
   const { data: attendees } = useAttendeesByEvent(id);
-  
+
   const {
     data: eventStatistics,
     isLoading: isStatisticsLoading,
@@ -28,25 +28,50 @@ const EventStatistics = () => {
   }
   console.log(eventStatistics);
 
-// we will use these values to calculate the response rate ( mostly positive, negative, neutral) 
-const numberOfAttendees = attendees.length; // Total number of attendees
-
-console.log("numberr of alll attendees: ",numberOfAttendees);
-
-  const numberOfAttendeesWithResponses = attendees.filter(
-    (attendee) => attendee.responses && attendee.responses.length > 0
-  ).length; 
-
-console.log("number of ressssponded attendees: ",numberOfAttendeesWithResponses);
-
-
-// getting the responses of the attendees
+  
+// saving the responses of the attendees
 const responses = attendees.filter(
   (attendee) => attendee.responses && attendee.responses.length > 0
 )
 .flatMap((attendee) => attendee.responses.map((response) => response.responses));
 
   console.log("with responsessssss",responses);
+
+//TOFIX @sSAHAR  : should send the responses ↑ to the sentiment analysis api and store the result in the responseSentiment array
+// maybe loop through the responses array and send each response to the sentiment analysis api and store the result in the responseSentiment array by appending the result to the array
+
+
+// for now we will use this dummay data array to calculate the sentiment
+const responseSentiment = [
+  "positive",
+  "negative",
+  "positive",
+  "neutral",
+];
+
+// counting the number of each sentiment to calculate the response rate 
+const sentimentCounts = {
+  positive: 0,
+  negative: 0,
+  neutral: 0,
+};
+
+for (const sentiment of responseSentiment) {
+  sentimentCounts[sentiment] += 1;
+}
+
+// calculating the percentage of each sentiment
+const totalResponses = responseSentiment.length;
+
+const sentimentPercentages = {
+  positive: (sentimentCounts.positive / totalResponses) * 100,
+  negative: (sentimentCounts.negative / totalResponses) * 100,
+  neutral: (sentimentCounts.neutral / totalResponses) * 100,
+};
+
+//console log each sentiment percentage : negative , positive , neutral
+
+console.log("sentiment percentages:  ",sentimentPercentages);
 
   return (
     <>
@@ -114,8 +139,8 @@ const responses = attendees.filter(
         <div className="mt-5">
             <div className="font-bold text-xl mb-3">Forms Insights</div>
         </div>
-      <FormsBarChart></FormsBarChart>
-      <div className="flex justify-end">
+      <FormsBarChart sentimentPercentages={sentimentPercentages} ></FormsBarChart>
+      <div className="flex justify-end my-4">
       <CSVLink filename={event.name+"_form_responses.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm" data={responses}>Export Foms Data</CSVLink>
       </div>
       </div>
