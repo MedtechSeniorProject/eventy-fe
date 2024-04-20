@@ -276,6 +276,24 @@ export async function getEventById(
   }
 }
 
+export async function getAttendeesByEvent(
+  id: string,
+  accessToken: string | null
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.get(`/events/attendees/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log("API the gettttt attendees response", response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function addAttendees(
   eventId: string,
   attendees: AttendeeForm[],

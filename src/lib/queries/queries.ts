@@ -26,6 +26,7 @@ import {
   getEventStatistics,
   deleteAllDeskAgents,
   sendForm,
+  getAttendeesByEvent,
   getEventManagerStatistics,
 } from "./api";
 import {
@@ -258,6 +259,20 @@ export const useDeleteAttendees = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
 }
+
+export const useAttendeesByEvent = (eventId: string) => {
+  const { getAccessToken } = useAuth();
+  return useQuery({
+    queryKey: ["event", eventId],
+    queryFn: async () => {
+      const response = await getAttendeesByEvent(eventId, getAccessToken());
+      const responseData = response.data
+      console.log("QUERY RESPONSE", responseData);
+      return responseData;
+    },
+    enabled: !!eventId,
+  });
+};
 
 // ============================================================
 // Desk Agents QUERIES
