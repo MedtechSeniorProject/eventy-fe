@@ -286,7 +286,6 @@ export async function getAttendeesByEvent(
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("API the gettttt attendees response", response);
     return response;
   } catch (error) {
     console.log(error);

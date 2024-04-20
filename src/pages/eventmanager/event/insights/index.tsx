@@ -12,9 +12,6 @@ const EventStatistics = () => {
   const { id } = useParams() as { id: string };
   const { data: event } = useGetEventById(id);
   const { data: attendees } = useAttendeesByEvent(id);
-  console.log("AAAAAAAAAAAAAA attendee: ", attendees,"doneeeee");
-
-  // console.log(attendees);
   
   const {
     data: eventStatistics,
@@ -31,13 +28,25 @@ const EventStatistics = () => {
   }
   console.log(eventStatistics);
 
+// we will use these values to calculate the response rate ( mostly positive, negative, neutral) 
+const numberOfAttendees = attendees.length; // Total number of attendees
 
-  // const attendeesWithResponses = attendees.filter(
-  //   (attendee) => attendee.responses && attendee.responses.length > 0
-  // )
-  // .map((attendee) => attendee.responses);
+console.log("numberr of alll attendees: ",numberOfAttendees);
 
-  // console.log(attendeesWithResponses);
+  const numberOfAttendeesWithResponses = attendees.filter(
+    (attendee) => attendee.responses && attendee.responses.length > 0
+  ).length; 
+
+console.log("number of ressssponded attendees: ",numberOfAttendeesWithResponses);
+
+
+// getting the responses of the attendees
+const responses = attendees.filter(
+  (attendee) => attendee.responses && attendee.responses.length > 0
+)
+.flatMap((attendee) => attendee.responses.map((response) => response.responses));
+
+  console.log("with responsessssss",responses);
 
   return (
     <>
@@ -106,8 +115,9 @@ const EventStatistics = () => {
             <div className="font-bold text-xl mb-3">Forms Insights</div>
         </div>
       <FormsBarChart></FormsBarChart>
-      <CSVLink filename={"desk_agents_credentials.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center h-8 py-1 w-32 my-2 font-semibold text-sm" data={"attendees"}>Export CSV</CSVLink>
-
+      <div className="flex justify-end">
+      <CSVLink filename={event.name+"_form_responses.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm" data={responses}>Export Foms Data</CSVLink>
+      </div>
       </div>
     </>
   );

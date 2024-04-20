@@ -263,11 +263,10 @@ export const useDeleteAttendees = () => {
 export const useAttendeesByEvent = (eventId: string) => {
   const { getAccessToken } = useAuth();
   return useQuery({
-    queryKey: ["event", eventId],
+    queryKey: ["attendees", eventId],
     queryFn: async () => {
       const response = await getAttendeesByEvent(eventId, getAccessToken());
       const responseData = response.data
-      console.log("QUERY RESPONSE", responseData);
       return responseData;
     },
     enabled: !!eventId,
