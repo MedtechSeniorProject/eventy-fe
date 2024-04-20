@@ -5,7 +5,7 @@ const TopBar = () => {
 
   return (
 
- <nav className="fixed flex w-full lg:pt-16 py-8 px-2 lg:px-20 bg-white">
+ <nav className="fixed flex w-full lg:pt-16 py-8 px-2 lg:px-20  bg-white z-10">
     <div className="flex w-full flex-wrap items-center justify-between">
         
          {/* logo and line under */}
