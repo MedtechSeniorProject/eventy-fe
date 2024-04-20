@@ -384,6 +384,30 @@ export async function deleteDeskAgent(
   }
 }
 
+/**Delete multiple desk agents */
+
+export async function deleteAllDeskAgents(
+  deskAgentsIds: string[],
+  accessToken: string | null
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.post(
+      `/events/delete/`,
+      deskAgentsIds,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
 /** Send Invitees */
 export async function sendInvitees(
   id: string,
@@ -455,6 +479,28 @@ export async function updateResponses(
       responses
     );
     return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
+export async function sendForm(
+  id: string,
+  accessToken: string | null
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.patch(
+      `/events/sendEvaluation/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response;
   } catch (error) {
     console.log(error);
     throw error;
