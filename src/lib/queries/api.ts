@@ -481,3 +481,25 @@ export async function getEventStatistics(
     throw error;
   }
 }
+
+export async function getEventManagerStatistics(
+  eventManagerId: string,
+  accessToken: string | null,
+  startTime: string,
+  endTime: string
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.post(`/statistics/eventManager/${eventManagerId}`, {
+      startTime: startTime,
+      endTime: endTime
+    } , {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

@@ -24,6 +24,7 @@ import {
   getEvaluationFormQuestions,
   updateResponses,
   getEventStatistics,
+  getEventManagerStatistics,
 } from "./api";
 import {
   EventManager,
@@ -347,6 +348,18 @@ export const useGetEventStatistics = (eventId: string) => {
     queryKey: ["statistics", eventId],
     queryFn: async () => {
       const response = await getEventStatistics(eventId, getAccessToken());
+      const responseData = response.data
+      return responseData;
+    }
+  });
+}
+
+export const useGetEventManagerStatistics = (eventManagerId: string, startTime: string, endTime: string) => {
+  const { getAccessToken } = useAuth();
+  return useQuery({
+    queryKey: ["statistics", eventManagerId],
+    queryFn: async () => {
+      const response = await getEventManagerStatistics(eventManagerId, getAccessToken(), startTime, endTime);
       const responseData = response.data
       return responseData;
     }
