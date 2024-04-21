@@ -44,7 +44,7 @@ const FormsBarChart = ({ sentimentPercentages }) => {
           // Data value of each variable
           data:[sentimentPercentages.positive, sentimentPercentages.neutral, sentimentPercentages.negative],
           backgroundColor: ["rgba(0, 233, 75, 0.8)", "rgba(255, 214, 81, 0.8)", "rgba(247, 14, 0, 0.8)"],
-          borderColor: ["rgba(0, 233, 75, 1)", "rgba(255, 214, 81,1)", "rgba(247, 14, 0, 1)"],
+          borderColor: ["rgba(0, 0, 0, 1)", "rgba(0, 0, 0,1)", "rgba(0, 0, 0, 1)"],
           borderWidth: 0.5,
       },
   ],
