@@ -67,7 +67,6 @@ const questions = extractQuestionsFromEvent(event);
     return <div>Error: Failed to load event</div>;
   }
   console.log(eventStatistics);
-  
 // saving the responses of the attendees
 const responses = attendeesList.filter(
   (attendee) => attendee.responses && attendee.responses.length > 0
@@ -91,7 +90,7 @@ const responseSentiment = [
 ];
 
 // counting the number of each sentiment to calculate the response rate 
-const sentimentCounts = {
+const sentimentCounts: { [key: string]: number } = {
   positive: 0,
   negative: 0,
   neutral: 0,
