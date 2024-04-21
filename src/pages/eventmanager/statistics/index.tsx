@@ -113,7 +113,7 @@ const EmStatistics = () => {
                 numberOfAttendees: string;
               }, index: number) => {
                 return (
-                  <Card className="hover:cursor-pointer hover:border-primary">
+                  <Card key={index} className="hover:cursor-pointer hover:border-primary">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-md font-medium flex items-center justify-between w-full">
                         <div className="bg-orange-100 py-1 px-2 rounded-full ">
