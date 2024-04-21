@@ -19,7 +19,7 @@ ChartJS.register(
 );
 
 
-const FormsBarChart = ({ sentimentPercentages }) => {
+const FormsBarChart = ({ sentimentPercentages }: { sentimentPercentages: any }) => {
   const labels = ['Positive', 'Neutral', 'Negative'];
 
   const options = {
