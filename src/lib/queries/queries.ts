@@ -28,6 +28,7 @@ import {
   sendForm,
   getAttendeesByEvent,
   getEventManagerStatistics,
+  getSuperAdminStatistics,
 } from "./api";
 import {
   EventManager,
@@ -398,6 +399,18 @@ export const useGetEventManagerStatistics = (eventManagerId: string, startTime: 
     queryKey: ["statistics", eventManagerId],
     queryFn: async () => {
       const response = await getEventManagerStatistics(eventManagerId, getAccessToken(), startTime, endTime);
+      const responseData = response.data
+      return responseData;
+    }
+  });
+}
+
+export const useGetSuperAdminStatistics = (startTime: string, endTime: string) => {
+  const { getAccessToken, user } = useAuth();
+  return useQuery({
+    queryKey: ["statistics", user.id],
+    queryFn: async () => {
+      const response = await getSuperAdminStatistics(getAccessToken(), startTime, endTime);
       const responseData = response.data
       return responseData;
     }

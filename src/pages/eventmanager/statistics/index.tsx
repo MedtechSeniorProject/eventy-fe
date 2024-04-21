@@ -101,7 +101,7 @@ const EmStatistics = () => {
 
         {/**Best Events */}
         <div className="mb-10">
-          <div className="flex flex-row gap-2 mt-8 items-center text-primary">
+          <div className="flex flex-row gap-2 mt-8 items-center border-b justify-center border-black py-2">
             <Trophy className="h-6 w-6 " />
             <div className="font-bold text-2xl">Events Ranking</div>
           </div>
@@ -113,7 +113,7 @@ const EmStatistics = () => {
                 numberOfAttendees: string;
               }, index: number) => {
                 return (
-                  <Card className="hover:cursor-pointer hover:border-primary">
+                  <Card key={index} className="hover:cursor-pointer hover:border-primary">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-md font-medium flex items-center justify-between w-full">
                         <div className="bg-orange-100 py-1 px-2 rounded-full ">

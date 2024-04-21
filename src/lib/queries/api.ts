@@ -566,3 +566,24 @@ export async function getEventManagerStatistics(
     throw error;
   }
 }
+
+export async function getSuperAdminStatistics(
+  accessToken: string | null,
+  startTime: string,
+  endTime: string
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.post(`/statistics/superadmin`, {
+      startTime: startTime,
+      endTime: endTime
+    } , {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
