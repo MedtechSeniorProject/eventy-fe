@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 
 const EventStatistics = () => {
   const { id } = useParams() as { id: string };
-  
+
   const {
     data: event,
     isLoading:eventLoading,
@@ -29,6 +29,36 @@ const EventStatistics = () => {
     isError: isStatisticsError,
   } = useGetEventStatistics(id);
 
+
+
+// getting the event's form questions to be added to the csv file
+  function extractQuestionsFromEvent(event) {
+    if (!event || !event.questions) {
+      return []; // Handle cases where event is missing or questions is missing
+    }
+  
+    return event.questions.map(question => question.question);
+  }
+
+
+const questions = extractQuestionsFromEvent(event);
+
+
+
+    //TOADD to api and queries ? ( or just whatever one takes endpoints)
+  //maybe we will add a useGetResponsesCategorization(text); to get the sentiment of the responses
+  // const { data: responsesCategorization } = useGetResponsesCategorization("text");
+
+/* should look sth like this :
+  const {
+    data: responsesCategorization,
+    isLoading: responsesCategorizationLoading,
+    isError: responsesCategorizationError,
+  } = useGetResponsesCategorization("text");
+
+
+*/
+
   if (isStatisticsLoading || attendeesListLoading || eventLoading) {
     return <Loading />;
   }
@@ -37,15 +67,16 @@ const EventStatistics = () => {
     return <div>Error: Failed to load event</div>;
   }
   console.log(eventStatistics);
-
   
 // saving the responses of the attendees
 const responses = attendeesList.filter(
   (attendee) => attendee.responses && attendee.responses.length > 0
 )
-.flatMap((attendee) => attendee.responses.map((response) => response.responses));
+.map((attendee) => attendee.responses.map(response => response.responses[0]));
 
-console.log("with responsessssss",responses);
+const csvData = [questions, ...responses];
+
+console.log("csv data: ",csvData);
 
 //TOFIX @SAHAR  : should send the responses ↑ to the sentiment analysis api and store the result in the responseSentiment array
 // maybe loop through the responses array and send each response to the sentiment analysis api and store the result in the responseSentiment array by appending the result to the array
@@ -151,7 +182,7 @@ console.log("sentiment percentages:  ",sentimentPercentages);
         </div>
       <FormsBarChart sentimentPercentages={sentimentPercentages} ></FormsBarChart>
       <div className="flex justify-end my-4">
-      <CSVLink filename={event.name+"_form_responses.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm" data={responses}>Export Foms Data</CSVLink>
+      <CSVLink filename={event.name+"_form_responses.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm" data={csvData}>Export Foms Data</CSVLink>
       </div>
       </div>
     </>
