@@ -101,7 +101,7 @@ const EmStatistics = () => {
 
         {/**Best Events */}
         <div className="mb-10">
-          <div className="flex flex-row gap-2 mt-8 items-center text-primary">
+          <div className="flex flex-row gap-2 mt-8 items-center border-b justify-center border-black py-2">
             <Trophy className="h-6 w-6 " />
             <div className="font-bold text-2xl">Events Ranking</div>
           </div>
