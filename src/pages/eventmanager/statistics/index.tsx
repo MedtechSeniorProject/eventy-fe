@@ -15,8 +15,7 @@ const EmStatistics = () => {
     startTime,
     endTime
   );
-
-
+  console.log(data)
 
   if (isLoading) {
     return <Loading />;
@@ -33,7 +32,7 @@ const EmStatistics = () => {
     );
   }
 
-  const averageAttendanceRate: string = data.averageAttendanceRate.toString().substring(0,5);
+  const averageAttendanceRate: string = data?.averageAttendanceRate?.toString()?.substring(0,5);
   
   return (
     <>
