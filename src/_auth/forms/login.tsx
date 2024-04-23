@@ -1,9 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { loginSchema, LoginSchema } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, } from "react-hook-form";
 import { FunctionComponent } from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -24,7 +23,6 @@ const Login: FunctionComponent<LoginProps> = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<LoginSchema>({
@@ -128,24 +126,6 @@ const Login: FunctionComponent<LoginProps> = () => {
               placeholder="Password"
             />
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <Controller
-                name="terms"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Checkbox checked={field.value}
-                  onCheckedChange={field.onChange}
-                  />
-                )}
-              />
-              <Label htmlFor="terms">Accept terms and conditions</Label>
-            </div>
-            <p className="text-xs text-slate-400 mt-1 ml-6">
-              You agree to our Terms of Service and Privacy Policy.
-            </p>
-           </div>
           </div>
 
           {/* //button + arrow image relative div*/}
