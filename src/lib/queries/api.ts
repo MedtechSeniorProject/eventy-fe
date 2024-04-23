@@ -12,7 +12,7 @@ import {
   response,
 } from "@/types/types";
 import axios, { AxiosResponse } from "axios";
-import { axiosPrivate } from "../axios/axiosInstance";
+import { axiosPrivate, pythonServer } from "../axios/axiosInstance";
 
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<AxiosResponse> {
@@ -587,3 +587,27 @@ export async function getSuperAdminStatistics(
     throw error;
   }
 }
+
+
+// ============================================================
+// SENTIMENT ANALYSIS ENDPOINTS
+// ============================================================
+
+
+export async function getResponsesClassification(
+  texts: string[]
+): Promise<AxiosResponse> {
+  try {
+    const response = await pythonServer.post(`/classifyMany` , {
+      texts: texts,
+    }, );
+    console.log("TRYINGGGGGGGG");
+    console.log("AXIOS RESPONSEEE SAHAR",response);
+    return response;
+    
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+

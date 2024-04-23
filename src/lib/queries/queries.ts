@@ -29,6 +29,7 @@ import {
   getAttendeesByEvent,
   getEventManagerStatistics,
   getSuperAdminStatistics,
+  getResponsesClassification,
 } from "./api";
 import {
   EventManager,
@@ -416,3 +417,17 @@ export const useGetSuperAdminStatistics = (startTime: string, endTime: string) =
     }
   });
 }
+
+export const useGetResponsesClassification = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (texts: string[]) => getResponsesClassification(texts),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["responseclassifications"] });
+      },
+    }
+  );
+  return mutation;
+};
