@@ -32,8 +32,8 @@ const EmStatistics = () => {
     );
   }
 
-  const averageAttendanceRate: string = data?.averageAttendanceRate?.toString()?.substring(0,5);
-  
+  const averageAttendanceRate: string = (data?.averageAttendanceRate)?.toString()?.substring(0,8);
+
   return (
     <>
       <div className="w-10/12 -z-0">
@@ -44,7 +44,7 @@ const EmStatistics = () => {
           <div>
             <div className="text-primary font-medium">Average Attendance Rate</div>
             <div className="bg-orange-100 w-fit px-3 py-2 mt-2">
-              <div className="text-center text-primary font-bold text-2xl">{averageAttendanceRate} %</div>
+              <div className="text-center text-primary font-bold text-2xl">{(Number(averageAttendanceRate) * 100).toFixed(1)} %</div>
             </div>
           </div>
           <DonutChart data={averageAttendanceRate} />
