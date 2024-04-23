@@ -2,6 +2,7 @@ import Charts from "@/components/Charts";
 import EventHeader from "@/components/EventHeader";
 import FormsBarChart from "@/components/FormsBarChart";
 import Loading from "@/components/Loading";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics,useAttendeesByEvent } from "@/lib/queries/queries";
 import { Percent, User, } from "lucide-react";
@@ -115,6 +116,11 @@ console.log("sentiment percentages:  ",sentimentPercentages);
 
   return (
     <>
+    <SEO
+        title="Eventy - Event Insights"
+        description="Event Management System Event Insights Page"
+        name="Eventy"
+        type="event insights" />
       <div className="w-10/12">
         <EventHeader name={"Event Statistics - " + event?.name} address={event?.address} endTime={event?.endTime} time={event?.startTime}/>
         <div className="mt-5 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">

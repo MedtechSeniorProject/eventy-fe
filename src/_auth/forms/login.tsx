@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useLoginAccount } from "@/lib/queries/queries";
 import { Button } from "@/components/ui/button";
 import { AxiosError } from "axios";
+import SEO from "@/components/SEO";
 
 interface LoginProps {}
 
@@ -70,6 +71,11 @@ const Login: FunctionComponent<LoginProps> = () => {
 
   return (
     <> 
+      <SEO
+        title="Eventy - Login"
+        description="Event Management System Login Page"
+        name="Eventy"
+        type="login" />
      <form onSubmit={handleSubmit(onSubmit)} className="py-14 px-6 xs:px-12 lg:px-20 mx-auto ">
         <div className="flex flex-col gap-10">
 

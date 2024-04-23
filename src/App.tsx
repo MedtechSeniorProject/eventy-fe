@@ -22,11 +22,13 @@ import EventEvaluationForm from "./pages/eventmanager/event/evaluationform";
 import AttendeeEvaluationForm from "./pages/Attendee/evaluationform";
 import EventStatistics from "./pages/eventmanager/event/insights";
 import { Toaster as SToaster } from "@/components/ui/sonner"
+import { HelmetProvider } from 'react-helmet-async';
 
 const App = () => {
   return (
     <>
       <main className="flex h-screen">
+      <HelmetProvider>
         <QueryProvider>
           <AuthProvider>
             <Routes>
@@ -62,10 +64,10 @@ const App = () => {
             </Routes>
           </AuthProvider>
         </QueryProvider>
+      </HelmetProvider>
       </main>
       <Toaster />
       <SToaster />
-
     </>
   );
 };
