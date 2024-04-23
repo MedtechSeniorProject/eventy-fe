@@ -1,5 +1,5 @@
 # Stage 1: Build the React app using Vite and npm
-FROM node:14-alpine as build
+FROM node:alpine as build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the built application using a lightweight server
-FROM node:14-alpine
+FROM node:alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -33,6 +33,4 @@ EXPOSE 3000
 
 # Command to run the application when the container starts
 CMD ["serve", "-s", "dist"]
-
-
-
+ 

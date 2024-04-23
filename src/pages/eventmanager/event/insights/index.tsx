@@ -32,12 +32,12 @@ const EventStatistics = () => {
 
 
 // getting the event's form questions to be added to the csv file
-  function extractQuestionsFromEvent(event) {
+  function extractQuestionsFromEvent(event: { questions: any[]; }) {
     if (!event || !event.questions) {
       return []; // Handle cases where event is missing or questions is missing
     }
   
-    return event.questions.map(question => question.question);
+    return event.questions.map((question: { question: any; }) => question.question);
   }
 
 
@@ -69,9 +69,9 @@ const questions = extractQuestionsFromEvent(event);
   console.log(eventStatistics);
 // saving the responses of the attendees
 const responses = attendeesList.filter(
-  (attendee) => attendee.responses && attendee.responses.length > 0
+  (attendee: { responses: string | any[]; }) => attendee.responses && attendee.responses.length > 0
 )
-.map((attendee) => attendee.responses.map(response => response.responses[0]));
+.map((attendee: { responses: any[]; }) => attendee.responses.map((response: { responses: any[]; }) => response.responses[0]));
 
 const csvData = [questions, ...responses];
 
