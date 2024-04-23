@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics,useAttendeesByEvent } from "@/lib/queries/queries";
-import { AreaChart, BarChart, BarChart2, MessageSquare, Percent, User, } from "lucide-react";
+import { BarChart2, MessageSquare, Percent, User, } from "lucide-react";
 import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
 
