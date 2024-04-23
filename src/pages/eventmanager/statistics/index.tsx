@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Medal, Percent, Trophy, User } from "lucide-react";
 import DonutChart from "@/components/DonutChart";
 import Loading from "@/components/Loading";
+import SEO from "@/components/SEO";
 
 const EmStatistics = () => {
   const { user } = useAuth();
@@ -36,6 +37,11 @@ const EmStatistics = () => {
 
   return (
     <>
+    <SEO
+        title="Eventy - Statistics"
+        description="Event Management System Statistics Page"
+        name="Eventy"
+        type="statistics" />
       <div className="w-10/12 -z-0">
         <Header name="Statistics" />
 

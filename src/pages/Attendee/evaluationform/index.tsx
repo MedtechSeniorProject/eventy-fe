@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { responseForm } from "@/types/types";
+import SEO from "@/components/SEO";
 
 const AttendeeEvaluationForm = () => {
   const { eventId, inviteeId } = useParams() as {
@@ -134,6 +135,13 @@ const AttendeeEvaluationForm = () => {
   };
 
   return (
+    <>
+      <SEO
+        title="Eventy - Evaluation Form"
+        description="Event Management System Evaluation Form Page"
+        name="Eventy"
+        type="evaluation form" />
+    
     <div className="w-full h-full">
     <div className="flex flex-col items-center py-10">
       <img src="/assets/eventy.png" width={50} />
@@ -226,6 +234,7 @@ const AttendeeEvaluationForm = () => {
       </div>
     </div>
     </div>
+    </>
   );
 };
 

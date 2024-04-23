@@ -1,5 +1,6 @@
 import EventHeader from "@/components/EventHeader"
 import Loading from "@/components/Loading"
+import SEO from "@/components/SEO"
 import Editor from "@/components/events/Editor"
 import { useGetEventById } from "@/lib/queries/queries"
 import { useEffect, useState } from "react"
@@ -25,6 +26,11 @@ const EventEmailTemplate = () => {
 
   return (
     <>
+      <SEO
+        title="Eventy - Email Template"
+        description="Event Management System Email Template Page"
+        name="Eventy"
+        type="email template" />
         <div className="pb-10 w-11/12">
         <EventHeader name={"Email template - " + event.name} time={event.startTime} address={event.address} endTime={event.endTime}/>
             <Editor value={value} setValue={setValue} eventId={id} />
