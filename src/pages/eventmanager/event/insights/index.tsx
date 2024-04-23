@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetEventById, useGetEventStatistics,useAttendeesByEvent } from "@/lib/queries/queries";
-import { Percent, User, } from "lucide-react";
+import { AreaChart, BarChart, BarChart2, MessageSquare, Percent, User, } from "lucide-react";
 import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
 
@@ -177,13 +177,19 @@ console.log("sentiment percentages:  ",sentimentPercentages);
             </CardContent>
           </Card>
         </div>
-        <div className="mt-5">
-            <div className="font-bold text-xl mb-3">Event Timeline</div>
+        <div className="mt-10">
+            <div className="flex gap-5">
+              <BarChart2 size={30} strokeWidth={2} />
+              <div className="font-bold text-xl mb-3">Event Timeline</div>
+            </div>
           <Charts checkinData={eventStatistics.eventTimeline} />
         </div>
 
-        <div className="mt-5">
-            <div className="font-bold text-xl mb-3">Forms Insights</div>
+        <div className="mt-10 flex">
+        <div className="flex gap-5">
+              <MessageSquare size={30} strokeWidth={2} />
+              <div className="font-bold text-xl mb-3">Form Insights</div>
+            </div>
         </div>
       <FormsBarChart sentimentPercentages={sentimentPercentages} ></FormsBarChart>
       <div className="flex justify-end my-4">
