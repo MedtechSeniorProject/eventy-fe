@@ -26,7 +26,7 @@ const EventEvaluationForm = () => {
         name="Eventy"
         type="evaluation form" />
       <EventHeader name={"Evaluation Form - " + event.name} time={event.startTime} address={event.address} endTime={event.endTime} />
-      <EvaluationForm eventId={id} questions={event.questions} />
+      <EvaluationForm attendees={event.attendees} eventId={id} questions={event.questions} />
     </div>
   )
 }

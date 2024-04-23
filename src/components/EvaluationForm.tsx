@@ -6,12 +6,13 @@ import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Question } from "@/types/types";
 import { Button } from "./ui/button";
-import { Trash } from "lucide-react";
+import { AlertCircle, Trash } from "lucide-react";
 import { useAddEvaluationForm } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
 import { areArraysEqual } from "@/lib/utils";
 import EditQuestion from "./EditQuestion";
 import SendForm from "./SendForm";
+import { Alert, AlertDescription } from "./ui/alert";
 
 const EvaluationForm = ({ ...props }) => {
   const [questions, setQuestions] = useState<Question[]>(props.questions);
@@ -35,6 +36,19 @@ const EvaluationForm = ({ ...props }) => {
     }
   }
 
+  function isThereResponses(attendees:any): boolean {
+    if(attendees.length === 0){
+      return false
+    }
+    for(let i = 0; i < attendees.length; i++){
+      const responses = attendees[i].responses
+      if(responses.length > 0){
+        return true
+      }
+    }
+    return false
+  }
+
   return (
     <>
    <div className="flex items-center justify-between w-10/12">       
@@ -44,6 +58,12 @@ const EvaluationForm = ({ ...props }) => {
    </div>
       {!areArraysEqual(props.questions, questions) && (
         <div className="text-sm text-gray-500">You made changes. Do not forget to save.</div>
+      )}
+      {isThereResponses(props.attendees) && (
+        <Alert className="w-10/12 mt-5" variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+                <AlertDescription>You Cannot Edit the evaluation form because attendees already answered ! </AlertDescription>
+            </Alert>
       )}
       <div className="my-5 border-2 border-black p-5 w-10/12">
         <div className="text-black text-xl font-bold underline">Preview</div>
@@ -118,7 +138,7 @@ const EvaluationForm = ({ ...props }) => {
           </>
         )}
         <div className="flex justify-end">
-          <Button variant="inverse" onClick={handleSaveForm} disabled={isLoading}>
+          <Button variant="inverse" onClick={handleSaveForm} disabled={isLoading || isThereResponses(props.attendees)}>
             {isLoading ? "Loading..." : "Save Form"}
           </Button>
         </div>
