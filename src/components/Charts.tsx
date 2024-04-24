@@ -3,7 +3,8 @@ import Chart from "react-apexcharts";
 const Charts = ({...props}) => {
 
   // Change checkIn Data once we have the actual data
-  const checkinData = props.checkinData;
+  let checkinData = props.checkinData;
+  checkinData = checkinData.sort()
   console.log(checkinData)
 
   if(checkinData.length === 0) {
