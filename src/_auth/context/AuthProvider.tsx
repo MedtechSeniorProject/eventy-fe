@@ -1,6 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { user } from "@/types/types";
 import Loading from "@/components/Loading";
+import { axiosPrivate } from "@/lib/axios/axiosInstance";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+
 
 export const INITIAL_USER = {
   id: "",
@@ -46,6 +50,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const getAccessToken = () => user.accessToken
+
+  useEffect(() => {
+    axiosPrivate.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error) {
+        if (error.response.status === 401) {
+          toast({
+            variant:"destructive",
+            title: "Session Expired",
+            description: "Click to extend the session !",
+            action: (
+              <ToastAction onClick={() => {
+                axiosPrivate.post("/auth/extend", {
+                  sessionkey: getAccessToken()
+                }).then((response) => {
+                  if (response.status === 200) {
+                    toast({
+                      title: "Session Extended",
+                      description: "You can continue using the app"
+                    });
+                  }
+                }).catch((error) => {
+                  console.log(error);
+                });
+              }} altText="Extend Session">Extend</ToastAction>
+            )
+          });
+        }
+        return Promise.reject(error);
+      }
+    );
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider
