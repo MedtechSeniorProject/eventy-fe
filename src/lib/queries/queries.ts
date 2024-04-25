@@ -142,25 +142,34 @@ export const useDeleteEventManager = () => {
 export const useGetUpcomingEvents = () => {
   const { getAccessToken } = useAuth();
 
-  return useQuery("upcomingEvents", async () => {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-    return getUpcomingEvents(accessToken);
+  return useQuery({
+    queryKey: ["upcomingEvents"],
+    queryFn: async () => {
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        throw new Error("No access token available");
+      }
+      return getUpcomingEvents(accessToken);
+    },
+    retry: false
   });
 };
 
 export const useGetArchivedEvents = () => {
   const { getAccessToken } = useAuth();
 
-  return useQuery("archivedEvents", async () => {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      throw new Error("No access token available");
-    }
-    return getArchivedEvents(accessToken);
-  });
+  return useQuery({
+    queryKey: ["archivedEvents"],
+    queryFn: async () => {
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        throw new Error("No access token available");
+      }
+      return getArchivedEvents(accessToken);
+    },
+    retry: false
+  },
+);
 };
 
 export const useCreateEvent = () => {
