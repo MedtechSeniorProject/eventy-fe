@@ -1,29 +1,39 @@
-import { Button } from "./ui/button"
 import { useSendInvitees } from "@/lib/queries/queries";
 import { useToast } from "./ui/use-toast";
+import { AlertConfirmation } from "./Alert";
 
 interface SendInviteesProps {
-    eventId: string;
+  eventId: string;
 }
 
-const SendInvitees = ({eventId}: SendInviteesProps) => {
-
+const SendInvitees = ({ eventId }: SendInviteesProps) => {
   const { toast } = useToast();
-  const {mutateAsync} = useSendInvitees();
+  const { mutateAsync } = useSendInvitees();
   const handleSendInvitees = async (eventId: string) => {
-    // Send invitees
-    try{
-        await mutateAsync(eventId);
-        toast({title:"Invitees Sent Successfully"});
-    }catch(error){
-        const errormsg = error as Error;
-        toast({variant:"destructive",title:"Error", description: errormsg.message});
+    try {
+      await mutateAsync(eventId);
+      toast({ title: "Invitees Sent Successfully" });
+    } catch (error) {
+      const errormsg = error as Error;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: errormsg.message,
+      });
     }
-  }
+  };
 
   return (
-    <Button variant={"secondary"} onClick={() => handleSendInvitees(eventId)}>Send Invitees</Button>
-  )
-}
+    <>
+      <AlertConfirmation
+        title="Confirm Email Invitations"
+        description="Please confirm your action to send email invitations to event attendees. This step will ensure that all guests receive their invitations promptly and accurately. By confirming, you affirm that the event details are correct and that you wish to proceed with sending invitations."
+        className="border-2 border-black bg-white text-black hover:text-white"
+        name="Send Invitees"
+        cta={() => handleSendInvitees(eventId)}
+      />
+    </>
+  );
+};
 
-export default SendInvitees
+export default SendInvitees;
