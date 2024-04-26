@@ -15,10 +15,12 @@ import {
     name: string,
     disabled?: boolean
     cta: () => void
-    className?: string
+    className?: string,
+    title?:string,
+    description?:string
   }
 
-  export function AlertConfirmation({name, disabled, cta, className} : AlertConfirmationProps) {
+  export function AlertConfirmation({name, disabled, cta, className, title, description} : AlertConfirmationProps) {
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -26,9 +28,9 @@ import {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>{title ? title : "Are you absolutely sure?"}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove your data from our servers.
+              {description ? description : "This action cannot be undone. This will permanently delete the data."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
