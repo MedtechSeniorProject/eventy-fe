@@ -214,6 +214,7 @@ export const useToggleArchiveEvent = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("upcomingEvents");
+        queryClient.invalidateQueries("archivedEvents");
       },
     }
   );
