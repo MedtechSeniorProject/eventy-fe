@@ -30,6 +30,7 @@ import {
   getEventManagerStatistics,
   getSuperAdminStatistics,
   getResponsesClassification,
+  getEvaluationStatistics,
 } from "./api";
 import {
   EventManager,
@@ -76,12 +77,12 @@ export const useResendCode = () => {
 // ============================================================
 
 export const useGetEventManagers = () => {
-  const {getAccessToken} = useAuth()
+  const { getAccessToken } = useAuth();
 
-  return useQuery('eventmanagers', async () => {
+  return useQuery("eventmanagers", async () => {
     const accessToken = getAccessToken();
     if (!accessToken) {
-      throw new Error('No access token available');
+      throw new Error("No access token available");
     }
     return getEventManagers(accessToken);
   });
@@ -93,7 +94,8 @@ export const useCreateEventManager = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (eventmanager: EventManager) => createEventManager(eventmanager, getAccessToken()),
+    (eventmanager: EventManager) =>
+      createEventManager(eventmanager, getAccessToken()),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("eventmanagers");
@@ -151,7 +153,7 @@ export const useGetUpcomingEvents = () => {
       }
       return getUpcomingEvents(accessToken);
     },
-    retry: false
+    retry: false,
   });
 };
 
@@ -167,9 +169,8 @@ export const useGetArchivedEvents = () => {
       }
       return getArchivedEvents(accessToken);
     },
-    retry: false
-  },
-);
+    retry: false,
+  });
 };
 
 export const useCreateEvent = () => {
@@ -243,7 +244,7 @@ export const useGetEventById = (eventId: string) => {
     queryKey: ["event", eventId],
     queryFn: async () => {
       const response = await getEventById(eventId, getAccessToken());
-      const responseData = response.data
+      const responseData = response.data;
       return responseData;
     },
     enabled: !!eventId,
@@ -270,7 +271,7 @@ export const useDeleteAttendees = () => {
       removeAttendees(event.eventId, event.attendeeIds, getAccessToken()),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
-}
+};
 
 export const useAttendeesByEvent = (eventId: string) => {
   const { getAccessToken } = useAuth();
@@ -278,7 +279,7 @@ export const useAttendeesByEvent = (eventId: string) => {
     queryKey: ["attendees", eventId],
     queryFn: async () => {
       const response = await getAttendeesByEvent(eventId, getAccessToken());
-      const responseData = response.data
+      const responseData = response.data;
       return responseData;
     },
     enabled: !!eventId,
@@ -305,7 +306,8 @@ export const useEditDeskAgent = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (deskAgent: DeskAgentsDisplay) => editDeskAgent(deskAgent, getAccessToken()),
+    (deskAgent: DeskAgentsDisplay) =>
+      editDeskAgent(deskAgent, getAccessToken()),
     {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["event"] });
@@ -339,16 +341,16 @@ export const useDeleteAllDeskAgents = () => {
       deleteAllDeskAgents(ids.agentsIds, getAccessToken()),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
-}
+};
 
 export const useSendInvitees = () => {
   const { getAccessToken } = useAuth();
 
-  const mutation = useMutation(
-    (id: string) => sendInvitees(id, getAccessToken()),
-  )
+  const mutation = useMutation((id: string) =>
+    sendInvitees(id, getAccessToken())
+  );
   return mutation;
-}
+};
 
 /**Add evaluation form query */
 export const useAddEvaluationForm = () => {
@@ -356,37 +358,57 @@ export const useAddEvaluationForm = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (form: QuestionForm) => addEvaluationFormQuestions(form.eventId, form.questions, getAccessToken()),
+    mutationFn: (form: QuestionForm) =>
+      addEvaluationFormQuestions(
+        form.eventId,
+        form.questions,
+        getAccessToken()
+      ),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["event"] }),
   });
 };
 
-export const useGetEvaluationFormQuestions = (eventId: string, attendeeId: string) => {
+export const useGetEvaluationFormQuestions = (
+  eventId: string,
+  attendeeId: string
+) => {
   return useQuery({
     queryKey: ["evaluationform", eventId, attendeeId],
     queryFn: async () => getEvaluationFormQuestions(eventId, attendeeId),
     onError: (error: AxiosError) => {
       console.log((error.response?.data as any)?.message);
-    }
-  }
-);
-}
+    },
+  });
+};
 
 export const useGetEvaluationFormResponses = () => {
   return useMutation({
-    mutationFn: (responseForm: responseForm) => updateResponses(responseForm.eventId, responseForm.attendeeId, responseForm.responses),
+    mutationFn: (responseForm: responseForm) =>
+      updateResponses(
+        responseForm.eventId,
+        responseForm.attendeeId,
+        responseForm.responses
+      ),
   });
-}
+};
+
+export const useGetEvaluationResponses = (id: string) => {
+  const { getAccessToken } = useAuth();
+  return useQuery({
+    queryKey: ["evaluationresponses", id],
+    queryFn: async () => getEvaluationStatistics(getAccessToken(), id),
+    onError: (error: AxiosError) => {
+      console.log((error.response?.data as any)?.message);
+    },
+  });
+};
 
 export const useSendForm = () => {
   const { getAccessToken } = useAuth();
 
-  const mutation = useMutation(
-    (id: string) => sendForm(id, getAccessToken()),
-  )
+  const mutation = useMutation((id: string) => sendForm(id, getAccessToken()));
   return mutation;
-}
-
+};
 
 // ============================================================
 // Statistics QUERIES
@@ -398,35 +420,51 @@ export const useGetEventStatistics = (eventId: string) => {
     queryKey: ["statistics", eventId],
     queryFn: async () => {
       const response = await getEventStatistics(eventId, getAccessToken());
-      const responseData = response.data
+      const responseData = response.data;
       return responseData;
-    }
+    },
   });
-}
+};
 
-export const useGetEventManagerStatistics = (eventManagerId: string, startTime: string, endTime: string) => {
+export const useGetEventManagerStatistics = (
+  eventManagerId: string,
+  startTime: string,
+  endTime: string
+) => {
   const { getAccessToken } = useAuth();
   return useQuery({
     queryKey: ["statistics", eventManagerId],
     queryFn: async () => {
-      const response = await getEventManagerStatistics(eventManagerId, getAccessToken(), startTime, endTime);
-      const responseData = response.data
+      const response = await getEventManagerStatistics(
+        eventManagerId,
+        getAccessToken(),
+        startTime,
+        endTime
+      );
+      const responseData = response.data;
       return responseData;
-    }
+    },
   });
-}
+};
 
-export const useGetSuperAdminStatistics = (startTime: string, endTime: string) => {
+export const useGetSuperAdminStatistics = (
+  startTime: string,
+  endTime: string
+) => {
   const { getAccessToken, user } = useAuth();
   return useQuery({
     queryKey: ["statistics", user.id],
     queryFn: async () => {
-      const response = await getSuperAdminStatistics(getAccessToken(), startTime, endTime);
-      const responseData = response.data
+      const response = await getSuperAdminStatistics(
+        getAccessToken(),
+        startTime,
+        endTime
+      );
+      const responseData = response.data;
       return responseData;
-    }
+    },
   });
-}
+};
 
 export const useGetResponsesClassification = () => {
   const queryClient = useQueryClient();
@@ -435,7 +473,9 @@ export const useGetResponsesClassification = () => {
     (texts: string[]) => getResponsesClassification(texts),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["responseclassifications"] });
+        queryClient.invalidateQueries({
+          queryKey: ["responseclassifications"],
+        });
       },
     }
   );

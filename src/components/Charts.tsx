@@ -64,7 +64,7 @@ const Charts = ({...props}) => {
       size: 0,
       style: 'hollow',
     },
-    colors: ['#000000'],
+    colors: ['#f16e00'],
     xaxis: {
       type: 'datetime',
       title: {
@@ -77,7 +77,7 @@ const Charts = ({...props}) => {
       }
     },
     fill: {
-      type: 'gradient',
+      type: 'solid',
       gradient: {
         shadeIntensity: 1,
         opacityFrom: 0.7,
@@ -87,7 +87,7 @@ const Charts = ({...props}) => {
     }
   };
 
-  return <Chart series={series} options={options} type="area" height={350} />;
+  return <Chart series={series} options={options} type="bar" height={350} />;
 };
 
 export default Charts;
