@@ -3,7 +3,8 @@ import Chart from "react-apexcharts";
 const Charts = ({...props}) => {
 
   // Change checkIn Data once we have the actual data
-  const checkinData = props.checkinData;
+  let checkinData = props.checkinData;
+  checkinData = checkinData.sort()
   console.log(checkinData)
 
   if(checkinData.length === 0) {
@@ -20,23 +21,41 @@ const Charts = ({...props}) => {
   });
 
   const groupedData = Object.entries(groupedByMinute).map(([_, data]: any) => [new Date(data.timestamp).getTime(), data.occurrences]);
-  console.log(groupedData)
   const series = [{
+    name: "Number Of Attendees",
     data: 
       groupedData.map((data) => data)
-    
   }]
+
+  function calculateMax(data: any){
+    if(data.length === 0){
+      return;
+    }
+    let length = 0
+    data.map((element: any) => {
+      length = Math.max(length, element.length)
+    })
+    return length
+  }
 
   const options: any = {
     chart: {
       id: 'area-datetime',
-      type: 'area',
-      height: 350,
-      zoom: {
-        autoScaleYaxis: true
-      }},
+      height: 350,},
     yaxis: {
-      show: false,
+      show: true,
+      min: 0,
+      max: calculateMax(groupedData),
+      seriesName: "Number of Attendees",
+      axisBorder: {
+        show: true,
+      },
+      axisTicks: {
+        show: true
+      },
+      title: {
+        text: "Number of Attendees",
+      },
     },
     dataLabels: {
       enabled: false
@@ -48,6 +67,9 @@ const Charts = ({...props}) => {
     colors: ['#000000'],
     xaxis: {
       type: 'datetime',
+      title: {
+        text: "Time"
+      }
     },
     tooltip: {
       x: {
@@ -62,7 +84,7 @@ const Charts = ({...props}) => {
         opacityTo: 0.9,
         stops: [0, 100]
       }
-    },
+    }
   };
 
   return <Chart series={series} options={options} type="area" height={350} />;

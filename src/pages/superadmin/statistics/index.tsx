@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Medal, Percent, Trophy, User } from "lucide-react";
 import DonutChart from "@/components/DonutChart";
 import Loading from "@/components/Loading";
+import SEO from "@/components/SEO";
 
 const SaStatistics = () => {
   const startTime = "1970-01-01";
@@ -34,6 +35,12 @@ const SaStatistics = () => {
   
   return (
     <>
+       <SEO
+        title="Eventy - Super Admin Statistics"
+        description="Event Management System Super Admin Statistics Page"
+        name="Eventy"
+        type="superadmin statistics" />
+
       <div className="w-10/12 -z-0">
         <Header name="Statistics" />
 

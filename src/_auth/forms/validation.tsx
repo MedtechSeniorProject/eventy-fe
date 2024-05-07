@@ -15,6 +15,7 @@ import { ValidateUser } from "@/types/types";
 import { useTimer } from 'react-timer-hook';
 import { ToastAction } from "@/components/ui/toast";
 import { AxiosError } from "axios";
+import SEO from "@/components/SEO";
 
 const Validation: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -129,6 +130,11 @@ const Validation: FunctionComponent = () => {
 
   return (
     <>
+      <SEO
+        title="Eventy - Verify Account"
+        description="Event Management System Verify Account Page"
+        name="Eventy"
+        type="verify" />
       <form onSubmit={handleSubmit(onSubmit) } className="py-14 px-6 xs:px-12 lg:px-20 mx-auto ">
         <div className="flex flex-col gap-10">
 

@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteEvent, useToggleArchiveEvent } from "@/lib/queries/queries";
 import { useToast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
+import { AlertConfirmation } from "@/components/Alert";
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -149,11 +150,13 @@ export const columns: ColumnDef<Event>[] = [
                 <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/evaluationform`)}}>Evaluation Form</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {navigate(`/event/${event.id}/deskagents`)}}>Desk Agents</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleToggleArchiveEvent(event.id)} className="bg-red">
-                  Archive Event
+                <DropdownMenuItem className="bg-red" asChild>
+                  <AlertConfirmation className="bg-white w-full justify-start text-primary hover:bg-orange-100" name="Archive Event" cta={() => handleToggleArchiveEvent(event.id)}/>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleDeleteEvent(event.id)}>Delete Event</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <AlertConfirmation className="bg-white w-full justify-start text-red-500 hover:bg-red-100" name="Delete" cta={() => handleDeleteEvent(event.id)}/>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <EditEvent event={event} />

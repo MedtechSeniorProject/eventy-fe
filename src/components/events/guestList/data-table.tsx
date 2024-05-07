@@ -108,7 +108,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <AlertConfirmation name="Remove Attendees" disabled={checkSelectedRows()} cta={handleRemoveAttendees} />
+        <AlertConfirmation title="Confirm Attendee Deletion" description="Please confirm your action to delete attendees from the event list. This step will remove the selected individuals from the event roster. By confirming, you acknowledge that you want to proceed with this action and understand that deleted attendees will no longer be part of the event. " name="Remove Attendees" disabled={checkSelectedRows()} cta={handleRemoveAttendees} />
       </div>
       <div className="w-full border">
         <Table>
