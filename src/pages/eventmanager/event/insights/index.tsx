@@ -52,9 +52,6 @@ const EventStatistics = () => {
 
   console.log(eventStatistics);
 
-  const { mutateAsync: classifyResponses } = useGetResponsesClassification();
-  const [classificationResults, setClassificationResults] = useState(null);
-
   // getting the event's form questions to be added as the first row to the csv file
   function extractQuestionsFromEvent(event: { questions: any[] }) {
     if (!event || !event.questions) {
@@ -88,6 +85,25 @@ const EventStatistics = () => {
   }
   //console.log(eventStatistics);
 
+  // add attendee name to each response as the answer to the question object that contains an id of 0
+  attendeesList.forEach((attendee: { name: any; responses: any[] }) => {
+    // check if any of the responses already holds the name of the attendee
+    if (
+      attendee.responses &&
+      attendee.responses.some(
+        (response: { responses: any[] }) =>
+          response.responses[0] === attendee.name
+      )
+    ) {
+      return;
+    }
+    // if not, add the name to the responses array
+    attendee.responses = [
+      { id: "0", responses: [attendee.name] },
+      ...attendee.responses,
+    ];
+  });
+
   // saving the responses of the attendees
   const csvresponses = attendeesList
     .filter(
@@ -99,8 +115,10 @@ const EventStatistics = () => {
         (response: { responses: any[] }) => response.responses[0]
       )
     );
+  console.log("cv responses");
+  console.log(csvresponses);
 
-  const csvData = [questions, ...csvresponses];
+  const csvData = [["Attendee Name",...questions], ...csvresponses];
   //console.log("csv data: ", csvData);
 
   // calculate the sentiment percentages for each question of type Input
@@ -269,12 +287,12 @@ const EventStatistics = () => {
                                     "rgba(255, 159, 64, 0.5)",
                                   ],
                                   data: [
-                                    evalResponses[question.id]
-                                      .sentimentPercentages.Positive,
-                                    evalResponses[question.id]
-                                      .sentimentPercentages.Negative,
-                                    evalResponses[question.id]
-                                      .sentimentPercentages.Neutral,
+                                    evalResponses[question.id].sentiments
+                                      .Positive,
+                                    evalResponses[question.id].sentiments
+                                      .Negative,
+                                    evalResponses[question.id].sentiments
+                                      .Neutral,
                                   ],
                                 },
                               ],
