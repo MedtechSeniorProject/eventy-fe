@@ -17,7 +17,10 @@ import { axiosPrivate, pythonServer } from "../axios/axiosInstance";
 /** Login Request */
 export async function loginAccount(user: LoginUser): Promise<AxiosResponse> {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, user);
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/auth/login`,
+      user
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -408,22 +411,17 @@ export async function deleteAllDeskAgents(
   accessToken: string | null
 ): Promise<AxiosResponse> {
   try {
-    const response = await axiosPrivate.post(
-      `/events/delete/`,
-      deskAgentsIds,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosPrivate.post(`/events/delete/`, deskAgentsIds, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response;
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
-
 
 /** Send Invitees */
 export async function sendInvitees(
@@ -502,7 +500,6 @@ export async function updateResponses(
   }
 }
 
-
 export async function sendForm(
   id: string,
   accessToken: string | null
@@ -552,14 +549,18 @@ export async function getEventManagerStatistics(
   endTime: string
 ): Promise<AxiosResponse> {
   try {
-    const response = await axiosPrivate.post(`/statistics/eventManager/${eventManagerId}`, {
-      startTime: startTime,
-      endTime: endTime
-    } , {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosPrivate.post(
+      `/statistics/eventManager/${eventManagerId}`,
+      {
+        startTime: startTime,
+        endTime: endTime,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -573,14 +574,18 @@ export async function getSuperAdminStatistics(
   endTime: string
 ): Promise<AxiosResponse> {
   try {
-    const response = await axiosPrivate.post(`/statistics/superadmin`, {
-      startTime: startTime,
-      endTime: endTime
-    } , {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosPrivate.post(
+      `/statistics/superadmin`,
+      {
+        startTime: startTime,
+        endTime: endTime,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -588,26 +593,42 @@ export async function getSuperAdminStatistics(
   }
 }
 
+export async function getEvaluationStatistics(
+  accessToken: string | null,
+  eventId: string
+): Promise<AxiosResponse> {
+  try {
+    const response = await axiosPrivate.get(
+      `/statistics/eventResponses/${eventId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 // ============================================================
 // SENTIMENT ANALYSIS ENDPOINTS
 // ============================================================
 
-
 export async function getResponsesClassification(
   texts: string[]
 ): Promise<AxiosResponse> {
   try {
-    const response = await pythonServer.post(`/classifyMany` , {
+    const response = await pythonServer.post(`/classifyMany`, {
       texts: texts,
-    }, );
+    });
     console.log("TRYINGGGGGGGG");
-    console.log("AXIOS RESPONSEEE SAHAR",response);
+    console.log("AXIOS RESPONSEEE SAHAR", response);
     return response;
-    
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
-
