@@ -1,32 +1,48 @@
 import Charts from "@/components/Charts";
 import EventHeader from "@/components/EventHeader";
-import FormsBarChart from "@/components/FormsBarChart";
 import Loading from "@/components/Loading";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
-import { useGetEventById, useGetEventStatistics,useAttendeesByEvent, useGetResponsesClassification } from "@/lib/queries/queries";
-import { AxiosError } from "axios";
-import { BarChart2, MessageSquare, Percent, User, } from "lucide-react";
+import {
+  useGetEventById,
+  useGetEventStatistics,
+  useAttendeesByEvent,
+  useGetResponsesClassification,
+  useGetEvaluationResponses,
+} from "@/lib/queries/queries";
+import { BarChart2, Percent, User } from "lucide-react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const EventStatistics = () => {
   const { id } = useParams() as { id: string };
 
   const {
     data: event,
-    isLoading:eventLoading,
+    isLoading: eventLoading,
     isError: eventError,
   } = useGetEventById(id);
 
   const {
     data: attendeesList,
-    isLoading:attendeesListLoading,
+    isLoading: attendeesListLoading,
     isError: attendeesListError,
   } = useAttendeesByEvent(id);
+
+  const {
+    data: responses,
+    isLoading: responsesLoading,
+    isError: responsesError,
+  } = useGetEvaluationResponses(id);
+
+  const evalResponses = responses?.data;
+  console.log(evalResponses);
 
   const {
     data: eventStatistics,
@@ -34,108 +50,129 @@ const EventStatistics = () => {
     isError: isStatisticsError,
   } = useGetEventStatistics(id);
 
+  console.log(eventStatistics);
 
-  const { mutateAsync: classifyResponses } = useGetResponsesClassification();
-  const [classificationResults, setClassificationResults] = useState(null);
-
-
-  
-// getting the event's form questions to be added as the first row to the csv file
-  function extractQuestionsFromEvent(event: { questions: any[]; }) {
+  // getting the event's form questions to be added as the first row to the csv file
+  function extractQuestionsFromEvent(event: { questions: any[] }) {
     if (!event || !event.questions) {
       return []; // Handle cases where event is missing or questions is missing
     }
-  
-    return event.questions.map((question: { question: any; }) => question.question);
+
+    return event.questions.map(
+      (question: { question: any }) => question.question
+    );
   }
 
-const questions = extractQuestionsFromEvent(event);
+  const questions = extractQuestionsFromEvent(event);
 
-
-  if (isStatisticsLoading || attendeesListLoading || eventLoading ) {
+  if (
+    isStatisticsLoading ||
+    attendeesListLoading ||
+    eventLoading ||
+    responsesLoading
+  ) {
     return <Loading />;
   }
 
-  if (isStatisticsError || !eventStatistics || attendeesListError || eventError ) {
+  if (
+    isStatisticsError ||
+    !eventStatistics ||
+    attendeesListError ||
+    eventError ||
+    responsesError
+  ) {
     return <div>Error: Failed to load event</div>;
   }
-  console.log(eventStatistics);
+  //console.log(eventStatistics);
 
-
-// saving the responses of the attendees
-  const csvresponses = attendeesList.filter(
-  (attendee: { responses: string | any[]; }) => attendee.responses && attendee.responses.length > 0
-)
-.map((attendee: { responses: any[]; }) => attendee.responses.map((response: { responses: any[]; }) => response.responses[0]));
-
-const csvData = [questions, ...csvresponses];
-console.log("csv data: ",csvData);
-
-
-// flattening the list of responses to be classified
-const classificationresponses = csvresponses.flat();
-
-
-
-const handleClassifyResponses = async() => {
-  console.log("responsesss checkkkk: ",classificationresponses);
-  try{
-    const response= await classifyResponses(classificationresponses);
-     setClassificationResults(response.data); 
-
-    toast({title:"Responses Classified Successfully", })
-  }catch(error){
-    console.error('Error:', error)
-    const axiosError = error as AxiosError;
-    if (axiosError.response) {
-      toast({variant:"destructive", title:"Error", description:"Failed classify data!"})
-    } else if (axiosError.request) {
-      console.error('No response received:', axiosError.request);
-      toast({ variant:"destructive", title: 'Network Error', description: 'Failed to fetch data due to network issue!' });
-    } else {
-      console.error('Request setup error:', axiosError.message);
-      toast({ variant:"destructive", title: 'Request Error', description: 'Failed to setup request!' });
+  // add attendee name to each response as the answer to the question object that contains an id of 0
+  attendeesList.forEach((attendee: { name: any; responses: any[] }) => {
+    // check if any of the responses already holds the name of the attendee
+    if (
+      attendee.responses &&
+      attendee.responses.some(
+        (response: { responses: any[] }) =>
+          response.responses[0] === attendee.name
+      )
+    ) {
+      return;
     }
-  }
-}
+    // if not, add the name to the responses array
+    attendee.responses = [
+      { id: "0", responses: [attendee.name] },
+      ...attendee.responses,
+    ];
+  });
 
+  // saving the responses of the attendees
+  const csvresponses = attendeesList
+    .filter(
+      (attendee: { responses: string | any[] }) =>
+        attendee.responses && attendee.responses.length > 0
+    )
+    .map((attendee: { responses: any[] }) =>
+      attendee.responses.map(
+        (response: { responses: any[] }) => response.responses[0]
+      )
+    );
+  console.log("cv responses");
+  console.log(csvresponses);
 
+  const csvData = [["Attendee Name",...questions], ...csvresponses];
+  //console.log("csv data: ", csvData);
 
-const filteredResults = classificationResults ? classificationResults.map((response: { classification: any; }) => response.classification) : [];
-console.log("filtered results: ",filteredResults);
-
-
-// counting the number of each sentiment to calculate the response rate 
-const sentimentCounts: { [key: string]: number } = {
-  positive: 0,
-  negative: 0,
-  neutral: 0,
-};
-
-for (const result of filteredResults) {
-  sentimentCounts[result] += 1;
-}
-
-// calculating the percentage of each sentiment
-const totalResponses = filteredResults.length;
-
-const sentimentPercentages = {
-  positive: (sentimentCounts.positive / totalResponses) * 100,
-  negative: (sentimentCounts.negative / totalResponses) * 100,
-  neutral: (sentimentCounts.neutral / totalResponses) * 100,
-};
-
+  // calculate the sentiment percentages for each question of type Input
+  Object.keys(evalResponses).forEach((questionId) => {
+    if (evalResponses[questionId].type === "Input") {
+      const sentiments = {
+        Positive: 0,
+        Negative: 0,
+        Neutral: 0,
+      };
+      evalResponses[questionId].responses.forEach((response) => {
+        if (response.classification === "positive") {
+          sentiments.Positive += 1;
+        } else if (response.classification === "negative") {
+          sentiments.Negative += 1;
+        } else {
+          sentiments.Neutral += 1;
+        }
+      });
+      evalResponses[questionId].sentiments = sentiments;
+      evalResponses[questionId].sentimentPercentages = {
+        Positive:
+          (sentiments.Positive /
+            Object.keys(evalResponses[questionId].responses).length) *
+          100,
+        Negative:
+          (sentiments.Negative /
+            Object.keys(evalResponses[questionId].responses).length) *
+          100,
+        Neutral:
+          (sentiments.Neutral /
+            Object.keys(evalResponses[questionId].responses).length) *
+          100,
+      };
+      console.log(evalResponses[questionId]);
+    }
+  });
 
   return (
     <>
-    <SEO
+      <SEO
         title="Eventy - Event Insights"
         description="Event Management System Event Insights Page"
         name="Eventy"
-        type="event insights" />
+        type="event insights"
+      />
       <div className="w-10/12">
-        <EventHeader name={"Event Statistics - " + event?.name} address={event?.address} endTime={event?.endTime} time={event?.startTime}/>
-        <div className="mt-5 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <EventHeader
+          name={"Event Statistics - " + event?.name}
+          address={event?.address}
+          endTime={event?.endTime}
+          time={event?.startTime}
+        />
+        <div className="mt-5 mb-8 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -190,13 +227,12 @@ const sentimentPercentages = {
           </Card>
         </div>
         <div className="mt-10">
-            <div className="flex gap-5">
-              <BarChart2 size={30} strokeWidth={2} />
-              <div className="font-bold text-xl mb-3">Event Timeline</div>
-            </div>
+          <div className="flex gap-5">
+            <div className="font-bold text-xl mb-3">Event Timeline</div>
+          </div>
           <Charts checkinData={eventStatistics.eventTimeline} />
         </div>
-
+        {/*
         <div className="mt-10 flex">
         <div className="flex gap-5">
               <MessageSquare size={30} strokeWidth={2} />
@@ -207,12 +243,79 @@ const sentimentPercentages = {
       <FormsBarChart sentimentPercentages={sentimentPercentages} ></FormsBarChart>
       
       <div className="flex justify-between  my-4">
-      <Button className=" ml-7" variant={"secondary"} onClick={() => handleClassifyResponses()}>Get Responses Analysis</Button>
-
-      <CSVLink filename={event.name+"_form_responses.csv"} className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm" data={csvData}>Export Foms Data</CSVLink>
-
+      <Button className=" ml-7" variant={"secondary"} onClick={() => handleClassifyResponses()}>Get Responses Analysis</Button> */}
+        {Object.keys(evalResponses).length != 0 && (
+          <div>
+            <div className="w-full text-xl font-bold text-center p-8">
+              Evaluation results :
+            </div>
+            {event.questions.length > 0 &&
+              event.questions.map((question, index) => (
+                <div key={index} className="w-full p-8 h-96 text-center">
+                  <div className="text-xl mb-8">{question.question}</div>
+                  <div className="w-full flex flex-row justify-around">
+                    {evalResponses[question.id] &&
+                      evalResponses[question.id].type === "Choice" &&
+                      Object.keys(evalResponses[question.id].responses).map(
+                        (option, index) => (
+                          <Card key={index}>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                              <CardTitle className="text-sm font-medium">
+                                {option}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-2xl font-bold">
+                                {evalResponses[question.id].responses[option]}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )
+                      )}
+                    {evalResponses[question.id] &&
+                      evalResponses[question.id].type === "Input" && (
+                        <div key={question.id} className="w-64 h-64">
+                          <Pie
+                            data={{
+                              labels: ["Positive", "Negative", "Neutral"],
+                              datasets: [
+                                {
+                                  label: "# of answers",
+                                  backgroundColor: [
+                                    "rgba(75, 192, 192, 0.5)",
+                                    "rgba(255, 99, 132, 0.5)",
+                                    "rgba(255, 159, 64, 0.5)",
+                                  ],
+                                  data: [
+                                    evalResponses[question.id].sentiments
+                                      .Positive,
+                                    evalResponses[question.id].sentiments
+                                      .Negative,
+                                    evalResponses[question.id].sentiments
+                                      .Neutral,
+                                  ],
+                                },
+                              ],
+                            }}
+                          />
+                        </div>
+                      )}
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+        <div className="p-16">
+          <CSVLink
+            filename={event.name + "_form_responses.csv"}
+            className="bg-white text-black border-2 border-black hover:bg-black hover:text-white text-center p-2 font-semibold text-sm"
+            data={csvData}
+          >
+            Export Foms Data
+          </CSVLink>
+        </div>
       </div>
-      </div>
+      {/* </div> */}
     </>
   );
 };
