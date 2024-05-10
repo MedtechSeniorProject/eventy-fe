@@ -7,11 +7,9 @@ import {
   useGetEventById,
   useGetEventStatistics,
   useAttendeesByEvent,
-  useGetResponsesClassification,
   useGetEvaluationResponses,
 } from "@/lib/queries/queries";
-import { BarChart2, Percent, User } from "lucide-react";
-import { useState } from "react";
+import { Percent, User } from "lucide-react";
 import { CSVLink } from "react-csv";
 import { useParams } from "react-router-dom";
 
@@ -129,7 +127,7 @@ const EventStatistics = () => {
         Negative: 0,
         Neutral: 0,
       };
-      evalResponses[questionId].responses.forEach((response) => {
+      evalResponses[questionId].responses.forEach((response: { classification: string; }) => {
         if (response.classification === "positive") {
           sentiments.Positive += 1;
         } else if (response.classification === "negative") {
@@ -250,7 +248,7 @@ const EventStatistics = () => {
               Evaluation results :
             </div>
             {event.questions.length > 0 &&
-              event.questions.map((question, index) => (
+              event.questions.map((question: { question: any; id: string | number; }, index: any) => (
                 <div key={index} className="w-full p-8 h-96 text-center">
                   <div className="text-xl mb-8">{question.question}</div>
                   <div className="w-full flex flex-row justify-around">
